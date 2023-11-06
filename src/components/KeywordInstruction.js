@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Link } from "react-router-dom"
 
 export default function KeywordInstruction(props) {
   return (
@@ -7,7 +8,7 @@ export default function KeywordInstruction(props) {
         <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
           <div className="flex flex-col items-stretch w-[31%] max-md:w-full max-md:ml-0">
             <div className="flex flex-col max-md:mt-10">
-              <h1 className="text-black text-5xl leading-[70px] uppercase self-stretch whitespace-nowrap mt-3 max-md:text-4xl font-['NEXON']">
+              <h1 className="text-black text-5xl leading-[70px] uppercase self-stretch whitespace-nowrap mt-3 max-md:text-4xl">
                 키워드 검색
               </h1>
               <p className="text-stone-500 text-base leading-6 uppercase self-stretch mt-24 max-md:mt-10 font-['NEXON']">
@@ -23,12 +24,12 @@ export default function KeywordInstruction(props) {
                 className="absolute h-full w-full object-cover object-center inset-0"
                 alt="Keyword Analysis"
               />
-              <a
-                href="#"
-                className="relative text-white text-lg leading-7 uppercase whitespace-nowrap bg-yellow-900 w-[180px] max-w-full pl-7 pr-8 py-3 rounded-[30px] self-end max-md:px-5 font-['NEXON']"
+               <Link to
+                ="/keyword"
+                className="relative text-white text-lg leading-7 uppercase whitespace-nowrap bg-yellow-900 w-[180px] max-w-full pl-7 pr-8 py-3 rounded-[30px] self-end max-md:px-5"
               >
                 키워드 분석하기
-              </a>
+              </Link>
             </div>
           </div>
         </div>
