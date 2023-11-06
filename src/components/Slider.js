@@ -2,10 +2,17 @@ import * as React from "react";
 
 export default function Slider(props) {
     return (
-        <section className="flex-col overflow-hidden relative flex min-h-[580px] items-start justify-between gap-5 max-md:flex-wrap">
-          <img loading="lazy" srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/53b52ced-38d2-438d-b911-52c34adc2252?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/53b52ced-38d2-438d-b911-52c34adc2252?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/53b52ced-38d2-438d-b911-52c34adc2252?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/53b52ced-38d2-438d-b911-52c34adc2252?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/53b52ced-38d2-438d-b911-52c34adc2252?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/53b52ced-38d2-438d-b911-52c34adc2252?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/53b52ced-38d2-438d-b911-52c34adc2252?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/53b52ced-38d2-438d-b911-52c34adc2252?apiKey=d9a6bade01504f228813cd0dfee9b81b&"className="absolute z-[-1] h-full w-full object-cover object-center inset-0" />
-          <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/0afcf09e-033b-4568-bc5d-74a5ea3a602c?apiKey=d9a6bade01504f228813cd0dfee9b81b&" className="aspect-[0.54] object-contain object-center w-[31px] rotate-[-179.663deg] stroke-[1px] stroke-white overflow-hidden self-center max-w-full my-auto" />
-          <div className="relative flex flex-col mt-24 px-5 self-end max-md:max-w-full max-md:mt-10">
+        <section className="flex flex-col min-h-[580px] items-center justify-center gap-5 max-md:flex-wrap overflow-hidden relative">
+            <img loading="lazy" srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/1ba9aa69-bab9-48ac-af50-8dfae301870a?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=100 100w,
+           https://cdn.builder.io/api/v1/image/assets/TEMP/1ba9aa69-bab9-48ac-af50-8dfae301870a?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=200 200w, 
+           https://cdn.builder.io/api/v1/image/assets/TEMP/1ba9aa69-bab9-48ac-af50-8dfae301870a?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=400 400w, 
+           https://cdn.builder.io/api/v1/image/assets/TEMP/1ba9aa69-bab9-48ac-af50-8dfae301870a?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=800 800w, 
+           https://cdn.builder.io/api/v1/image/assets/TEMP/1ba9aa69-bab9-48ac-af50-8dfae301870a?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1200 1200w, 
+           https://cdn.builder.io/api/v1/image/assets/TEMP/1ba9aa69-bab9-48ac-af50-8dfae301870a?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1600 1600w, 
+           https://cdn.builder.io/api/v1/image/assets/TEMP/1ba9aa69-bab9-48ac-af50-8dfae301870a?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=2000 2000w, 
+           https://cdn.builder.io/api/v1/image/assets/TEMP/1ba9aa69-bab9-48ac-af50-8dfae301870a?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
+           className="absolute z-[-1] h-full w-full object-cover object-center inset-0" />
+<div className="relative flex flex-col mt-24 px-5 justify-center items-center max-md:max-w-full max-md:mt-10">
             <div className="text-black text-base uppercase whitespace-nowrap bg-white w-[120px] max-w-full -ml-2.5 px-3 py-1 rounded-3xl self-start"> developer </div>
             <h1 className="text-black text-8xl font-light uppercase mt-3.5 self-start max-md:max-w-full max-md:text-4xl"> 트렌드 분석 서비스 </h1>
             <div className="self-center flex w-full max-w-[1549px] grow flex-col mt-5 pl-2.5 max-md:max-w-full">
@@ -22,3 +29,6 @@ export default function Slider(props) {
         </section>
       );
 }
+
+
+

@@ -2,8 +2,8 @@ import * as React from "react";
 
 export default function KeywordInstruction(props) {
   return (
-    <m  ain className="justify-center items-start bg-white flex flex-col px-20 max-md:px-5">
-      <section className="self-center w-full max-w-[1161px] mt-32 mb-24 max-md:max-w-full max-md:my-10">
+    <section className="bg-white flex flex-col px-20 max-md:px-5">
+      <div className="self-center w-full max-w-[1161px] mt-32 mb-24 max-md:max-w-full max-md:my-10">
         <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
           <div className="flex flex-col items-stretch w-[31%] max-md:w-full max-md:ml-0">
             <div className="flex flex-col max-md:mt-10">
@@ -22,9 +22,9 @@ export default function KeywordInstruction(props) {
             <div className="flex-col overflow-hidden relative flex min-h-[500px] grow pl-20 pr-5 pt-96 pb-2.5 max-md:max-w-full max-md:mt-10 max-md:pl-5 max-md:pt-24">
               <img
                 loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/ccc5ecdd-407c-42b0-a996-a798016e3cff?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
-                className="absolute z-[-1] h-full w-full object-cover object-center inset-0"
-                alt="Keyword Search"
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/e8e0b44b-56ff-430f-a9c1-22cc68a1a547?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
+                className="absolute h-full w-full object-cover object-center inset-0"
+                alt="Keyword Analysis"
               />
               <a
                 href="#"
@@ -35,7 +35,7 @@ export default function KeywordInstruction(props) {
             </div>
           </div>
         </div>
-      </section>
-    </m>
+      </div>
+    </section>
   );
 }
