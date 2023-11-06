@@ -1,24 +1,22 @@
 
 import './App.css';
-import Header from './components/Header.js';
-import TrendingInstruction from './components/TrendingInstruction.js';
-import DataInstruction from './components/DataInstruction.js';
-import Banner from './components/Banner.js';
-import Footer from './components/Footer.js';
-import KeywordInstruction from './components/KeywordInstruction.js';
-import Slider from './components/Slider.js';
+
+import KeywordSearch from './components/KeywordSearch.js';
+import { HashRouter, Route, Routes } from 'react-router-dom';
+import Home from './routes/Home.js';
 
 export default function App() {
   return (
     <div>
-    <Header/>
-    <Slider/>
-    <TrendingInstruction/>
-    <KeywordInstruction/>
-    <DataInstruction/>
-    <Banner/>
-    <Footer/>
-
+      <HashRouter>
+      
+      <Routes>
+        <Route path="/" exact = {true} element={<Home />} />
+        <Route path="/keyword" element={<KeywordSearch />} />
+    
+      </Routes>
+    </HashRouter>
+    
     </div>
   
   );

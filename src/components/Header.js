@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 
 export default function Header(props) {
   return (
@@ -14,7 +15,7 @@ export default function Header(props) {
           즐겨 찾기
         </div>
         <div className="text-black text-base font-light leading-6 uppercase self-center my-auto font-['NEXON']">
-          키워드 검색
+          <Link to="/keyword">키워드 검색</Link>
         </div>
         <div className="text-black text-base font-light leading-6 uppercase self-center whitespace-nowrap my-auto font-['NEXON']">
           실시간 검색어
