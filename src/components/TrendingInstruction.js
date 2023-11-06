@@ -3,8 +3,8 @@ import * as React from "react";
 export default function TrendingInstruction(props) {
   return (
     <main className="bg-white flex flex-col px-20 max-md:px-5">
-      <section className="self-center flex w-full max-w-[977px] flex-col mt-32 mb-24 max-md:max-w-full max-md:my-10 font-['NEXON']">
-        <h1 className="text-black text-5xl uppercase self-center whitespace-nowrap max-md:text-4xl">
+      <section className="self-center flex w-full max-w-[977px] flex-col mt-32 mb-24 max-md:max-w-full max-md:my-10">
+        <h1 className="text-black text-5xl uppercase self-center whitespace-nowrap max-md:text-4xl font-['NEXON']">
           실시간 트렌드
         </h1>
         <p className="text-black text-2xl font-light uppercase self-center whitespace-nowrap mt-14 max-md:max-w-full max-md:mt-10 font-['NEXON']">
@@ -12,7 +12,15 @@ export default function TrendingInstruction(props) {
         </p>
         <img
           loading="lazy"
-          srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&"className="aspect-[1.67] object-contain object-center w-[677px] overflow-hidden self-center max-w-full mt-12 max-md:mt-10"
+          srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=100 100w, 
+          https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=200 200w, 
+          https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=400 400w, 
+          https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=800 800w, 
+          https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1200 1200w, 
+          https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1600 1600w, 
+          https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=2000 2000w, 
+          https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
+          className="aspect-[1.67] object-contain object-center w-[677px] overflow-hidden self-center max-w-full mt-12 max-md:mt-10"
         />
         <div className="self-center flex w-full items-start justify-between gap-5 mt-20 max-md:max-w-full max-md:flex-wrap max-md:justify-center max-md:mt-10">
           <div className="shadow-sm bg-white flex flex-col flex-1 px-9 py-3 rounded-3xl max-md:px-5">
@@ -23,7 +31,7 @@ export default function TrendingInstruction(props) {
             />
             <a
               href="#"
-              className="text-blue-400 text-base font-semibold leading-5 tracking-normal self-center whitespace-nowrap"
+              className="text-blue-400 text-base font-semibold leading-5 tracking-normal self-center whitespace-nowrap font-['NEXON']"
             >
               패션
             </a>
@@ -36,7 +44,7 @@ export default function TrendingInstruction(props) {
             />
             <a
               href="#"
-              className="text-green-400 text-base font-semibold leading-5 tracking-normal self-center whitespace-nowrap"
+              className="text-green-400 text-base font-semibold leading-5 tracking-normal self-center whitespace-nowrap font-['NEXON']"
             >
               스포츠
             </a>
@@ -49,7 +57,7 @@ export default function TrendingInstruction(props) {
             />
             <a
               href="#"
-              className="text-violet-500 text-base font-semibold leading-5 tracking-normal self-center whitespace-nowrap"
+              className="text-violet-500 text-base font-semibold leading-5 tracking-normal self-center whitespace-nowrap font-['NEXON']"
             >
               가전
             </a>
@@ -58,11 +66,11 @@ export default function TrendingInstruction(props) {
             <img
               loading="lazy"
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/06873a76-9dd5-4c33-ae2f-c5a3541d3134?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
-              className="aspect-[1.09] object-contain object-center w-full overflow-hidden self-stretch"
+              className="aspect-square object-contain object-center w-full overflow-hidden self-stretch"
             />
             <a
               href="#"
-              className="text-orange-300 text-base font-semibold leading-5 tracking-normal self-center whitespace-nowrap"
+              className="text-orange-300 text-base font-semibold leading-5 tracking-normal self-center whitespace-nowrap font-['NEXON']"
             >
               여가
             </a>
@@ -75,7 +83,7 @@ export default function TrendingInstruction(props) {
             />
             <a
               href="#"
-              className="text-red-400 text-base font-semibold leading-5 tracking-normal self-center whitespace-nowrap"
+              className="text-red-400 text-base font-semibold leading-5 tracking-normal self-center whitespace-nowrap font-['NEXON']"
             >
               식품
             </a>
