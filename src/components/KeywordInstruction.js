@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 
 export default function KeywordInstruction(props) {
   return (
@@ -26,12 +27,12 @@ export default function KeywordInstruction(props) {
                 className="absolute h-full w-full object-cover object-center inset-0"
                 alt="Keyword Analysis"
               />
-              <a
-                href="#"
+              <Link to
+                ="/keyword"
                 className="relative text-white text-lg leading-7 uppercase whitespace-nowrap bg-yellow-900 w-[180px] max-w-full pl-7 pr-8 py-3 rounded-[30px] self-end max-md:px-5"
               >
                 키워드 분석하기
-              </a>
+              </Link>
             </div>
           </div>
         </div>
