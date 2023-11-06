@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function KeywordSearch(props) {
+export default function Search(props) {
   const [keyword, setKeyword] = useState('');
   const [category, setCategory] = useState('');
 
