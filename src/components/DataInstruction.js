@@ -4,10 +4,10 @@ export default function DataInstruction(props) {
   return (
     <main className="bg-white flex flex-col px-20 max-md:px-5">
       <section className="self-center flex w-full max-w-[1159px] flex-col mt-28 mb-24 max-md:max-w-full max-md:my-10">
-        <h1 className="text-black text-5xl uppercase self-center whitespace-nowrap max-md:text-4xl">
+        <h1 className="text-black text-5xl uppercase self-center whitespace-nowrap max-md:text-4xl font-['NEXON']">
           데이터 대시보드
         </h1>
-        <p className="text-black text-center text-2xl font-light leading-8 uppercase self-center whitespace-nowrap mt-3.5 max-md:max-w-full">
+        <p className="text-black text-center text-2xl font-light leading-8 uppercase self-center whitespace-nowrap mt-3.5 max-md:max-w-full font-['NEXON']">
           보고싶은 키워드의 데이터를 다양한 데이터로 만나보세요!
         </p>
         <div className="self-stretch mt-28 max-md:max-w-full max-md:mt-10">
@@ -20,7 +20,7 @@ export default function DataInstruction(props) {
                   alt="Graph Chart"
                 />
                 <div className="bg-neutral-100 self-stretch flex w-full grow flex-col pt-6 pb-28 px-20 max-md:pb-24 max-md:px-5">
-                  <h2 className="text-black text-center text-2xl uppercase self-center whitespace-nowrap -mb-6 max-md:mb-2.5">
+                  <h2 className="text-black text-center text-2xl uppercase self-center whitespace-nowrap -mb-6 max-md:mb-2.5 font-['NEXON']">
                     그래프 차트
                   </h2>
                 </div>
@@ -34,7 +34,7 @@ export default function DataInstruction(props) {
                   alt="Circular Grid Chart"
                 />
                 <div className="bg-neutral-100 self-stretch flex w-full grow flex-col pt-7 pb-28 px-20 max-md:pb-24 max-md:px-5">
-                  <h2 className="text-black text-center text-2xl uppercase self-center mb-0 whitespace-nowrap max-md:mb-2.5">
+                  <h2 className="text-black text-center text-2xl uppercase self-center mb-0 whitespace-nowrap max-md:mb-2.5 font-['NEXON']">
                     원형 그리드 차트
                   </h2>
                 </div>
@@ -48,7 +48,7 @@ export default function DataInstruction(props) {
                   alt="Dashboard Chart"
                 />
                 <div className="bg-neutral-100 self-stretch flex w-full grow flex-col pt-6 pb-28 px-20 max-md:pb-24 max-md:px-5">
-                  <h2 className="text-black text-center text-2xl uppercase self-center whitespace-nowrap -mb-6 max-md:mb-2.5">
+                  <h2 className="text-black text-center text-2xl uppercase self-center whitespace-nowrap -mb-6 max-md:mb-2.5 font-['NEXON']">
                     계기판 차트
                   </h2>
                 </div>
