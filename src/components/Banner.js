@@ -1,6 +1,6 @@
 import * as React from "react";
 
-function BannerComponent(props) {
+export default function Banner(props) {
   return (
     <section className="flex-col items-center overflow-hidden relative flex min-h-[554px] px-20 max-md:px-5">
       <img
@@ -26,5 +26,3 @@ function BannerComponent(props) {
     </section>
   );
 }
-
-export default BannerComponent;
