@@ -1,15 +1,60 @@
+import axios from "axios";
 import React, { useState } from "react";
 
 export default function Search(props) {
-  const [keyword, setKeyword] = useState('');
-  const [category, setCategory] = useState('');
+ 
+  const [filterData, setFilterData] = useState({
+    keyword: '',
+    category: '50000000',
+    timeUnit : 'month',
+    startDate :'2017-08-01',
+    endDate : '2017-09-30',
+    device : '',
+    ages : [],
+    gender : ''
+
+
+  });
+
+  const dateComb = () => {
+    
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
     // You can add your form submission logic here
-    console.log('검색어:', keyword);
-    console.log('분야:', category);
+    console.log('객체:', filterData)
+    console.log('검색어:', filterData.keyword);
+    console.log('분야:', filterData.category);
+    console.log('시간기준:', filterData.timeUnit);
+    console.log('시작날짜:', filterData.startDate);
+    console.log('종료날짜:', filterData.endDate);
+    console.log('기기:', filterData.device);
+    console.log('나이:', filterData.ages);
+    console.log('성별:', filterData.gender);
+    
+    test()
+
+    
+
+
   };
+
+  async function test(){
+    const baseUrl = "http://localhost:8080";
+
+    await axios
+        .post(baseUrl + "/test/requestbody",
+          filterData
+        )
+        .then((response) => {
+            console.log(response.data);
+          
+        })
+        .catch((error)=>{
+            console.log(error);
+        })
+}
 
   const handleButtonClick = () => {
     const form = document.getElementById("searchForm");
@@ -19,8 +64,8 @@ export default function Search(props) {
       const formData = new FormData(form);
       
     // FormData에서 필요한 값을 추출하고 상태 변수에 설정합니다.
-      setKeyword(formData.get("keyword")); // "field"는 input 요소의 name 속성 값
-      setCategory(formData.get("category")); // "category"는 select 요소의 name 속성 값
+      // // setKeyword(formData.get("keyword")); // "field"는 input 요소의 name 속성 값
+      // setCategory(formData.get("category")); // "category"는 select 요소의 name 속성 값
       handleSubmit(new Event('submit'));
       
     }
@@ -40,13 +85,18 @@ export default function Search(props) {
 
             <select
             name="category" 
-            onChange={(e) => setCategory(e.target.value)}
+            onChange={(e) => setFilterData({
+              ...filterData,
+              category : e.target.value,
+            })
+            
+            }
             className="text-black text-base font-light leading-6 uppercase self-stretch border w-[269px] max-w-full grow shrink basis-auto items-start justify-between gap-5 pl-32 py-7 rounded-3xl border-solid border-black max-md:pl-5">
-              <option value="fashion">패션</option>
-              <option value="sports">스포츠</option>
-              <option value="home-appliances">가전제품</option>
+              <option value="50000001">패션</option>
+              <option value="50000007">스포츠</option>
+              <option value="50000003">가전제품</option>
               <option value="leisure">여가</option>
-              <option value="food">음식</option>
+              <option value="50000006">음식</option>
             </select>
           </div>
           <div className="self-center flex w-full items-start justify-between gap-5 mt-16 max-md:max-w-full max-md:flex-wrap max-md:mt-10">
@@ -55,7 +105,10 @@ export default function Search(props) {
             </div>
             <input
               name="keyword"
-              onChange={(e) => setKeyword(e.target.value)}
+              onChange={(e) => setFilterData({
+                ...filterData,
+                keyword : e.target.value,
+              })}
               type="text"
               className="text-black text-xl leading-8 uppercase self-stretch border w-[975px] max-w-full grow shrink basis-auto items-start justify-between gap-5 stroke-[1px] stroke-black pl-5 py-3 rounded-3xl border-solid border-black max-md:pl-3"
               placeholder="검색어를 입력하세요"
@@ -69,14 +122,20 @@ export default function Search(props) {
               <div className="relative">
                 <select
                   className="text-black text-base font-light leading-6 uppercase self-stretch border w-[102px] max-w-full items-start justify-between gap-4 pl-9 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5"
-                  defaultValue="일간" // Set the default selected option
+                  defaultValue="month" // Set the default selected option
                 >
                   <option value="date">일간</option>
                   <option value="week">주간</option>
                   <option value="month">월간</option>
                 </select>
               </div>
-              <select className="text-black text-base font-light leading-6 uppercase self-stretch border w-[102px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5">
+              <select 
+              name="start-year"
+              onChange={(e) => setFilterData({
+                ...filterData,
+                startDate : e.target.value + "-" + document.querySelector('select[name="start-month"]').value + "-" + "30",
+              })}              
+              className="text-black text-base font-light leading-6 uppercase self-stretch border w-[102px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5">
                 <option value="2017">2017</option>
                 <option value="2018">2018</option>
                 <option value="2019">2019</option>
@@ -85,7 +144,14 @@ export default function Search(props) {
                 <option value="2022">2022</option>
                 <option value="2023">2023</option>
               </select>
-              <select className="text-black text-base font-light leading-6 uppercase self-stretch border w-[83px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5">
+              <select 
+              name="start-month"
+              defaultValue="08"
+              onChange={(e) => setFilterData({
+                ...filterData,
+                startDate : document.querySelector('select[name="start-year"]').value + "-" +e.target.value+ "-" + "30" ,
+              })}   
+              className="text-black text-base font-light leading-6 uppercase self-stretch border w-[83px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5">
                 <option value="01">01</option>
                 <option value="02">02</option>
                 <option value="03">03</option>
@@ -100,7 +166,13 @@ export default function Search(props) {
                 <option value="12">12</option>
               </select>
               <div className="bg-zinc-300 self-center flex w-[45px] h-[7px] flex-col grow shrink-0 basis-auto my-auto" />
-              <select className="text-black text-base font-light leading-6 uppercase self-stretch border w-[102px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5">
+              <select 
+              name="end-year"
+              onChange={(e) => setFilterData({
+                ...filterData,
+                endDate : e.target.value + "-" + document.querySelector('select[name="end-month"]').value + "-" + "31",
+              })} 
+              className="text-black text-base font-light leading-6 uppercase self-stretch border w-[102px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5">
                 <option value="2017">2017</option>
                 <option value="2018">2018</option>
                 <option value="2019">2019</option>
@@ -109,7 +181,14 @@ export default function Search(props) {
                 <option value="2022">2022</option>
                 <option value="2023">2023</option>
               </select>
-              <select className="text-black text-base font-light leading-6 uppercase self-stretch border w-[83px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5">
+              <select
+              name="end-month"
+              defaultValue="09"
+              onChange={(e) => setFilterData({
+                ...filterData,
+                endDate : document.querySelector('select[name="end-year"]').value + "-" +e.target.value+ "-" + "31" ,
+              })} 
+              className="text-black text-base font-light leading-6 uppercase self-stretch border w-[83px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5">
                 <option value="01">01</option>
                 <option value="02">02</option>
                 <option value="03">03</option>
