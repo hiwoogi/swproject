@@ -3,8 +3,8 @@ import './App.css';
 
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import Home from './routes/Home.js';
-import Login from './components/Login.js';
-import Signup from './components/Signup.js';
+import Login from './components/user/Login.js';
+import Signup from './components/user/Signup.js';
 import Keyword from './routes/Keyword.js';
 
 export default function App() {

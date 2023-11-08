@@ -1,76 +1,123 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Graph from "./charts/Graph";
+import { createRoot } from 'react-dom/client';
 
 export default function Search(props) {
- 
   const [filterData, setFilterData] = useState({
-    keyword: '',
-    category: '50000000',
-    timeUnit : 'month',
-    startDate :'2017-08-01',
-    endDate : '2017-09-30',
-    device : '',
-    ages : [],
-    gender : ''
-
-
+    keyword: "",
+    category: "50000001",
+    timeUnit: "month",
+    startDate: "2017-08-01",
+    endDate: "2017-09-30",
+    device: "",
+    ages: [],
+    gender: "",
   });
+  const [root, setRoot] = useState(null);
 
-  const dateComb = () => {
-    
+  const [responseData, setResponseData] = useState({
+    startDate: null,
+    endDate: null,
+    timeUnit: null,
+    results: null,
+  });
+  const daysInMonth = {
+    "01": 31,
+    "02": 28,
+    "03": 31,
+    "04": 30,
+    "05": 31,
+    "06": 30,
+    "07": 31,
+    "08": 31,
+    "09": 30,
+    10: 31,
+    11: 30,
+    12: 31,
+  };
+
+  // 윤년 체크
+  function isLeapYear(year) {
+    return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
   }
 
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
     // You can add your form submission logic here
-    console.log('객체:', filterData)
-    console.log('검색어:', filterData.keyword);
-    console.log('분야:', filterData.category);
-    console.log('시간기준:', filterData.timeUnit);
-    console.log('시작날짜:', filterData.startDate);
-    console.log('종료날짜:', filterData.endDate);
-    console.log('기기:', filterData.device);
-    console.log('나이:', filterData.ages);
-    console.log('성별:', filterData.gender);
-    
-    test()
+    console.log("객체:", filterData);
+    console.log("검색어:", filterData.keyword);
+    console.log("분야:", filterData.category);
+    console.log("시간기준:", filterData.timeUnit);
+    console.log("시작날짜:", filterData.startDate);
+    console.log("종료날짜:", filterData.endDate);
+    console.log("기기:", filterData.device);
+    console.log("나이:", filterData.ages);
+    console.log("성별:", filterData.gender);
 
-    
-
+    test();
 
   };
-
-  async function test(){
-    const baseUrl = "http://localhost:8080";
-
-    await axios
-        .post(baseUrl + "/test/requestbody",
-          filterData
-        )
-        .then((response) => {
-            console.log(response.data);
-          
-        })
-        .catch((error)=>{
-            console.log(error);
-        })
-}
 
   const handleButtonClick = () => {
     const form = document.getElementById("searchForm");
 
-    
     if (form) {
       const formData = new FormData(form);
-      
-    // FormData에서 필요한 값을 추출하고 상태 변수에 설정합니다.
+
+      // FormData에서 필요한 값을 추출하고 상태 변수에 설정합니다.
       // // setKeyword(formData.get("keyword")); // "field"는 input 요소의 name 속성 값
       // setCategory(formData.get("category")); // "category"는 select 요소의 name 속성 값
-      handleSubmit(new Event('submit'));
-      
+      handleSubmit(new Event("submit"));
     }
   };
 
+  async function test() {
+    const baseUrl = "http://localhost:8080";
+
+    await axios
+      .post(baseUrl + "/test/requestbody", filterData)
+      .then((response) => {
+        console.log(response.data);
+        setResponseData({
+          ...responseData, // Spread the existing state
+          startDate: response.data.startDate, // Update the startDate property
+          endDate: response.data.endDate, // Update the endDate property
+          timeUnit: response.data.timeUnit, // Update the timeUnit property
+          results: response.data.results, // Update the results property
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  useEffect(() => {
+    if (responseData.startDate && responseData.endDate) {
+      if (!root) {
+        // createRoot를 사용하여 루트를 초기화
+        const newRoot = createRoot(document.getElementById("graph1"));
+        newRoot.render(
+          <Graph
+            startDate={responseData.startDate}
+            endDate={responseData.endDate}
+            timeUnit={responseData.timeUnit}
+            results={responseData.results}
+          />
+        );
+        setRoot(newRoot);
+      } else {
+        // 이미 루트가 초기화된 경우 업데이트
+        root.render(
+          <Graph
+            startDate={responseData.startDate}
+            endDate={responseData.endDate}
+            timeUnit={responseData.timeUnit}
+            results={responseData.results}
+          />
+        );
+      }
+    }
+  }, [responseData]);
   return (
     <div className="bg-white flex flex-col px-20 max-md:px-5">
       <form id="searchForm" onSubmit={handleSubmit}>
@@ -84,14 +131,15 @@ export default function Search(props) {
             </div>
 
             <select
-            name="category" 
-            onChange={(e) => setFilterData({
-              ...filterData,
-              category : e.target.value,
-            })
-            
-            }
-            className="text-black text-base font-light leading-6 uppercase self-stretch border w-[269px] max-w-full grow shrink basis-auto items-start justify-between gap-5 pl-32 py-7 rounded-3xl border-solid border-black max-md:pl-5">
+              name="category"
+              onChange={(e) =>
+                setFilterData({
+                  ...filterData,
+                  category: e.target.value,
+                })
+              }
+              className="text-black text-base font-light leading-6 uppercase self-stretch border w-[269px] max-w-full grow shrink basis-auto items-start justify-between gap-5 pl-32 py-7 rounded-3xl border-solid border-black max-md:pl-5"
+            >
               <option value="50000001">패션</option>
               <option value="50000007">스포츠</option>
               <option value="50000003">가전제품</option>
@@ -105,10 +153,12 @@ export default function Search(props) {
             </div>
             <input
               name="keyword"
-              onChange={(e) => setFilterData({
-                ...filterData,
-                keyword : e.target.value,
-              })}
+              onChange={(e) =>
+                setFilterData({
+                  ...filterData,
+                  keyword: e.target.value,
+                })
+              }
               type="text"
               className="text-black text-xl leading-8 uppercase self-stretch border w-[975px] max-w-full grow shrink basis-auto items-start justify-between gap-5 stroke-[1px] stroke-black pl-5 py-3 rounded-3xl border-solid border-black max-md:pl-3"
               placeholder="검색어를 입력하세요"
@@ -129,13 +179,28 @@ export default function Search(props) {
                   <option value="month">월간</option>
                 </select>
               </div>
-              <select 
-              name="start-year"
-              onChange={(e) => setFilterData({
-                ...filterData,
-                startDate : e.target.value + "-" + document.querySelector('select[name="start-month"]').value + "-" + "30",
-              })}              
-              className="text-black text-base font-light leading-6 uppercase self-stretch border w-[102px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5">
+              <select
+                name="start-year"
+                onChange={(e) => {
+                  const selectedYear = e.target.value;
+                  const selectedMonth = document.querySelector(
+                    'select[name="start-month"]'
+                  ).value;
+
+                  if (selectedMonth === "02" && isLeapYear(selectedYear)) {
+                    daysInMonth["02"] = 29;
+                  }
+
+                  const selectedDay = daysInMonth[selectedMonth];
+
+                  setFilterData({
+                    ...filterData,
+                    startDate:
+                      selectedYear + "-" + selectedMonth + "-" + selectedDay,
+                  });
+                }}
+                className="text-black text-base font-light leading-6 uppercase self-stretch border w-[102px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5"
+              >
                 <option value="2017">2017</option>
                 <option value="2018">2018</option>
                 <option value="2019">2019</option>
@@ -144,14 +209,28 @@ export default function Search(props) {
                 <option value="2022">2022</option>
                 <option value="2023">2023</option>
               </select>
-              <select 
-              name="start-month"
-              defaultValue="08"
-              onChange={(e) => setFilterData({
-                ...filterData,
-                startDate : document.querySelector('select[name="start-year"]').value + "-" +e.target.value+ "-" + "30" ,
-              })}   
-              className="text-black text-base font-light leading-6 uppercase self-stretch border w-[83px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5">
+              <select
+                name="start-month"
+                defaultValue="08"
+                onChange={(e) => {
+                  const selectedYear = document.querySelector(
+                    'select[name="start-year"]'
+                  ).value;
+                  const selectedMonth = e.target.value;
+
+                  if (selectedMonth === "02" && isLeapYear(selectedYear)) {
+                    daysInMonth["02"] = 29;
+                  }
+
+                  const selectedDay = daysInMonth[selectedMonth];
+
+                  setFilterData({
+                    ...filterData,
+                    startDate: `${selectedYear}-${selectedMonth}-${selectedDay}`,
+                  });
+                }}
+                className="text-black text-base font-light leading-6 uppercase self-stretch border w-[83px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5"
+              >
                 <option value="01">01</option>
                 <option value="02">02</option>
                 <option value="03">03</option>
@@ -166,13 +245,28 @@ export default function Search(props) {
                 <option value="12">12</option>
               </select>
               <div className="bg-zinc-300 self-center flex w-[45px] h-[7px] flex-col grow shrink-0 basis-auto my-auto" />
-              <select 
-              name="end-year"
-              onChange={(e) => setFilterData({
-                ...filterData,
-                endDate : e.target.value + "-" + document.querySelector('select[name="end-month"]').value + "-" + "31",
-              })} 
-              className="text-black text-base font-light leading-6 uppercase self-stretch border w-[102px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5">
+              <select
+                name="end-year"
+                onChange={(e) => {
+                  const selectedYear = e.target.value;
+                  const selectedMonth = document.querySelector(
+                    'select[name="end-month"]'
+                  ).value;
+
+                  if (selectedMonth === "02" && isLeapYear(selectedYear)) {
+                    daysInMonth["02"] = 29;
+                  }
+
+                  const selectedDay = daysInMonth[selectedMonth];
+
+                  setFilterData({
+                    ...filterData,
+                    endDate:
+                      selectedYear + "-" + selectedMonth + "-" + selectedDay,
+                  });
+                }}
+                className="text-black text-base font-light leading-6 uppercase self-stretch border w-[102px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5"
+              >
                 <option value="2017">2017</option>
                 <option value="2018">2018</option>
                 <option value="2019">2019</option>
@@ -182,13 +276,27 @@ export default function Search(props) {
                 <option value="2023">2023</option>
               </select>
               <select
-              name="end-month"
-              defaultValue="09"
-              onChange={(e) => setFilterData({
-                ...filterData,
-                endDate : document.querySelector('select[name="end-year"]').value + "-" +e.target.value+ "-" + "31" ,
-              })} 
-              className="text-black text-base font-light leading-6 uppercase self-stretch border w-[83px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5">
+                name="end-month"
+                defaultValue="08"
+                onChange={(e) => {
+                  const selectedYear = document.querySelector(
+                    'select[name="end-year"]'
+                  ).value;
+                  const selectedMonth = e.target.value;
+
+                  if (selectedMonth === "02" && isLeapYear(selectedYear)) {
+                    daysInMonth["02"] = 29;
+                  }
+
+                  const selectedDay = daysInMonth[selectedMonth];
+
+                  setFilterData({
+                    ...filterData,
+                    endDate: `${selectedYear}-${selectedMonth}-${selectedDay}`,
+                  });
+                }}
+                className="text-black text-base font-light leading-6 uppercase self-stretch border w-[83px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5"
+              >
                 <option value="01">01</option>
                 <option value="02">02</option>
                 <option value="03">03</option>
@@ -224,7 +332,12 @@ export default function Search(props) {
                 </label>
               </div>
               <div className="self-stretch flex items-start justify-between gap-2">
-                <input type="radio" id="mobile-device" name="기기" value="mobile" />
+                <input
+                  type="radio"
+                  id="mobile-device"
+                  name="기기"
+                  value="mobile"
+                />
                 <label
                   htmlFor="mobile-device"
                   className="text-black text-base font-light self-center whitespace-nowrap my-auto"
@@ -284,7 +397,12 @@ export default function Search(props) {
                 </label>
               </div>
               <div className="self-stretch flex items-start justify-between gap-2">
-                <input type="checkbox" id="twenties" name="연령" value="twenties" />
+                <input
+                  type="checkbox"
+                  id="twenties"
+                  name="연령"
+                  value="twenties"
+                />
                 <label
                   htmlFor="twenties"
                   className="text-black text-base font-light self-center whitespace-nowrap my-auto"
@@ -293,7 +411,12 @@ export default function Search(props) {
                 </label>
               </div>
               <div className="self-stretch flex items-start justify-between gap-2">
-                <input type="checkbox" id="thirties" name="연령" value="thirties" />
+                <input
+                  type="checkbox"
+                  id="thirties"
+                  name="연령"
+                  value="thirties"
+                />
                 <label
                   htmlFor="thirties"
                   className="text-black text-base font-light self-center whitespace-nowrap my-auto"
@@ -302,7 +425,12 @@ export default function Search(props) {
                 </label>
               </div>
               <div className="self-stretch flex items-start justify-between gap-2">
-                <input type="checkbox" id="forties" name="연령" value="forties" />
+                <input
+                  type="checkbox"
+                  id="forties"
+                  name="연령"
+                  value="forties"
+                />
                 <label
                   htmlFor="forties"
                   className="text-black text-base font-light self-center whitespace-nowrap my-auto"
@@ -311,7 +439,12 @@ export default function Search(props) {
                 </label>
               </div>
               <div className="self-stretch flex items-start justify-between gap-2">
-                <input type="checkbox" id="fifties" name="연령" value="fifties" />
+                <input
+                  type="checkbox"
+                  id="fifties"
+                  name="연령"
+                  value="fifties"
+                />
                 <label
                   htmlFor="fifties"
                   className="text-black text-base font-light self-center whitespace-nowrap my-auto"
@@ -320,7 +453,12 @@ export default function Search(props) {
                 </label>
               </div>
               <div className="self-stretch flex items-start justify-between gap-2">
-                <input type="checkbox" id="sixties" name="연령" value="sixties" />
+                <input
+                  type="checkbox"
+                  id="sixties"
+                  name="연령"
+                  value="sixties"
+                />
                 <label
                   htmlFor="sixties"
                   className="text-black text-base font-light self-center whitespace-nowrap my-auto"
@@ -357,13 +495,16 @@ export default function Search(props) {
                   <div className="text-black text-base font-light self-center whitespace-nowrap my-auto">
                     조회하기
                   </div>
-                </div>  
+                </div>
               </div>
             </div>
           </div>
         </div>
-
       </form>
+
+      <div id="graph1">
+        
+      </div>
     </div>
   );
 }
