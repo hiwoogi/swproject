@@ -102,6 +102,8 @@ export default function Search(props) {
             endDate={responseData.endDate}
             timeUnit={responseData.timeUnit}
             results={responseData.results}
+
+            width={500} height={500}
           />
         );
         setRoot(newRoot);
@@ -113,6 +115,8 @@ export default function Search(props) {
             endDate={responseData.endDate}
             timeUnit={responseData.timeUnit}
             results={responseData.results}
+
+            width={500} height={500}
           />
         );
       }
