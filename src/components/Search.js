@@ -6,7 +6,7 @@ import { createRoot } from 'react-dom/client';
 export default function Search(props) {
   const [filterData, setFilterData] = useState({
     keyword: "",
-    category: "50000001",
+    category: "50000008",
     timeUnit: "month",
     startDate: "2017-08-01",
     endDate: "2017-09-30",
