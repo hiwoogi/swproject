@@ -6,7 +6,7 @@ import { createRoot } from 'react-dom/client';
 export default function Search(props) {
   const [filterData, setFilterData] = useState({
     keyword: "",
-    category: "50000008",
+    category: "50000000",
     timeUnit: "month",
     startDate: "2017-08-01",
     endDate: "2017-09-30",
@@ -140,7 +140,7 @@ export default function Search(props) {
               }
               className="text-black text-base font-light leading-6 uppercase self-stretch border w-[269px] max-w-full grow shrink basis-auto items-start justify-between gap-5 pl-32 py-7 rounded-3xl border-solid border-black max-md:pl-5"
             >
-              <option value="50000001">패션</option>
+              <option value="50000000">패션</option>
               <option value="50000007">스포츠</option>
               <option value="50000003">가전제품</option>
               <option value="leisure">여가</option>
