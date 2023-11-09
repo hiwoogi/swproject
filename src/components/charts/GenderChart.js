@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
-export default function GenderChart({ startDate, endDate, timeUnit, genderResults, width, height }) {
+export default function GenderChart({ startDate, endDate, timeUnit, genderResults }) {
   const chartRef = useRef(null);
 
   console.log(startDate); // "2017-08-01"
@@ -62,10 +62,9 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
   }, [genderResults]);
 
   return (
-    <div style={ {width, height} } >
-      {startDate}
-      {endDate}
-      {timeUnit}
+    <div className="w-95 h-80 border-2 border-gray-300 p-4 rounded-lg shadow-md flex justify-center items-center">
+      {startDate} ~ {endDate} <br />
+      -{timeUnit}
       <canvas id="genderChart" />
     </div>
   );

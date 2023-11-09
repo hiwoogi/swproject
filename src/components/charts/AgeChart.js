@@ -6,8 +6,6 @@ export default function AgeChart({
   endDate,
   timeUnit,
   ageResults,
-  width,
-  height,
 }) {
   const chartRef = useRef(null);
 
@@ -102,10 +100,9 @@ export default function AgeChart({
 
 
   return (
-    <div style={{ width, height }}>
-      {startDate}
-      {endDate}
-      {timeUnit}
+    <div className="w-120 h-80 border-2 border-gray-300 p-4 rounded-lg shadow-md flex justify-center items-center">
+      {startDate} ~ {endDate} <br />
+      -{timeUnit}
       <canvas id="ageChart" />
     </div>
   );

@@ -149,8 +149,6 @@ useEffect(() => {
           endDate={responseData.endDate}
           timeUnit={responseData.timeUnit}
           genderResults={responseData.genderResults}
-          width={300}
-          height={300}
         />
       );
       setRoot(newRoot);
@@ -162,8 +160,6 @@ useEffect(() => {
           endDate={responseData.endDate}
           timeUnit={responseData.timeUnit}
           genderResults={responseData.genderResults}
-          width={300}
-          height={300}
         />
       );
     }
@@ -179,8 +175,6 @@ useEffect(() => {
           endDate={responseData.endDate}
           timeUnit={responseData.timeUnit}
           ageResults={responseData.ageResults}
-          width={300}
-          height={300}
         />
       );
       setAgeRoot(newRoot2);
@@ -192,8 +186,6 @@ useEffect(() => {
           endDate={responseData.endDate}
           timeUnit={responseData.timeUnit}
           ageResults={responseData.ageResults}
-          width={300}
-          height={300}
         />
       );
     }
