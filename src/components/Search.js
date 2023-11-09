@@ -1,7 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import Graph from "./charts/Graph";
+
 import { createRoot } from 'react-dom/client';
+import GenderChart from "./charts/GenderChart";
+import AgeChart from "./charts/AgeChart";
 
 export default function Search(props) {
   const [filterData, setFilterData] = useState({
@@ -16,11 +18,15 @@ export default function Search(props) {
   });
   const [root, setRoot] = useState(null);
 
+  const [ageRoot, setAgeRoot] = useState(null);
+
+
   const [responseData, setResponseData] = useState({
     startDate: null,
     endDate: null,
     timeUnit: null,
-    results: null,
+    genderResults: null,
+    ageResults: null,
   });
   const daysInMonth = {
     "01": 31,
@@ -55,7 +61,8 @@ export default function Search(props) {
     console.log("나이:", filterData.ages);
     console.log("성별:", filterData.gender);
 
-    test();
+    makeGenderChart();
+    makeAgeChart();
 
   };
 
@@ -72,11 +79,11 @@ export default function Search(props) {
     }
   };
 
-  async function test() {
+  async function makeGenderChart() {
     const baseUrl = "http://localhost:8080";
 
     await axios
-      .post(baseUrl + "/test/requestbody", filterData)
+      .post(baseUrl + "/test/gender", filterData)
       .then((response) => {
         console.log(response.data);
         setResponseData({
@@ -84,39 +91,87 @@ export default function Search(props) {
           startDate: response.data.startDate, // Update the startDate property
           endDate: response.data.endDate, // Update the endDate property
           timeUnit: response.data.timeUnit, // Update the timeUnit property
-          results: response.data.results, // Update the results property
+          genderResults: response.data.results, // Update the results property
         });
       })
       .catch((error) => {
         console.log(error);
       });
   }
+
+  async function makeAgeChart() {
+    const baseUrl = "http://localhost:8080";
+
+    await axios
+      .post(baseUrl + "/test/age", filterData)
+      .then((response) => {
+        console.log('리스폰스데이터', response.data);
+        setResponseData({
+          ...responseData, // Spread the existing state
+          ageResults: response.data.results, // Update the results property
+        });
+        console.log("ageResult :", responseData.ageResults)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+
+
   useEffect(() => {
     if (responseData.startDate && responseData.endDate) {
       if (!root) {
         // createRoot를 사용하여 루트를 초기화
         const newRoot = createRoot(document.getElementById("graph1"));
         newRoot.render(
-          <Graph
+          <GenderChart
             startDate={responseData.startDate}
             endDate={responseData.endDate}
             timeUnit={responseData.timeUnit}
-            results={responseData.results}
+            genderResults={responseData.genderResults}
 
-            width={500} height={500}
+            width={300} height={300}
           />
         );
         setRoot(newRoot);
       } else {
         // 이미 루트가 초기화된 경우 업데이트
         root.render(
-          <Graph
+          <GenderChart
             startDate={responseData.startDate}
             endDate={responseData.endDate}
             timeUnit={responseData.timeUnit}
-            results={responseData.results}
+            genderResults={responseData.genderResults}
 
-            width={500} height={500}
+            width={300} height={300}
+          />
+        );
+      }
+
+      if (!ageRoot) {
+        // createRoot를 사용하여 AgeChart를 초기화
+        const newRoot2 = createRoot(document.getElementById("graph2"));
+        newRoot2.render(
+          <AgeChart
+            startDate={responseData.startDate}
+            endDate={responseData.endDate}
+            timeUnit={responseData.timeUnit}
+            ageResults={responseData.ageResults} // Assuming this is the correct property name
+            width={300}
+            height={300}/>
+          );
+          setAgeRoot(newRoot2);
+      }
+      else {
+        // 이미 루트가 초기화된 경우 업데이트
+        ageRoot.render(
+          <AgeChart
+            startDate={responseData.startDate}
+            endDate={responseData.endDate}
+            timeUnit={responseData.timeUnit}
+            ageResults={responseData.genderResults}
+            width={300} height={300}
           />
         );
       }
@@ -508,6 +563,10 @@ export default function Search(props) {
 
       <div id="graph1">
         
+      </div>
+
+      <div id="graph2">
+                
       </div>
     </div>
   );
