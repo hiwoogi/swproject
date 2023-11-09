@@ -11,10 +11,10 @@ export default function AgeChart({
 }) {
   const chartRef = useRef(null);
 
-  console.log(startDate); // "2017-08-01"
-  console.log(endDate); // "2017-09-30"
-  console.log(timeUnit); // "month"
-  console.log(ageResults);
+  console.log("시작 날짜 :",startDate); // "2017-08-01"
+  console.log("종료 날짜 :",endDate); // "2017-09-30"
+  console.log("시간 단위 : ", timeUnit); // "month"
+  console.log("연령 결과:", ageResults);
 
   return (
     <div style={{ width, height }}>

@@ -61,8 +61,8 @@ export default function Search(props) {
     console.log("나이:", filterData.ages);
     console.log("성별:", filterData.gender);
 
-    makeGenderChart();
-    makeAgeChart();
+    makeChartData();
+    
 
   };
 
@@ -79,7 +79,7 @@ export default function Search(props) {
     }
   };
 
-  async function makeGenderChart() {
+  async function makeChartData() {
     const baseUrl = "http://localhost:8080";
 
     await axios
@@ -97,12 +97,8 @@ export default function Search(props) {
       .catch((error) => {
         console.log(error);
       });
-  }
 
-  async function makeAgeChart() {
-    const baseUrl = "http://localhost:8080";
-
-    await axios
+      await axios
       .post(baseUrl + "/test/age", filterData)
       .then((response) => {
         console.log('리스폰스데이터', response.data);
@@ -119,64 +115,70 @@ export default function Search(props) {
 
 
 
-  useEffect(() => {
-    if (responseData.startDate && responseData.endDate) {
-      if (!root) {
-        // createRoot를 사용하여 루트를 초기화
-        const newRoot = createRoot(document.getElementById("graph1"));
-        newRoot.render(
-          <GenderChart
-            startDate={responseData.startDate}
-            endDate={responseData.endDate}
-            timeUnit={responseData.timeUnit}
-            genderResults={responseData.genderResults}
-
-            width={300} height={300}
-          />
-        );
-        setRoot(newRoot);
-      } else {
-        // 이미 루트가 초기화된 경우 업데이트
-        root.render(
-          <GenderChart
-            startDate={responseData.startDate}
-            endDate={responseData.endDate}
-            timeUnit={responseData.timeUnit}
-            genderResults={responseData.genderResults}
-
-            width={300} height={300}
-          />
-        );
-      }
-
+useEffect(() => {
+  if (responseData.startDate && responseData.endDate) {
+    if (!root) {
+      // createRoot user interface
+      const newRoot = createRoot(document.getElementById("graph1"));
+      newRoot.render(
+        <GenderChart
+          startDate={responseData.startDate}
+          endDate={responseData.endDate}
+          timeUnit={responseData.timeUnit}
+          genderResults={responseData.genderResults}
+          width={300}
+          height={300}
+        />
+      );
+      setRoot(newRoot);
+    } else {
+      // 이미 루트가 초기화된 경우 업데이트
+      root.render(
+        <GenderChart
+          startDate={responseData.startDate}
+          endDate={responseData.endDate}
+          timeUnit={responseData.timeUnit}
+          genderResults={responseData.genderResults}
+          width={300}
+          height={300}
+        />
+      );
+    }
+    if (responseData.ageResults) { // Check if ageResults is available
       if (!ageRoot) {
-        // createRoot를 사용하여 AgeChart를 초기화
+        // createRoot user AgeChart display
         const newRoot2 = createRoot(document.getElementById("graph2"));
         newRoot2.render(
           <AgeChart
             startDate={responseData.startDate}
             endDate={responseData.endDate}
             timeUnit={responseData.timeUnit}
-            ageResults={responseData.ageResults} // Assuming this is the correct property name
+            ageResults={responseData.ageResults}
             width={300}
-            height={300}/>
-          );
-          setAgeRoot(newRoot2);
-      }
-      else {
+            height={300}
+          />
+        );
+        setAgeRoot(newRoot2);
+      } else {
         // 이미 루트가 초기화된 경우 업데이트
         ageRoot.render(
           <AgeChart
             startDate={responseData.startDate}
             endDate={responseData.endDate}
             timeUnit={responseData.timeUnit}
-            ageResults={responseData.genderResults}
-            width={300} height={300}
+            ageResults={responseData.ageResults}
+            width={300}
+            height={300}
           />
         );
       }
+      
     }
-  }, [responseData]);
+  }
+
+  
+}, [responseData]);
+  
   return (
     <div className="bg-white flex flex-col px-20 max-md:px-5">
       <form id="searchForm" onSubmit={handleSubmit}>
