@@ -38,7 +38,7 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
       console.log('female 상대적 비율:', female);
       console.log('male의 상대적 비율:', male);
 
-      const ctx = document.getElementById('myChart');
+      const ctx = document.getElementById('genderChart');
       if (ctx) {
         if (chartRef.current) {
           chartRef.current.destroy();
@@ -49,9 +49,10 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
             labels: ['Female', 'Male'],
             datasets: [
               {
-                label: 'Gender',
+                label: '%',
                 data: [female, male],
-                backgroundColor: ['rgba(255, 99, 132)', 'rgba(54, 162, 235)'],
+                backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
+                borderColor: [ 'rgba(255, 99, 132, 0.3)', 'rgba(54, 162, 235, 0.3)'],
               },
             ],
           },
@@ -65,7 +66,7 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
       {startDate}
       {endDate}
       {timeUnit}
-      <canvas id="myChart" />
+      <canvas id="genderChart" />
     </div>
   );
 }
