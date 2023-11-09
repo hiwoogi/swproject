@@ -80,39 +80,38 @@ export default function Search(props) {
   };
 
   async function makeChartData() {
-    const baseUrl = "http://localhost:8080";
+  const baseUrl = "http://localhost:8080";
 
-    await axios
-      .post(baseUrl + "/test/gender", filterData)
-      .then((response) => {
-        console.log(response.data);
-        setResponseData({
-          ...responseData, // Spread the existing state
-          startDate: response.data.startDate, // Update the startDate property
-          endDate: response.data.endDate, // Update the endDate property
-          timeUnit: response.data.timeUnit, // Update the timeUnit property
-          genderResults: response.data.results, // Update the results property
-        });
-      })
-      .catch((error) => {
-        console.log(error);
+  await axios
+    .post(baseUrl + "/test/gender", filterData)
+    .then((response) => {
+      console.log(response.data);
+      setResponseData({
+        ...responseData,
+        startDate: response.data.startDate,
+        endDate: response.data.endDate,
+        timeUnit: response.data.timeUnit,
+        genderResults: response.data.results,
       });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 
-      await axios
-      .post(baseUrl + "/test/age", filterData)
-      .then((response) => {
-        console.log('리스폰스데이터', response.data);
-        setResponseData({
-          ...responseData, // Spread the existing state
-          ageResults: response.data.results, // Update the results property
-        });
-        console.log("ageResult :", responseData.ageResults)
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
+  await axios
+    .post(baseUrl + "/test/age", filterData)
+    .then((response) => {
+      console.log('리스폰스데이터', response.data);
+      setResponseData((prevData) => ({
+        ...prevData, // Spread the existing state
+        ageResults: response.data.results,
+      }));
+      console.log("ageResult :", responseData.ageResults);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
 
 
 useEffect(() => {
@@ -144,39 +143,37 @@ useEffect(() => {
         />
       );
     }
-    if (responseData.ageResults) { // Check if ageResults is available
-      if (!ageRoot) {
-        // createRoot user AgeChart display
-        const newRoot2 = createRoot(document.getElementById("graph2"));
-        newRoot2.render(
-          <AgeChart
-            startDate={responseData.startDate}
-            endDate={responseData.endDate}
-            timeUnit={responseData.timeUnit}
-            ageResults={responseData.ageResults}
-            width={300}
-            height={300}
-          />
-        );
-        setAgeRoot(newRoot2);
-      } else {
-        // 이미 루트가 초기화된 경우 업데이트
-        ageRoot.render(
-          <AgeChart
-            startDate={responseData.startDate}
-            endDate={responseData.endDate}
-            timeUnit={responseData.timeUnit}
-            ageResults={responseData.ageResults}
-            width={300}
-            height={300}
-          />
-        );
-      }
-      
-    }
   }
 
-  
+  if (responseData.ageResults) { // Check if ageResults is available
+    if (!ageRoot) {
+      // createRoot user AgeChart display
+      const newRoot2 = createRoot(document.getElementById("graph2"));
+      newRoot2.render(
+        <AgeChart
+          startDate={responseData.startDate}
+          endDate={responseData.endDate}
+          timeUnit={responseData.timeUnit}
+          ageResults={responseData.ageResults}
+          width={300}
+          height={300}
+        />
+      );
+      setAgeRoot(newRoot2);
+    } else {
+      // 이미 루트가 초기화된 경우 업데이트
+      ageRoot.render(
+        <AgeChart
+          startDate={responseData.startDate}
+          endDate={responseData.endDate}
+          timeUnit={responseData.timeUnit}
+          ageResults={responseData.ageResults}
+          width={300}
+          height={300}
+        />
+      );
+    }
+  }
 }, [responseData]);
   
   return (
