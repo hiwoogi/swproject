@@ -47,6 +47,30 @@ export default function Search(props) {
   function isLeapYear(year) {
     return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
   }
+  const handleAgeCheckboxChange = (e) => {
+    const ageValue = e.target.value;
+    const isChecked = e.target.checked;
+  
+    if (ageValue === "") {
+      // If "전체" checkbox is clicked, update all age checkboxes
+      const allAgeDivs = document.querySelectorAll(".self-stretch input[type=checkbox]");
+      allAgeDivs.forEach((ageCheckbox) => {
+        ageCheckbox.checked = isChecked;  
+      });
+      setFilterData({
+        ...filterData,
+        ages: [],
+      });
+    } else {
+      // For other age checkboxes, handle individually
+      setFilterData((prevFilterData) => ({
+        ...prevFilterData,
+        ages: isChecked
+          ? [...prevFilterData.ages, ageValue]
+          : prevFilterData.ages.filter((age) => age !== ageValue),
+      }));
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
@@ -372,7 +396,13 @@ useEffect(() => {
             <div className="flex w-[435px] max-w-full items-start justify-between gap-5 mt-14 self-start max-md:flex-wrap max-md:justify-center max-md:mt-10">
               <div className="text-black text-lg self-center my-auto">기기</div>
               <div className="self-stretch flex items-start justify-between gap-2">
-                <input type="radio" id="all-device" name="기기" value="all" />
+                <input type="radio" id="all-device" name="기기" value="" 
+                onChange={(e) =>
+                  setFilterData({
+                    ...filterData,
+                    device: e.target.value,
+                  })
+                }/>
                 <label
                   htmlFor="all-device"
                   className="text-black text-base font-light self-center whitespace-nowrap my-auto"
@@ -381,7 +411,13 @@ useEffect(() => {
                 </label>
               </div>
               <div className="self-stretch flex items-start justify-between gap-2">
-                <input type="radio" id="pc-device" name="기기" value="pc" />
+                <input type="radio" id="pc-device" name="기기" value="pc"
+                onChange={(e) =>
+                  setFilterData({
+                    ...filterData,
+                    device: e.target.value,
+                  })
+                } />
                 <label
                   htmlFor="pc-device"
                   className="text-black text-base font-light self-center whitespace-nowrap my-auto"
@@ -394,7 +430,13 @@ useEffect(() => {
                   type="radio"
                   id="mobile-device"
                   name="기기"
-                  value="mobile"
+                  value="mo"
+                  onChange={(e) =>
+                    setFilterData({
+                      ...filterData,
+                      device: e.target.value,
+                    })
+                  }
                 />
                 <label
                   htmlFor="mobile-device"
@@ -407,7 +449,13 @@ useEffect(() => {
             <div className="flex w-[418px] max-w-full items-start justify-between gap-5 mt-6 self-start max-md:justify-center">
               <div className="text-black text-lg self-center my-auto">성별</div>
               <div className="self-stretch flex items-start justify-between gap-2">
-                <input type="radio" id="all-gender" name="성별" value="all" />
+                <input type="radio" id="all-gender" name="성별" value=""
+                onChange={(e) =>
+                  setFilterData({
+                    ...filterData,
+                    gender: e.target.value,
+                  })
+                } />
                 <label
                   htmlFor="all-gender"
                   className="text-black text-base font-light self-center whitespace-nowrap my-auto"
@@ -416,7 +464,14 @@ useEffect(() => {
                 </label>
               </div>
               <div className="self-stretch flex items-start justify-between gap-2">
-                <input type="radio" id="female" name="성별" value="female" />
+                <input type="radio" id="female" name="성별" value="f"
+                onChange={(e) =>
+                  setFilterData({
+                    ...filterData,
+                    gender: e.target.value,
+                  })
+                }
+                />
                 <label
                   htmlFor="female"
                   className="text-black text-base font-light self-center whitespace-nowrap my-auto"
@@ -425,7 +480,14 @@ useEffect(() => {
                 </label>
               </div>
               <div className="self-stretch flex items-start justify-between gap-2">
-                <input type="radio" id="male" name="성별" value="male" />
+                <input type="radio" id="male" name="성별" value="m" 
+                onChange={(e) =>
+                  setFilterData({
+                    ...filterData,
+                    gender: e.target.value,
+                  })
+                }
+                />
                 <label
                   htmlFor="male"
                   className="text-black text-base font-light self-center whitespace-nowrap my-auto"
@@ -437,7 +499,9 @@ useEffect(() => {
             <div className="self-stretch flex w-full items-start justify-between gap-5 mt-6 max-md:max-w-full max-md:flex-wrap max-md:justify-center">
               <div className="text-black text-lg self-center my-auto">연령</div>
               <div className="self-stretch flex items-start justify-between gap-2">
-                <input type="checkbox" id="all-age" name="연령" value="all" />
+                <input type="checkbox" id="all-age" name="연령" value=""
+                onChange={handleAgeCheckboxChange}
+                />
                 <label
                   htmlFor="all-age"
                   className="text-black text-base font-light self-center whitespace-nowrap my-auto"
@@ -446,7 +510,8 @@ useEffect(() => {
                 </label>
               </div>
               <div className="self-stretch flex items-start justify-between gap-2">
-                <input type="checkbox" id="teens" name="연령" value="teens" />
+                <input type="checkbox" id="teens" name="연령" value="10"
+                onChange={handleAgeCheckboxChange} />
                 <label
                   htmlFor="teens"
                   className="text-black text-base font-light self-center whitespace-nowrap my-auto"
@@ -459,7 +524,8 @@ useEffect(() => {
                   type="checkbox"
                   id="twenties"
                   name="연령"
-                  value="twenties"
+                  value="20"
+                  onChange={handleAgeCheckboxChange}
                 />
                 <label
                   htmlFor="twenties"
@@ -473,7 +539,8 @@ useEffect(() => {
                   type="checkbox"
                   id="thirties"
                   name="연령"
-                  value="thirties"
+                  value="30"
+                  onChange={handleAgeCheckboxChange}
                 />
                 <label
                   htmlFor="thirties"
@@ -487,7 +554,8 @@ useEffect(() => {
                   type="checkbox"
                   id="forties"
                   name="연령"
-                  value="forties"
+                  value="40"
+                  onChange={handleAgeCheckboxChange}
                 />
                 <label
                   htmlFor="forties"
@@ -501,7 +569,8 @@ useEffect(() => {
                   type="checkbox"
                   id="fifties"
                   name="연령"
-                  value="fifties"
+                  value="50"
+                  onChange={handleAgeCheckboxChange}
                 />
                 <label
                   htmlFor="fifties"
@@ -515,7 +584,8 @@ useEffect(() => {
                   type="checkbox"
                   id="sixties"
                   name="연령"
-                  value="sixties"
+                  value="60"
+                  onChange={handleAgeCheckboxChange}
                 />
                 <label
                   htmlFor="sixties"
