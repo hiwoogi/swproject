@@ -9,10 +9,10 @@ export default function AgeChart({
 }) {
   const chartRef = useRef(null);
 
-  console.log("시작 날짜 :",startDate); // "2017-08-01"
-  console.log("종료 날짜 :",endDate); // "2017-09-30"
-  console.log("시간 단위 : ", timeUnit); // "month"
-  console.log("연령 결과:", ageResults);
+  // console.log("시작 날짜 :",startDate); // "2017-08-01"
+  // console.log("종료 날짜 :",endDate); // "2017-09-30"
+  // console.log("시간 단위 : ", timeUnit); // "month"
+  // console.log("연령 결과:", ageResults);
 
   const filterA = (data) => data.filter((item) => item.group === '10');
   const filterB = (data) => data.filter((item) => item.group === '20');
@@ -29,15 +29,15 @@ export default function AgeChart({
 
   useEffect(() => {
     if (ageResults.length > 0) {
-      console.log(ageResults[0].title); // 결과 데이터
-      console.log(ageResults[0].data[0]);
+      // console.log(ageResults[0].title); // 결과 데이터
+      // console.log(ageResults[0].data[0]);
 
-      ageResults[0].data.map((data, index) => {
-        console.log(index);
-        console.log('기간', data.period);
-        console.log('비율', data.ratio);
-        console.log('나이 그룹', data.group);
-      });
+      // ageResults[0].data.map((data, index) => {
+      //   console.log(index);
+      //   console.log('기간', data.period);
+      //   console.log('비율', data.ratio);
+      //   console.log('나이 그룹', data.group);
+      // });
 
       const filteredAData = filterA(ageResults[0].data);
       const filteredBData = filterB(ageResults[0].data);
@@ -53,12 +53,12 @@ export default function AgeChart({
       const E = calculateRelativeRatio(filteredEData);
       const F = calculateRelativeRatio(filteredFData);
 
-      console.log('10대 상대적 비율:', A);
-      console.log('20대 상대적 비율:', B);
-      console.log('30대 상대적 비율:', C);
-      console.log('40대 상대적 비율:', D);
-      console.log('50대 상대적 비율:', E);
-      console.log('60대 상대적 비율:', F);
+      // console.log('10대 상대적 비율:', A);
+      // console.log('20대 상대적 비율:', B);
+      // console.log('30대 상대적 비율:', C);
+      // console.log('40대 상대적 비율:', D);
+      // console.log('50대 상대적 비율:', E);
+      // console.log('60대 상대적 비율:', F);
 
       const ctx = document.getElementById('ageChart');
       if (ctx) {

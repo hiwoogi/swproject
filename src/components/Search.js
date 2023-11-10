@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { createRoot } from 'react-dom/client';
 import GenderChart from "./charts/GenderChart";
 import AgeChart from "./charts/AgeChart";
+import DeviceChart from "./charts/DeviceChart";
 
 export default function Search(props) {
   const [filterData, setFilterData] = useState({
@@ -19,6 +20,8 @@ export default function Search(props) {
   const [root, setRoot] = useState(null);
 
   const [ageRoot, setAgeRoot] = useState(null);
+  const [deviceRoot, setDeviceRoot] = useState(null);
+
 
 
   const [responseData, setResponseData] = useState({
@@ -27,6 +30,7 @@ export default function Search(props) {
     timeUnit: null,
     genderResults: null,
     ageResults: null,
+    deviceResults: null,
   });
   const daysInMonth = {
     "01": 31,
@@ -74,16 +78,6 @@ export default function Search(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
-    // You can add your form submission logic here
-    console.log("객체:", filterData);
-    console.log("검색어:", filterData.keyword);
-    console.log("분야:", filterData.category);
-    console.log("시간기준:", filterData.timeUnit);
-    console.log("시작날짜:", filterData.startDate);
-    console.log("종료날짜:", filterData.endDate);
-    console.log("기기:", filterData.device);
-    console.log("나이:", filterData.ages);
-    console.log("성별:", filterData.gender);
 
     makeChartData();
     
@@ -104,44 +98,43 @@ export default function Search(props) {
   };
 
   async function makeChartData() {
-  const baseUrl = "http://localhost:8080";
-
-  await axios
-    .post(baseUrl + "/test/gender", filterData)
-    .then((response) => {
-      console.log(response.data);
-      setResponseData({
-        ...responseData,
-        startDate: response.data.startDate,
-        endDate: response.data.endDate,
-        timeUnit: response.data.timeUnit,
-        genderResults: response.data.results,
-      });
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-
-  await axios
-    .post(baseUrl + "/test/age", filterData)
-    .then((response) => {
-      console.log('리스폰스데이터', response.data);
+    const baseUrl = "http://localhost:8080";
+  
+    try {
+      // Make all requests concurrently
+      const [genderResponse, ageResponse, deviceResponse] = await Promise.all([
+        axios.post(baseUrl + "/test/gender", filterData),
+        axios.post(baseUrl + "/test/age", filterData),
+        axios.post(baseUrl + "/test/device", filterData)
+      ]);
+  
+      // Extract data from responses
+      const genderResults = genderResponse.data.results;
+      const ageResults = ageResponse.data.results;
+      const deviceResults = deviceResponse.data.results;
+  
+      // Update state in a single call
       setResponseData((prevData) => ({
-        ...prevData, // Spread the existing state
-        ageResults: response.data.results,
+        ...prevData,
+        startDate: genderResponse.data.startDate,
+        endDate: genderResponse.data.endDate,
+        timeUnit: genderResponse.data.timeUnit,
+        genderResults,
+        ageResults,
+        deviceResults,
       }));
-      console.log("ageResult :", responseData.ageResults);
-    })
-    .catch((error) => {
+  
+      console.log("deviceResult :", deviceResults);
+    } catch (error) {
       console.log(error);
-    });
-}
+    }
+  }
 
 
 useEffect(() => {
   if (responseData.startDate && responseData.endDate) {
     if (!root) {
-      // createRoot user interface
+      
       const newRoot = createRoot(document.getElementById("graph1"));
       newRoot.render(
         <GenderChart
@@ -153,7 +146,7 @@ useEffect(() => {
       );
       setRoot(newRoot);
     } else {
-      // 이미 루트가 초기화된 경우 업데이트
+    
       root.render(
         <GenderChart
           startDate={responseData.startDate}
@@ -165,9 +158,9 @@ useEffect(() => {
     }
   }
 
-  if (responseData.ageResults) { // Check if ageResults is available
+  if (responseData.ageResults) { 
     if (!ageRoot) {
-      // createRoot user AgeChart display
+     
       const newRoot2 = createRoot(document.getElementById("graph2"));
       newRoot2.render(
         <AgeChart
@@ -179,7 +172,7 @@ useEffect(() => {
       );
       setAgeRoot(newRoot2);
     } else {
-      // 이미 루트가 초기화된 경우 업데이트
+      
       ageRoot.render(
         <AgeChart
           startDate={responseData.startDate}
@@ -190,7 +183,33 @@ useEffect(() => {
       );
     }
   }
-}, [responseData]);
+
+  if (responseData.deviceResults) { // Check if ageResults is available
+    if (!deviceRoot) {
+      
+      const newRoot3 = createRoot(document.getElementById("graph3"));
+      newRoot3.render(
+        <DeviceChart
+          startDate={responseData.startDate}
+          endDate={responseData.endDate}
+          timeUnit={responseData.timeUnit}
+          deviceResults={responseData.deviceResults}
+        />
+      );
+      setDeviceRoot(newRoot3);
+    } else {
+    
+      deviceRoot.render(
+        <DeviceChart
+          startDate={responseData.startDate}
+          endDate={responseData.endDate}
+          timeUnit={responseData.timeUnit}
+          deviceResults={responseData.deviceResults}
+        />
+      );
+    }
+  }
+},  [responseData, ageRoot, deviceRoot, root, responseData.deviceResults]);
   
   return (
     <div className="bg-white flex flex-col px-20 max-md:px-5">
@@ -628,6 +647,10 @@ useEffect(() => {
 
       <div id="graph2">
                 
+      </div>
+
+      <div id="graph3">
+
       </div>
     </div>
   );
