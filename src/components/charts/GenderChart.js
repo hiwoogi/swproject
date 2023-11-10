@@ -2,7 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
 export default function GenderChart({ startDate, endDate, timeUnit, genderResults }) {
-  const chartRef = useRef(null);
+  const chartRefF = useRef(null);
+  const chartRefM = useRef(null);
 
   // console.log(startDate); // "2017-08-01"
   // console.log(endDate); // "2017-09-30"
@@ -36,36 +37,73 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
       const male = calculateRelativeRatio(filteredMData);
 
       // console.log('female 상대적 비율:', female);
-      // console.log('male의 상대적 비율:', male);
+      // console.log('male 상대적 비율:', male);
 
-      const ctx = document.getElementById('genderChart');
-      if (ctx) {
-        if (chartRef.current) {
-          chartRef.current.destroy();
+
+      const ctxF = document.getElementById('femaleChart');
+      if (ctxF) {
+        if (chartRefF.current) {
+          chartRefF.current.destroy();
         }
-        chartRef.current = new Chart(ctx, {
+        chartRefF.current = new Chart(ctxF, {
           type: 'doughnut',
           data: {
-            labels: ['Female', 'Male'],
+            labels: ['Female'],
             datasets: [
               {
                 label: '%',
-                data: [female, male],
-                backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
-                borderColor: [ 'rgba(255, 99, 132, 0.3)', 'rgba(54, 162, 235, 0.3)'],
+                data: [female, 100 - female],
+                backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(0, 0, 0, 0.2)'],
+                borderColor: [ 'rgba(255, 99, 132, 0)', 'rgba(0, 0, 0, 0)'],
               },
             ],
           },
+          options:{
+            rotation: -90,
+            circumference: 180,
+            
+          }
         });
       }
+
+      const ctxM = document.getElementById('maleChart');
+      if (ctxM) {
+        if (chartRefM.current) {
+          chartRefM.current.destroy();
+        }
+        chartRefM.current = new Chart(ctxM, {
+          type: 'doughnut',
+          data: {
+            labels: ['Male'],
+            datasets: [
+              {
+                label: '%',
+                data: [male, 100 - male],
+                backgroundColor: ['rgba(54, 162, 235, 0.2)', 'rgba(0, 0, 0, 0.2)'],
+                borderColor: ['rgba(54, 162, 235, 0)', 'rgba(0, 0, 0, 0)'],
+              },
+            ],
+          },
+          options: {
+            //cutout: '60%',
+            rotation: -90,
+            circumference: 180,
+            
+          }
+        });
+      }
+
+
     }
   }, [genderResults]);
 
   return (
-    <div className="w-95 h-80 border-2 border-gray-300 p-4 rounded-lg shadow-md flex justify-center items-center">
+    <div className="w-120 h-80 border-2 border-gray-300 p-4 rounded-lg shadow-md flex justify-center items-center">
       {startDate} ~ {endDate} <br />
-      -{timeUnit}
-      <canvas id="genderChart" />
+      -{timeUnit} <br />
+      GenderChart
+      <canvas id="femaleChart" />
+      <canvas id="maleChart" />
     </div>
   );
 }
