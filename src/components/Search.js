@@ -5,6 +5,7 @@ import { createRoot } from 'react-dom/client';
 import GenderChart from "./charts/GenderChart";
 import AgeChart from "./charts/AgeChart";
 import DeviceChart from "./charts/DeviceChart";
+import ClickChart from "./charts/ClickChart";
 
 export default function Search(props) {
   const [filterData, setFilterData] = useState({
@@ -17,11 +18,27 @@ export default function Search(props) {
     ages: [],
     gender: "",
   });
+  
+  const [clickFilterData, setClickFilterData] = useState({
+    keyword: [
+      {
+        name: "",
+        param: []
+      }
+    ],
+    category: "50000000",
+    timeUnit: "month",
+    startDate: "2017-08-01",
+    endDate: "2017-09-30",
+    device: "",
+    ages: [],
+    gender: "",
+  });
   const [root, setRoot] = useState(null);
 
   const [ageRoot, setAgeRoot] = useState(null);
   const [deviceRoot, setDeviceRoot] = useState(null);
-
+  const [clickRoot, setClickRoot] = useState(null);
 
 
   const [responseData, setResponseData] = useState({
@@ -31,6 +48,8 @@ export default function Search(props) {
     genderResults: null,
     ageResults: null,
     deviceResults: null,
+    clickResults : null,
+    
   });
   const daysInMonth = {
     "01": 31,
@@ -65,6 +84,10 @@ export default function Search(props) {
         ...filterData,
         ages: [],
       });
+      setClickFilterData({
+        ...clickFilterData,
+        ages: [],
+      });
     } else {
       // For other age checkboxes, handle individually
       setFilterData((prevFilterData) => ({
@@ -73,12 +96,18 @@ export default function Search(props) {
           ? [...prevFilterData.ages, ageValue]
           : prevFilterData.ages.filter((age) => age !== ageValue),
       }));
+      setClickFilterData((prevClickFilterData) => ({
+        ...prevClickFilterData,
+        ages: isChecked
+          ? [...prevClickFilterData.ages, ageValue]
+          : prevClickFilterData.ages.filter((age) => age !== ageValue),
+      }));
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
-
+    
     makeChartData();
     
 
@@ -90,29 +119,31 @@ export default function Search(props) {
     if (form) {
       const formData = new FormData(form);
 
-      // FormData에서 필요한 값을 추출하고 상태 변수에 설정합니다.
-      // // setKeyword(formData.get("keyword")); // "field"는 input 요소의 name 속성 값
-      // setCategory(formData.get("category")); // "category"는 select 요소의 name 속성 값
       handleSubmit(new Event("submit"));
     }
   };
 
   async function makeChartData() {
     const baseUrl = "http://localhost:8080";
-  
+    
+    console.log(clickFilterData)
+    
     try {
       // Make all requests concurrently
-      const [genderResponse, ageResponse, deviceResponse] = await Promise.all([
+      const [genderResponse, ageResponse, deviceResponse, clickResponse] = await Promise.all([
         axios.post(baseUrl + "/test/gender", filterData),
         axios.post(baseUrl + "/test/age", filterData),
-        axios.post(baseUrl + "/test/device", filterData)
+        axios.post(baseUrl + "/test/device", filterData),
+        axios.post(baseUrl + "/test/click", clickFilterData)
+        
       ]);
   
       // Extract data from responses
       const genderResults = genderResponse.data.results;
       const ageResults = ageResponse.data.results;
       const deviceResults = deviceResponse.data.results;
-  
+      const clickResults = clickResponse.data.results;
+      
       // Update state in a single call
       setResponseData((prevData) => ({
         ...prevData,
@@ -122,9 +153,10 @@ export default function Search(props) {
         genderResults,
         ageResults,
         deviceResults,
+        clickResults,
       }));
   
-      console.log("deviceResult :", deviceResults);
+      console.log("clickResults :", clickResults);
     } catch (error) {
       console.log(error);
     }
@@ -209,7 +241,34 @@ useEffect(() => {
       );
     }
   }
-},  [responseData, ageRoot, deviceRoot, root, responseData.deviceResults]);
+
+  if (responseData.clickResults) { // Check if ageResults is available
+    if (!clickRoot) {
+      
+      const newRoot4 = createRoot(document.getElementById("graph4"));
+      newRoot4.render(
+        <ClickChart
+          startDate={responseData.startDate}
+          endDate={responseData.endDate}
+          timeUnit={responseData.timeUnit}
+          clickResults={responseData.clickResults}
+        />
+      );
+      setClickRoot(newRoot4);
+    } else {
+    
+      clickRoot.render(
+        <ClickChart
+          startDate={responseData.startDate}
+          endDate={responseData.endDate}
+          timeUnit={responseData.timeUnit}
+          clickResults={responseData.clickResults}
+        />
+      );
+    }
+  }
+
+},  [responseData, ageRoot, deviceRoot, root,clickRoot ,responseData.clickResults]);
   
   return (
     <div className="bg-white flex flex-col px-20 max-md:px-5">
@@ -246,12 +305,25 @@ useEffect(() => {
             </div>
             <input
               name="keyword"
-              onChange={(e) =>
-                setFilterData({
-                  ...filterData,
-                  keyword: e.target.value,
-                })
-              }
+              onChange={(e) => {
+                const newKeyword = e.target.value;
+                setFilterData((prevFilterData) => ({
+                  ...prevFilterData,
+                  keyword: newKeyword,
+                 
+                }));
+
+                setClickFilterData((prevFilterData) => ({
+                  ...prevFilterData,
+                  keyword: [
+                    {
+                      name: newKeyword,
+                      param: [newKeyword],
+                    },
+                  ],
+                }));
+                
+              }}
               type="text"
               className="text-black text-xl leading-8 uppercase self-stretch border w-[975px] max-w-full grow shrink basis-auto items-start justify-between gap-5 stroke-[1px] stroke-black pl-5 py-3 rounded-3xl border-solid border-black max-md:pl-3"
               placeholder="검색어를 입력하세요"
@@ -285,12 +357,16 @@ useEffect(() => {
                   }
 
                   const selectedDay = daysInMonth[selectedMonth];
-
+                  const newStartDate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
                   setFilterData({
                     ...filterData,
-                    startDate:
-                      selectedYear + "-" + selectedMonth + "-" + selectedDay,
+                    startDate: newStartDate,
                   });
+
+                  setClickFilterData({
+                    ...clickFilterData,
+                    startDate:newStartDate
+                  })
                 }}
                 className="text-black text-base font-light leading-6 uppercase self-stretch border w-[102px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5"
               >
@@ -316,11 +392,16 @@ useEffect(() => {
                   }
 
                   const selectedDay = daysInMonth[selectedMonth];
-
+                  const newStartDate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
                   setFilterData({
                     ...filterData,
-                    startDate: `${selectedYear}-${selectedMonth}-${selectedDay}`,
+                    startDate: newStartDate,
                   });
+
+                  setClickFilterData({
+                    ...clickFilterData,
+                    startDate:newStartDate
+                  })
                 }}
                 className="text-black text-base font-light leading-6 uppercase self-stretch border w-[83px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5"
               >
@@ -351,12 +432,16 @@ useEffect(() => {
                   }
 
                   const selectedDay = daysInMonth[selectedMonth];
-
+                  const newStartDate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
                   setFilterData({
                     ...filterData,
-                    endDate:
-                      selectedYear + "-" + selectedMonth + "-" + selectedDay,
+                    endDate: newStartDate
                   });
+
+                  setClickFilterData({
+                    ...clickFilterData,
+                    endDate:newStartDate
+                  })
                 }}
                 className="text-black text-base font-light leading-6 uppercase self-stretch border w-[102px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5"
               >
@@ -382,11 +467,17 @@ useEffect(() => {
                   }
 
                   const selectedDay = daysInMonth[selectedMonth];
-
+                  const newStartDate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
+                  
                   setFilterData({
                     ...filterData,
-                    endDate: `${selectedYear}-${selectedMonth}-${selectedDay}`,
+                    endDate: newStartDate,
                   });
+
+                  setClickFilterData({
+                    ...clickFilterData,
+                    endDate:newStartDate
+                  })
                 }}
                 className="text-black text-base font-light leading-6 uppercase self-stretch border w-[83px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5"
               >
@@ -408,11 +499,18 @@ useEffect(() => {
               <div className="text-black text-lg self-center my-auto">기기</div>
               <div className="self-stretch flex items-start justify-between gap-2">
                 <input type="radio" id="all-device" name="기기" value="" 
-                onChange={(e) =>
+                onChange={(e) =>{
                   setFilterData({
                     ...filterData,
                     device: e.target.value,
                   })
+
+                  setClickFilterData({
+                    ...clickFilterData,
+                    device:e.target.value,
+                  })
+                }
+                
                 }/>
                 <label
                   htmlFor="all-device"
@@ -423,11 +521,16 @@ useEffect(() => {
               </div>
               <div className="self-stretch flex items-start justify-between gap-2">
                 <input type="radio" id="pc-device" name="기기" value="pc"
-                onChange={(e) =>
+                onChange={(e) =>{
                   setFilterData({
                     ...filterData,
                     device: e.target.value,
                   })
+                  setClickFilterData({
+                    ...clickFilterData,
+                    device:e.target.value,
+                  })
+                }
                 } />
                 <label
                   htmlFor="pc-device"
@@ -442,11 +545,17 @@ useEffect(() => {
                   id="mobile-device"
                   name="기기"
                   value="mo"
-                  onChange={(e) =>
+                  onChange={(e) =>{
                     setFilterData({
                       ...filterData,
                       device: e.target.value,
                     })
+                    setClickFilterData({
+                      ...clickFilterData,
+                      device:e.target.value,
+                    })
+                  }
+                    
                   }
                 />
                 <label
@@ -462,10 +571,19 @@ useEffect(() => {
               <div className="self-stretch flex items-start justify-between gap-2">
                 <input type="radio" id="all-gender" name="성별" value=""
                 onChange={(e) =>
-                  setFilterData({
-                    ...filterData,
-                    gender: e.target.value,
-                  })
+                  {
+
+                    setFilterData({
+                      ...filterData,
+                      gender: e.target.value,
+                    })
+
+                    setClickFilterData({
+                      ...clickFilterData,
+                      gender:e.target.value,
+                    })
+                  }
+
                 } />
                 <label
                   htmlFor="all-gender"
@@ -476,11 +594,17 @@ useEffect(() => {
               </div>
               <div className="self-stretch flex items-start justify-between gap-2">
                 <input type="radio" id="female" name="성별" value="f"
-                onChange={(e) =>
+                onChange={(e) =>{
+
                   setFilterData({
                     ...filterData,
                     gender: e.target.value,
                   })
+                  setClickFilterData({
+                    ...clickFilterData,
+                    gender:e.target.value,
+                  })
+                }
                 }
                 />
                 <label
@@ -492,12 +616,19 @@ useEffect(() => {
               </div>
               <div className="self-stretch flex items-start justify-between gap-2">
                 <input type="radio" id="male" name="성별" value="m" 
-                onChange={(e) =>
+                onChange={(e) => {
+
                   setFilterData({
                     ...filterData,
                     gender: e.target.value,
                   })
+                  setClickFilterData({
+                    ...clickFilterData,
+                    gender:e.target.value,
+                  })
                 }
+                
+              }
                 />
                 <label
                   htmlFor="male"
@@ -652,6 +783,11 @@ useEffect(() => {
       <div id="graph3">
 
       </div>
+
+      <div id="graph4">
+
+      </div>
+      
     </div>
   );
 }
