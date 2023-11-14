@@ -33,11 +33,23 @@ export default function ClickChart({
               {
                 label: '%',
                 data: ratios,
-                borderColor: 'rgb(70, 215, 202)',
-                borderWidth: 1,
-                fill: false
+                borderColor: 'rgba(204, 0, 51, 0.8)',
+                borderWidth: 2,
+                pointStyle: 'rect',
+                backgroundColor: 'rgba(204, 0, 51, 1)',
               },
             ],
+          },
+          options: {
+            scales: {
+              y: {
+                min: 0,  // Y축 최소값
+                max: 100,  // Y축 최대값
+                ticks: {
+                  stepSize: 20, // y 축 간격 설정
+                }
+              },
+            },
           },
         });
       }
