@@ -58,8 +58,8 @@ export default function DeviceChart({
               {
                 label: '%',
                 data: [mobail, pc],
-                backgroundColor: ['rgba(051, 206, 86, 0.2)', 'rgba(153, 102, 51, 0.2)'],
-                borderColor: [ 'rgba(051, 206, 86, 0.3)', 'rgba(153, 102, 51, 0.3)'],
+                backgroundColor: ['rgba(051, 206, 86, 0.6)', 'rgba(153, 102, 51, 0.6)'],
+                borderColor: [ 'rgba(051, 206, 86, 1)', 'rgba(153, 102, 51, 1)'],
                 borderWidth: 1,
               },
             ],
