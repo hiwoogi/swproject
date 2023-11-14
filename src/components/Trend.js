@@ -48,7 +48,6 @@ export default function Trend() {
               <option value="50000000">패션</option>
               <option value="50000007">스포츠</option>
               <option value="50000003">가전제품</option>
-              
               <option value="50000006">음식</option>
             </select>
           </div>
@@ -56,6 +55,7 @@ export default function Trend() {
           <div id='treemap'>
             <TreeMap
             trend = {trend}
+            field = {field}
         />
     </div>
     </div>

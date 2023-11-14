@@ -23,11 +23,11 @@ ChartJS.register(
   TreemapElement
 );
 
-export default function TreeMap({ trend }) {
+export default function TreeMap({ trend , field}) {
   const chartRef = useRef(null);
 
   console.log('컴포넌트에 값 전달 확인:', trend);
-
+  console.log('필드값', field)
   useEffect(() => {
     if (trend.length > 0) {
       const data = trend.map((item, index) => ({
