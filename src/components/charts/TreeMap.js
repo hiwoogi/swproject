@@ -28,6 +28,7 @@ export default function TreeMap({ trend , field}) {
 
   console.log('컴포넌트에 값 전달 확인:', trend);
   console.log('필드값', field)
+
   useEffect(() => {
     if (trend.length > 0) {
       const data = trend.map((item, index) => ({
@@ -35,7 +36,19 @@ export default function TreeMap({ trend , field}) {
         capacityMW: 100 / item.rank, //capacityMW 값을 100/item.rank로 설정
         dataCoverage: 1,
         index: index, //색상 구별용 index
+
+        //@@keyword값으로 우선 사용했는데 linkId를 사용하고 싶으면 바꿔도 가능
+        link: `#/keyword?trend=${encodeURIComponent(item.keyword)}&field=${encodeURIComponent(field)}`, //링크 정보 추가
       }));
+
+      //@@colorsMap
+      let colorMap = {
+        50000000: 'blue',
+        50000007: 'green',
+        50000003: 'purple',
+        50000006: 'red'
+      };
+      let colors = colorMap[field];
 
       //capacityMW의 최대값 계산
       const maxCapacity = Math.max(...data.map((item) => item.capacityMW));
@@ -46,7 +59,6 @@ export default function TreeMap({ trend , field}) {
         if (chartRef.current) {
           chartRef.current.destroy();
         }
-
         chartRef.current = new ChartJS(ctx, {
           type: 'treemap',
           data: {
@@ -67,7 +79,7 @@ export default function TreeMap({ trend , field}) {
 
                   return dataCoverage === 0
                     ? color('grey').alpha(alpha).rgbString()
-                    : color('green').alpha(alpha * dataCoverage).rgbString();
+                    : color(colors).alpha(alpha * dataCoverage).rgbString();
                 },
               },
             ],
@@ -98,6 +110,20 @@ export default function TreeMap({ trend , field}) {
                   },
                 },
               },
+            },
+
+            //@@각 값 클릭 이벤트
+            onClick(event, elements, chart) {
+              if (elements && elements[0]) {
+                const datasetIndex = elements[0].datasetIndex;
+                const index = elements[0].index;
+                //클릭한 데이터셋 및 인덱스로부터 데이터 추출
+                const data = chart.data.datasets[datasetIndex].tree[index];
+                //데이터에서 link 속성 추출
+                const link = data.link;
+                //해당 링크로 이동
+                window.location.href = link;
+              }
             },
           },
         });

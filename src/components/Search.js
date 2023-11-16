@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
+import { useLocation } from 'react-router-dom'; 
+
 import { createRoot } from 'react-dom/client';
 import GenderChart from "./charts/GenderChart";
 import AgeChart from "./charts/AgeChart";
@@ -18,7 +20,7 @@ export default function Search(props) {
     ages: [],
     gender: "",
   });
-  
+
   const [clickFilterData, setClickFilterData] = useState({
     keyword: [
       {
@@ -162,7 +164,17 @@ export default function Search(props) {
     }
   }
 
+  //@@trend에서 보내는 값
+  const location = useLocation();
+  const trend = new URLSearchParams(location.search).get('trend');
+  const field = new URLSearchParams(location.search).get('field');
+  //@@우선 따로 빼서 확인만 해놨어요..
+  useEffect(() => {
+    console.log('트렌드 키워드 값:', trend);
+    console.log('트렌드 필드 값', field);
+  }, [trend, field]);
 
+  
 useEffect(() => {
   if (responseData.startDate && responseData.endDate) {
     if (!root) {
