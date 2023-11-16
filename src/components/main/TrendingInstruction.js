@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 
 export default function TrendingInstruction(props) {
   return (
@@ -29,12 +30,11 @@ export default function TrendingInstruction(props) {
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/0ebb2b7c-b651-4c2b-8b2e-6f7834777987?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
               className="aspect-square object-contain object-center w-full overflow-hidden self-stretch"
             />
-            <a
-              href="#"
+            <Link to={"/trend"} state={{fieldValue : 50000000}} 
               className="text-blue-400 text-base font-semibold leading-5 tracking-normal self-center whitespace-nowrap font-['NEXON']"
             >
               패션
-            </a>
+            </Link>
           </div>
           <div className="shadow-sm bg-white flex flex-col flex-1 pt-2.5 pb-4 px-9 rounded-3xl max-md:px-5">
             <img
@@ -42,12 +42,11 @@ export default function TrendingInstruction(props) {
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/7108a0a4-bf35-43fb-80ca-453475259550?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
               className="aspect-square object-contain object-center w-full overflow-hidden self-stretch"
             />
-            <a
-              href="#"
+            <Link to={"/trend"} state={{fieldValue : 50000007}} 
               className="text-green-400 text-base font-semibold leading-5 tracking-normal self-center whitespace-nowrap font-['NEXON']"
             >
               스포츠
-            </a>
+            </Link>
           </div>
           <div className="shadow-sm bg-white flex flex-col flex-1 px-9 py-3 rounded-3xl max-md:px-5">
             <img
@@ -55,12 +54,11 @@ export default function TrendingInstruction(props) {
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/b5be54af-1423-4122-832e-b3f9b14439a0?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
               className="aspect-square object-contain object-center w-full overflow-hidden self-stretch"
             />
-            <a
-              href="#"
+            <Link to={"/trend"} state={{fieldValue : 50000003}} 
               className="text-violet-500 text-base font-semibold leading-5 tracking-normal self-center whitespace-nowrap font-['NEXON']"
             >
               가전
-            </a>
+            </Link>
           </div>
           <div className="shadow-sm bg-white flex flex-col flex-1 pl-8 pr-8 py-3 rounded-3xl max-md:px-5">
             <img
@@ -68,12 +66,11 @@ export default function TrendingInstruction(props) {
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/06873a76-9dd5-4c33-ae2f-c5a3541d3134?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
               className="aspect-square object-contain object-center w-full overflow-hidden self-stretch"
             />
-            <a
-              href="#"
+            <Link to={"/trend"} state={{fieldValue : 50000007}} 
               className="text-orange-300 text-base font-semibold leading-5 tracking-normal self-center whitespace-nowrap font-['NEXON']"
             >
               여가
-            </a>
+            </Link>
           </div>
           <div className="shadow-sm bg-white flex flex-col flex-1 pl-8 pr-9 py-3 rounded-3xl max-md:px-5">
             <img
@@ -81,12 +78,11 @@ export default function TrendingInstruction(props) {
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/4bca508f-3345-4741-9e79-9cd7499ae077?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
               className="aspect-square object-contain object-center w-full overflow-hidden self-stretch"
             />
-            <a
-              href="#"
+            <Link to={"/trend"} state={{fieldValue : 50000006}} 
               className="text-red-400 text-base font-semibold leading-5 tracking-normal self-center whitespace-nowrap font-['NEXON']"
             >
               식품
-            </a>
+            </Link>
           </div>
         </div>
         <p className="text-black text-right text-2xl uppercase self-center whitespace-nowrap mt-24 max-md:max-w-full max-md:mt-10 font-['NEXON']">

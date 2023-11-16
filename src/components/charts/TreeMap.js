@@ -61,7 +61,7 @@ export default function TreeMap({ trend , field}) {
                 //각 칸 배경색 동적으로 설정
                 backgroundColor(context) {
                   if (context.type !== 'data') return 'transparent';
-
+                    
                   const { dataCoverage, capacityMW } = context.raw._data;
                   const alpha = capacityMW / maxCapacity * 0.5; //capacityMW에 따라 투명도 조절
 

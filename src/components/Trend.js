@@ -1,14 +1,21 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import TreeMap from './charts/TreeMap';
+import { useLocation } from 'react-router-dom';
 
 export default function Trend() {
 
+  const location = useLocation();
+  console.log(location)
+  // Access the prop from the state object in location
+  const fieldValue = location.state ? location.state.fieldValue : '50000000';
     const [trend, setTrend] = useState({
         keywords: [],
         
       });
-    const [field, setField] = useState('50000000')
+    const [field, setField] = useState(fieldValue)
+    // console.log("필드value : ", fieldValue)
+    
 
     useEffect(() => {
         const fetchData = async () => {
@@ -39,6 +46,7 @@ export default function Trend() {
             </div>
 
             <select
+              defaultValue={fieldValue}
               name="category"
               onChange={(e) =>
                 setField(e.target.value)
