@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import TreeMap from './charts/TreeMap';
 import { useLocation } from 'react-router-dom';
+import Header from './main/Header';
 
 export default function Trend() {
 
@@ -39,7 +40,9 @@ export default function Trend() {
     
 
   return (
+    
     <div>
+      <Header/>
         <div className="flex w-[356px] max-w-full items-start justify-between gap-5 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
             <div className="text-black text-xl leading-8 uppercase self-center my-auto">
               분야

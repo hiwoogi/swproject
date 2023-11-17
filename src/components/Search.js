@@ -14,8 +14,8 @@ export default function Search(props) {
     keyword: "",
     category: "50000000",
     timeUnit: "month",
-    startDate: "2017-08-01",
-    endDate: "2017-09-30",
+    startDate: "2023-08-01",
+    endDate: "2023-09-30",
     device: "",
     ages: [],
     gender: "",
@@ -30,8 +30,8 @@ export default function Search(props) {
     ],
     category: "50000000",
     timeUnit: "month",
-    startDate: "2017-08-01",
-    endDate: "2017-09-30",
+    startDate: "2023-08-01",
+    endDate: "2023-09-30",
     device: "",
     ages: [],
     gender: "",
@@ -172,7 +172,7 @@ export default function Search(props) {
   useEffect(() => {
 
     if (trend && field) {
-
+  
       
       // Update filterData state with trend and field values
       setFilterData((prevFilterData) => ({
@@ -202,6 +202,7 @@ export default function Search(props) {
 
   useEffect(() => {
     makeChartData()
+    console.log(responseData)
     if (responseData.startDate && responseData.endDate) {
       if (!root) {
         
@@ -428,6 +429,7 @@ useEffect(() => {
             </div>
 
             <select
+              defaultValue={field ? field : "50000000"}
               name="category"
               onChange={(e) =>
                 setFilterData({
@@ -450,6 +452,7 @@ useEffect(() => {
             </div>
             <input
               name="keyword"
+              defaultValue={trend ? trend : ""}
               onChange={(e) => {
                 const newKeyword = e.target.value;
                 setFilterData((prevFilterData) => ({
@@ -491,6 +494,7 @@ useEffect(() => {
               </div>
               <select
                 name="start-year"
+                defaultValue="2023"
                 onChange={(e) => {
                   const selectedYear = e.target.value;
                   const selectedMonth = document.querySelector(
@@ -566,6 +570,7 @@ useEffect(() => {
               <div className="bg-zinc-300 self-center flex w-[45px] h-[7px] flex-col grow shrink-0 basis-auto my-auto" />
               <select
                 name="end-year"
+                defaultValue="2023"
                 onChange={(e) => {
                   const selectedYear = e.target.value;
                   const selectedMonth = document.querySelector(
