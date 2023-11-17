@@ -9,11 +9,6 @@ export default function DeviceChart({
 }) {
   const chartRef = useRef(null);
 
-  console.log("기기별 시작 날짜 :",startDate); // "2017-08-01"
-  console.log("종료 날짜 :",endDate); // "2017-09-30"
-  console.log("시간 단위 : ", timeUnit); // "month"
-  console.log("기기 결과:", deviceResults);
-
 
   const filterMo = (data) => data.filter((item) => item.group === 'mo');
   const filterPc = (data) => data.filter((item) => item.group === 'pc');
@@ -26,15 +21,7 @@ export default function DeviceChart({
 
   useEffect(() => {
     if (deviceResults.length > 0) {
-      console.log(deviceResults[0].title); // 결과 데이터
-      //console.log(deviceResults[0].data[0]);
-
-      deviceResults[0].data.map((data, index) => {
-        console.log(index);
-        console.log('기간', data.period);
-        console.log('비율', data.ratio);
-        console.log('기기그룹', data.group);
-      });
+     
 
       const filteredMoData = filterMo(deviceResults[0].data);
       const filteredPcData = filterPc(deviceResults[0].data);
@@ -42,8 +29,7 @@ export default function DeviceChart({
       const mobail = calculateRelativeRatio(filteredMoData);
       const pc = calculateRelativeRatio(filteredPcData);
 
-      console.log('mobail 상대적 비율:', mobail);
-      console.log('pc 상대적 비율:', pc);
+     
 
       const ctx = document.getElementById('deviceChart');
       if (ctx) {

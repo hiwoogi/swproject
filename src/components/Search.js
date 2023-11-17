@@ -41,6 +41,7 @@ export default function Search(props) {
   const [ageRoot, setAgeRoot] = useState(null);
   const [deviceRoot, setDeviceRoot] = useState(null);
   const [clickRoot, setClickRoot] = useState(null);
+  const [isTrend, setIsTrend] = useState(false);
 
 
   const [responseData, setResponseData] = useState({
@@ -128,8 +129,6 @@ export default function Search(props) {
   async function makeChartData() {
     const baseUrl = "http://localhost:8080";
     
-    console.log(clickFilterData)
-    
     try {
       // Make all requests concurrently
       const [genderResponse, ageResponse, deviceResponse, clickResponse] = await Promise.all([
@@ -158,7 +157,7 @@ export default function Search(props) {
         clickResults,
       }));
   
-      console.log("clickResults :", clickResults);
+   
     } catch (error) {
       console.log(error);
     }
@@ -168,12 +167,146 @@ export default function Search(props) {
   const location = useLocation();
   const trend = new URLSearchParams(location.search).get('trend');
   const field = new URLSearchParams(location.search).get('field');
+  
   //@@우선 따로 빼서 확인만 해놨어요..
   useEffect(() => {
-    console.log('트렌드 키워드 값:', trend);
-    console.log('트렌드 필드 값', field);
+
+    if (trend && field) {
+
+      
+      // Update filterData state with trend and field values
+      setFilterData((prevFilterData) => ({
+        ...prevFilterData,
+        keyword: trend,
+        category: field,
+      }));
+      
+
+      setClickFilterData((prevFilterData) => ({
+        ...prevFilterData,
+        keyword: [
+          {
+            name: trend,
+            param: [trend],
+          },
+        ],
+        category: field,
+      }))
+
+      setIsTrend(true)
+    }
+
   }, [trend, field]);
 
+  
+
+  useEffect(() => {
+    makeChartData()
+    if (responseData.startDate && responseData.endDate) {
+      if (!root) {
+        
+        const newRoot = createRoot(document.getElementById("graph1"));
+        newRoot.render(
+          <GenderChart
+            startDate={responseData.startDate}
+            endDate={responseData.endDate}
+            timeUnit={responseData.timeUnit}
+            genderResults={responseData.genderResults}
+          />
+        );
+        setRoot(newRoot);
+      } else {
+      
+        root.render(
+          <GenderChart
+            startDate={responseData.startDate}
+            endDate={responseData.endDate}
+            timeUnit={responseData.timeUnit}
+            genderResults={responseData.genderResults}
+          />
+        );
+      }
+    }
+  
+    if (responseData.ageResults) { 
+      if (!ageRoot) {
+       
+        const newRoot2 = createRoot(document.getElementById("graph2"));
+        newRoot2.render(
+          <AgeChart
+            startDate={responseData.startDate}
+            endDate={responseData.endDate}
+            timeUnit={responseData.timeUnit}
+            ageResults={responseData.ageResults}
+          />
+        );
+        setAgeRoot(newRoot2);
+      } else {
+        
+        ageRoot.render(
+          <AgeChart
+            startDate={responseData.startDate}
+            endDate={responseData.endDate}
+            timeUnit={responseData.timeUnit}
+            ageResults={responseData.ageResults}
+          />
+        );
+      }
+    } 
+  
+    if (responseData.deviceResults) { // Check if ageResults is available
+      if (!deviceRoot) {
+        
+        const newRoot3 = createRoot(document.getElementById("graph3"));
+        newRoot3.render(
+          <DeviceChart
+            startDate={responseData.startDate}
+            endDate={responseData.endDate}
+            timeUnit={responseData.timeUnit}
+            deviceResults={responseData.deviceResults}
+          />
+        );
+        setDeviceRoot(newRoot3);
+      } else {
+      
+        deviceRoot.render(
+          <DeviceChart
+            startDate={responseData.startDate}
+            endDate={responseData.endDate}
+            timeUnit={responseData.timeUnit}
+            deviceResults={responseData.deviceResults}
+          />
+        );
+      }
+    }
+  
+    if (responseData.clickResults) { // Check if ageResults is available
+      if (!clickRoot) {
+        
+        const newRoot4 = createRoot(document.getElementById("graph4"));
+        newRoot4.render(
+          <ClickChart
+            startDate={responseData.startDate}
+            endDate={responseData.endDate}
+            timeUnit={responseData.timeUnit}
+            clickResults={responseData.clickResults}
+          />
+        );
+        setClickRoot(newRoot4);
+      } else {
+      
+        clickRoot.render(
+          <ClickChart
+            startDate={responseData.startDate}
+            endDate={responseData.endDate}
+            timeUnit={responseData.timeUnit}
+            clickResults={responseData.clickResults}
+          />
+        );
+      }
+    }
+ 
+  }, [isTrend]);
   
 useEffect(() => {
   if (responseData.startDate && responseData.endDate) {
