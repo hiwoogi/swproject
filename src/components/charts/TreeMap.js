@@ -70,7 +70,7 @@ export default function TreeMap({ trend , field}) {
                 labels: {
                   display: true,
                   formatter: (context) => context.raw._data.name,
-
+                  
                   //@@font 설정
                   font: function(context) {
                     const { capacityMW } = context.raw._data;

@@ -10,6 +10,8 @@ import DeviceChart from "./charts/DeviceChart";
 import ClickChart from "./charts/ClickChart";
 
 export default function Search(props) {
+
+  //요청 데이터1 (성별, 디바이스, 나이) state
   const [filterData, setFilterData] = useState({
     keyword: "",
     category: "50000000",
@@ -21,6 +23,8 @@ export default function Search(props) {
     gender: "",
   });
 
+  //요청 데이터2 (기간별 클릭량) state
+  //api요청에 필요한 데이터가 위와 다름 (keyword가 string이 아닌 5개의 객체배열로 구성되어있는점)
   const [clickFilterData, setClickFilterData] = useState({
     keyword: [
       {
@@ -36,14 +40,18 @@ export default function Search(props) {
     ages: [],
     gender: "",
   });
-  const [root, setRoot] = useState(null);
 
+  //동적으로 html생성 root state
+  const [root, setRoot] = useState(null);
   const [ageRoot, setAgeRoot] = useState(null);
   const [deviceRoot, setDeviceRoot] = useState(null);
   const [clickRoot, setClickRoot] = useState(null);
+
+  //실시간 키워드 -> 검색창으로 들어갔는지 확인하는 bool 변ㅅ후
   const [isTrend, setIsTrend] = useState(false);
 
 
+  //api 응답데이터 state
   const [responseData, setResponseData] = useState({
     startDate: null,
     endDate: null,
@@ -54,6 +62,8 @@ export default function Search(props) {
     clickResults : null,
     
   });
+
+  //달 체크
   const daysInMonth = {
     "01": 31,
     "02": 28,
@@ -69,7 +79,7 @@ export default function Search(props) {
     12: 31,
   };
 
-  // 윤년 체크
+  // 윤년 체크 (하는 이유는 월별 말일이 다르기때문에)
   function isLeapYear(year) {
     return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
   }
@@ -108,6 +118,7 @@ export default function Search(props) {
     }
   };
 
+
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
     
@@ -116,6 +127,7 @@ export default function Search(props) {
 
   };
 
+  //폼 제출버튼 클릭이 됐는지 체크 후 submit
   const handleButtonClick = () => {
     const form = document.getElementById("searchForm");
 
@@ -126,11 +138,12 @@ export default function Search(props) {
     }
   };
 
+  //axios로 서버에 filterData를 보낸후 responseData state를 설정해주는 함수
   async function makeChartData() {
     const baseUrl = "http://localhost:8080";
 
     try {
-      // Make all requests concurrently
+      // promise.all을 통해 비동기처리
       const [genderResponse, ageResponse, deviceResponse, clickResponse] = await Promise.all([
         axios.post(baseUrl + "/test/gender", filterData),
         axios.post(baseUrl + "/test/age", filterData),
@@ -165,18 +178,19 @@ export default function Search(props) {
     }
   }
 
-  //@@trend에서 보내는 값
+  //trend에서 키워드 선택시 넘어오는 변수
   const location = useLocation();
   const trend = new URLSearchParams(location.search).get('trend');
   const field = new URLSearchParams(location.search).get('field');
   
-  //@@우선 따로 빼서 확인만 해놨어요..
+  //
+  //검색창 들어간 즉시 trend field 확인
   useEffect(() => {
 
+
+    //trend와 field가 모두 존재한다면 요청데이터 설정해준 후 setIsTrend true로 바꿔줌
     if (trend && field) {
   
-      
-      // Update filterData state with trend and field values
       setFilterData((prevFilterData) => ({
         ...prevFilterData,
         keyword: trend,
@@ -201,7 +215,7 @@ export default function Search(props) {
   }, [trend, field]);
 
   
-
+  //setIsTrend로 인해 state가 변경될 시 작동하는 함수 (각 그래프를 그려줌)
   useEffect(() => {
     makeChartData()
     console.log(responseData)
@@ -311,6 +325,8 @@ export default function Search(props) {
  
   }, [isTrend]);
   
+
+  //조회하기 버튼 누른경우 작동하는 함수 (그래프 컴포넌트를 그려준다)
 useEffect(() => {
   if (responseData.startDate && responseData.endDate) {
     if (!root) {

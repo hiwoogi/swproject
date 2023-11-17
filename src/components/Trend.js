@@ -8,7 +8,7 @@ export default function Trend() {
 
   const location = useLocation();
   console.log(location)
-  // Access the prop from the state object in location
+  // keywordInstruction (키워드 소개하는 메인페이지) 에서 분야버튼을 클릭해 넘어온 경우 그 값 코드를 설정, 그게 아니라면 패션키워드로 default함
   const fieldValue = location.state ? location.state.fieldValue : '50000000';
     const [trend, setTrend] = useState({
         keywords: [],
@@ -21,11 +21,13 @@ export default function Trend() {
     useEffect(() => {
         const fetchData = async () => {
           try {
+            //서버로 스크래핑 요청보내고 응답데이터를 받아옴 (응답데이터는  1~10위 검색어 데이터가 10개의 배열로 들어가있음)
             const response = await axios.get(`http://localhost:8080/test2/scrape/${field}`);
             console.log('Response:', response.data);
             const arr = response.data
-            const latestData = arr[arr.length-1]
+            const latestData = arr[arr.length-1] // 가장 최근일자로 데이터를 가져옴
             
+            //가장 최근 트렌드를 가져옴
             setTrend(latestData.ranks)
 
             console.log('트렌드값' , trend)
