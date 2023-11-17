@@ -43,7 +43,7 @@ export default function TreeMap({ trend , field}) {
 
       //@@colorsMap
       let colorMap = {
-        50000000: 'blue',
+        50000000: 'skyblue',
         50000007: 'green',
         50000003: 'purple',
         50000006: 'red'
@@ -69,6 +69,21 @@ export default function TreeMap({ trend , field}) {
                 labels: {
                   display: true,
                   formatter: (context) => context.raw._data.name,
+
+                  //@@font 설정
+                  font: function(context) {
+                    const { capacityMW } = context.raw._data;
+                    const name = context.raw._data.name;
+                    let fontSize = 30;
+                    //작은 칸에 맞춰서 크기 조절
+                    if(capacityMW <= 30){
+                      fontSize = fontSize - name.length*2; 
+                    }
+                    return { size: fontSize, weight: 'bold' };
+                  },
+
+                  //font: {size: 30, weight: 'bold'},
+                  //color: 'grey',
                 },
                 //각 칸 배경색 동적으로 설정
                 backgroundColor(context) {

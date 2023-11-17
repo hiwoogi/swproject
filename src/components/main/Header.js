@@ -5,9 +5,11 @@ export default function Header(props) {
   return (
     <div className="border bg-white flex items-start justify-between gap-5 pl-3.5 pr-4 border-solid border-black max-md:flex-wrap max-md:justify-center">
       <div className="text-black text-lg leading-7 uppercase my-auto">
-        <span className="font-bold font-['NEXON']">web</span>
-        <span className=""> </span>
-        <span className="font-['NEXON']">site</span>
+        <Link to="/">
+          <span className="font-bold font-['NEXON']">web</span>
+          <span className=""> </span>
+          <span className="font-['NEXON']">site</span>
+        </Link>
       </div>
       <div className="bg-white self-center flex w-5 h-5 flex-col my-auto" />
       <div className="self-stretch flex w-[497px] max-w-full items-start justify-between gap-5 my-4 max-md:flex-wrap max-md:justify-center">

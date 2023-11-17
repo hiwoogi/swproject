@@ -37,7 +37,7 @@ export default function DeviceChart({
           chartRef.current.destroy();
         }
         chartRef.current = new Chart(ctx, {
-          type: 'doughnut',
+          type: 'pie',
           data: {
             labels: ['mobail', 'pc'],
             datasets: [
