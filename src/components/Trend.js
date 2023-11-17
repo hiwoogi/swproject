@@ -59,7 +59,8 @@ export default function Trend() {
               <option value="50000000">패션</option>
               <option value="50000007">스포츠</option>
               <option value="50000003">가전제품</option>
-              <option value="50000006">음식</option>
+              <option value="50005542">도서</option>
+              <option value="50000006">식품</option>
             </select>
           </div>
 

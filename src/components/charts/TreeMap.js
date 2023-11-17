@@ -46,7 +46,8 @@ export default function TreeMap({ trend , field}) {
         50000000: 'skyblue',
         50000007: 'green',
         50000003: 'purple',
-        50000006: 'red'
+        50000006: 'red',
+        50005542: 'orange'
       };
       let colors = colorMap[field];
 

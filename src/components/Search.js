@@ -450,8 +450,8 @@ useEffect(() => {
               <option value="50000000">패션</option>
               <option value="50000007">스포츠</option>
               <option value="50000003">가전제품</option>
-              <option value="leisure">여가</option>
-              <option value="50000006">음식</option>
+              <option value="50005542">도서</option>
+              <option value="50000006">식품</option>
             </select>
           </div>
           <div className="self-center flex w-full items-start justify-between gap-5 mt-16 max-md:max-w-full max-md:flex-wrap max-md:mt-10">
