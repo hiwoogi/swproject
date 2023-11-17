@@ -128,7 +128,7 @@ export default function Search(props) {
 
   async function makeChartData() {
     const baseUrl = "http://localhost:8080";
-    
+
     try {
       // Make all requests concurrently
       const [genderResponse, ageResponse, deviceResponse, clickResponse] = await Promise.all([
@@ -156,7 +156,9 @@ export default function Search(props) {
         deviceResults,
         clickResults,
       }));
-  
+      console.log("star", responseData.startDate)
+      console.log("end", responseData.endDate)
+      console.log(responseData)
    
     } catch (error) {
       console.log(error);
@@ -431,11 +433,17 @@ useEffect(() => {
             <select
               defaultValue={field ? field : "50000000"}
               name="category"
-              onChange={(e) =>
+              onChange={(e) =>{
                 setFilterData({
                   ...filterData,
                   category: e.target.value,
                 })
+
+                setClickFilterData({
+                  ...clickFilterData,
+                  category: e.target.value,
+                })
+              }
               }
               className="text-black text-base font-light leading-6 uppercase self-stretch border w-[269px] max-w-full grow shrink basis-auto items-start justify-between gap-5 pl-32 py-7 rounded-3xl border-solid border-black max-md:pl-5"
             >
