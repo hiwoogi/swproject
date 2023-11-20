@@ -25,7 +25,7 @@ export default function Header(props) {
       </div>
       
       <div className="text-black text-base leading-6 uppercase self-stretch whitespace-nowrap border w-[110px] max-w-full my-4 pl-8 pr-9 py-3.5 rounded-[50px] border-solid border-black max-md:px-5 font-['NEXON']">
-        로그인
+      <Link to="/login">로그인</Link>
       </div>
     </div>
   );
