@@ -64,7 +64,7 @@ export default function ClickChart({
 
 
   return (
-    <div className="w-full h-full border-2 border-gray-300 p-4 rounded-lg shadow-md flex justify-center items-center">
+    <div className="w-full h-full border-2 border-gray-300 p-4 rounded-lg flex justify-center items-center">
       {/* {startDate} ~ {endDate} <br />
       -{timeUnit} <br />
       ClickChart */}

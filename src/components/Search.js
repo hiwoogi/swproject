@@ -421,7 +421,7 @@ export default function Search(props) {
   return (
     <div className="bg-white flex flex-col px-20 max-md:px-5 font-['NEXON']">
       <form id="searchForm" onSubmit={handleSubmit}>
-        <div className="self-center flex w-full max-w-[1078px] flex-col mt-20 mb-24 max-md:max-w-full max-md:my-10">
+        <div className="self-center flex w-full max-w-[1078px] flex-col mt-20 mb-16 max-md:max-w-full max-md:my-10">
           <div className="text-black text-5xl max-w-[377px] self-center max-md:text-4xl">
             키워드 검색하기
           </div>
@@ -918,15 +918,16 @@ export default function Search(props) {
         </div>
       </form>
 
+      <div className="self-center flex w-full max-w-[1500px] flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
+        <div className="grid gap-5 lg:grid-cols-4">
+          <div id="graph4" className="col-span-3"> </div>
 
-      <div className="grid gap-5 lg:grid-cols-4">
-        <div id="graph4" className="col-span-3"> </div>
+          <div id="graph3"> </div>
 
-        <div id="graph3"> </div>
+          <div id="graph2" className="col-span-2"> </div>
 
-        <div id="graph2" className="col-span-2"> </div>
-
-        <div id="graph1" className="col-span-2"> </div>
+          <div id="graph1" className="col-span-2"> </div>
+        </div>
       </div>
     </div>
   );
