@@ -420,8 +420,8 @@ export default function Search(props) {
 
   return (
     <div className="bg-white flex flex-col px-20 max-md:px-5 font-['NEXON']">
-      <form id="searchForm" onSubmit={handleSubmit}>
-        <div className="self-center flex w-full max-w-[1078px] flex-col mt-20 mb-16 max-md:max-w-full max-md:my-10">
+      <form id="searchForm" onSubmit={handleSubmit} className="">
+        <div className="self-center flex w-full max-w-[1920px] flex-col mt-20 mb-16 max-md:max-w-full max-md:my-10">
           <div className="text-black text-5xl max-w-[377px] self-center max-md:text-4xl">
             키워드 검색하기
           </div>
@@ -453,7 +453,7 @@ export default function Search(props) {
               </select>
             </div>
 
-            <div className="self-center flex w-full items-start justify-between gap-5 mt-20 max-md:max-w-full max-md:flex-wrap max-md:mt-10">
+            <div className="self-center flex  items-start  gap-5 mt-20 max-md:max-w-full max-md:flex-wrap max-md:mt-10">
               <input
                 name="keyword"
                 defaultValue={trend ? trend : ""}
@@ -478,179 +478,183 @@ export default function Search(props) {
                 className="text-black text-xl leading-8 uppercase border w-[300px] h-[40px] md:w-[300px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
                 placeholder="검색어를 입력하세요"
               />
+
+
+            </div>
+            <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
+              <select
+                className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
+                defaultValue="month" // Set the default selected option
+              >
+                <option value="date">일간</option>
+                <option value="week">주간</option>
+                <option value="month">월간</option>
+              </select>
+            </div>
+            <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
+            <select
+              name="start-year"
+              defaultValue="2023"
+              onChange={(e) => {
+                const selectedYear = e.target.value;
+                const selectedMonth = document.querySelector(
+                  'select[name="start-month"]'
+                ).value;
+
+                if (selectedMonth === "02" && isLeapYear(selectedYear)) {
+                  daysInMonth["02"] = 29;
+                }
+
+                const selectedDay = daysInMonth[selectedMonth];
+                const newStartDate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
+                setFilterData({
+                  ...filterData,
+                  startDate: newStartDate,
+                });
+
+                setClickFilterData({
+                  ...clickFilterData,
+                  startDate: newStartDate
+                })
+              }}
+              className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
+            >
+              <option value="2017">2017</option>
+              <option value="2018">2018</option>
+              <option value="2019">2019</option>
+              <option value="2020">2020</option>
+              <option value="2021">2021</option>
+              <option value="2022">2022</option>
+              <option value="2023">2023</option>
+            </select>
+            </div>
+            <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
+            <select
+              name="start-month"
+              defaultValue="08"
+              onChange={(e) => {
+                const selectedYear = document.querySelector(
+                  'select[name="start-year"]'
+                ).value;
+                const selectedMonth = e.target.value;
+
+                if (selectedMonth === "02" && isLeapYear(selectedYear)) {
+                  daysInMonth["02"] = 29;
+                }
+
+                const selectedDay = daysInMonth[selectedMonth];
+                const newStartDate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
+                setFilterData({
+                  ...filterData,
+                  startDate: newStartDate,
+                });
+
+                setClickFilterData({
+                  ...clickFilterData,
+                  startDate: newStartDate
+                })
+              }}
+              className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
+            >
+              <option value="01">01</option>
+              <option value="02">02</option>
+              <option value="03">03</option>
+              <option value="04">04</option>
+              <option value="05">05</option>
+              <option value="06">06</option>
+              <option value="07">07</option>
+              <option value="08">08</option>
+              <option value="09">09</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+            </select>
+            </div>
+            <div className="bg-zinc-300 self-center flex w-[45px] h-[7px] flex-col mt-20  " />
+            <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
+            <select
+              name="end-year"
+              defaultValue="2023"
+              onChange={(e) => {
+                const selectedYear = e.target.value;
+                const selectedMonth = document.querySelector(
+                  'select[name="end-month"]'
+                ).value;
+
+                if (selectedMonth === "02" && isLeapYear(selectedYear)) {
+                  daysInMonth["02"] = 29;
+                }
+
+                const selectedDay = daysInMonth[selectedMonth];
+                const newStartDate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
+                setFilterData({
+                  ...filterData,
+                  endDate: newStartDate
+                });
+
+                setClickFilterData({
+                  ...clickFilterData,
+                  endDate: newStartDate
+                })
+              }}
+              className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
+            >
+              <option value="2017">2017</option>
+              <option value="2018">2018</option>
+              <option value="2019">2019</option>
+              <option value="2020">2020</option>
+              <option value="2021">2021</option>
+              <option value="2022">2022</option>
+              <option value="2023">2023</option>
+            </select>
+            </div>
+            <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
+            <select
+              name="end-month"
+              defaultValue="08"
+              onChange={(e) => {
+                const selectedYear = document.querySelector(
+                  'select[name="end-year"]'
+                ).value;
+                const selectedMonth = e.target.value;
+
+                if (selectedMonth === "02" && isLeapYear(selectedYear)) {
+                  daysInMonth["02"] = 29;
+                }
+
+                const selectedDay = daysInMonth[selectedMonth];
+                const newStartDate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
+
+                setFilterData({
+                  ...filterData,
+                  endDate: newStartDate,
+                });
+
+                setClickFilterData({
+                  ...clickFilterData,
+                  endDate: newStartDate
+                })
+              }}
+              className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
+            >
+              <option value="01">01</option>
+              <option value="02">02</option>
+              <option value="03">03</option>
+              <option value="04">04</option>
+              <option value="05">05</option>
+              <option value="06">06</option>
+              <option value="07">07</option>
+              <option value="08">08</option>
+              <option value="09">09</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+            </select>
             </div>
           </div>
 
 
-          <div className="flex w-[953px] max-w-full grow flex-col ml-5 mt-10 self-start max-md:mt-10">
-            <div className="self-stretch flex items-start justify-between gap-4 pr-60 max-md:max-w-full max-md:flex-wrap max-md:pr-5">
-              <div className="text-black text-xl leading-8 uppercase self-center my-auto">
-                기간
-              </div>
-              <div className="relative">
-                <select
-                  className="text-black text-base font-light leading-6 uppercase self-stretch border w-[102px] max-w-full items-start justify-between gap-4 pl-9 pr-2.5 py-8 rounded-3xl border-solid border-gray-300 max-md:pl-5"
-                  defaultValue="month" // Set the default selected option
-                >
-                  <option value="date">일간</option>
-                  <option value="week">주간</option>
-                  <option value="month">월간</option>
-                </select>
-              </div>
-              <select
-                name="start-year"
-                defaultValue="2023"
-                onChange={(e) => {
-                  const selectedYear = e.target.value;
-                  const selectedMonth = document.querySelector(
-                    'select[name="start-month"]'
-                  ).value;
-
-                  if (selectedMonth === "02" && isLeapYear(selectedYear)) {
-                    daysInMonth["02"] = 29;
-                  }
-
-                  const selectedDay = daysInMonth[selectedMonth];
-                  const newStartDate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
-                  setFilterData({
-                    ...filterData,
-                    startDate: newStartDate,
-                  });
-
-                  setClickFilterData({
-                    ...clickFilterData,
-                    startDate: newStartDate
-                  })
-                }}
-                className="text-black text-base font-light leading-6 uppercase self-stretch border w-[102px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-gray-300 max-md:pl-5"
-              >
-                <option value="2017">2017</option>
-                <option value="2018">2018</option>
-                <option value="2019">2019</option>
-                <option value="2020">2020</option>
-                <option value="2021">2021</option>
-                <option value="2022">2022</option>
-                <option value="2023">2023</option>
-              </select>
-              <select
-                name="start-month"
-                defaultValue="08"
-                onChange={(e) => {
-                  const selectedYear = document.querySelector(
-                    'select[name="start-year"]'
-                  ).value;
-                  const selectedMonth = e.target.value;
-
-                  if (selectedMonth === "02" && isLeapYear(selectedYear)) {
-                    daysInMonth["02"] = 29;
-                  }
-
-                  const selectedDay = daysInMonth[selectedMonth];
-                  const newStartDate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
-                  setFilterData({
-                    ...filterData,
-                    startDate: newStartDate,
-                  });
-
-                  setClickFilterData({
-                    ...clickFilterData,
-                    startDate: newStartDate
-                  })
-                }}
-                className="text-black text-base font-light leading-6 uppercase self-stretch border w-[83px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-gray-300 max-md:pl-5"
-              >
-                <option value="01">01</option>
-                <option value="02">02</option>
-                <option value="03">03</option>
-                <option value="04">04</option>
-                <option value="05">05</option>
-                <option value="06">06</option>
-                <option value="07">07</option>
-                <option value="08">08</option>
-                <option value="09">09</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-              </select>
-              <div className="bg-zinc-300 self-center flex w-[45px] h-[7px] flex-col grow shrink-0 basis-auto my-auto" />
-              <select
-                name="end-year"
-                defaultValue="2023"
-                onChange={(e) => {
-                  const selectedYear = e.target.value;
-                  const selectedMonth = document.querySelector(
-                    'select[name="end-month"]'
-                  ).value;
-
-                  if (selectedMonth === "02" && isLeapYear(selectedYear)) {
-                    daysInMonth["02"] = 29;
-                  }
-
-                  const selectedDay = daysInMonth[selectedMonth];
-                  const newStartDate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
-                  setFilterData({
-                    ...filterData,
-                    endDate: newStartDate
-                  });
-
-                  setClickFilterData({
-                    ...clickFilterData,
-                    endDate: newStartDate
-                  })
-                }}
-                className="text-black text-base font-light leading-6 uppercase self-stretch border w-[102px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-gray-300 max-md:pl-5"
-              >
-                <option value="2017">2017</option>
-                <option value="2018">2018</option>
-                <option value="2019">2019</option>
-                <option value="2020">2020</option>
-                <option value="2021">2021</option>
-                <option value="2022">2022</option>
-                <option value="2023">2023</option>
-              </select>
-              <select
-                name="end-month"
-                defaultValue="08"
-                onChange={(e) => {
-                  const selectedYear = document.querySelector(
-                    'select[name="end-year"]'
-                  ).value;
-                  const selectedMonth = e.target.value;
-
-                  if (selectedMonth === "02" && isLeapYear(selectedYear)) {
-                    daysInMonth["02"] = 29;
-                  }
-
-                  const selectedDay = daysInMonth[selectedMonth];
-                  const newStartDate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
-
-                  setFilterData({
-                    ...filterData,
-                    endDate: newStartDate,
-                  });
-
-                  setClickFilterData({
-                    ...clickFilterData,
-                    endDate: newStartDate
-                  })
-                }}
-                className="text-black text-base font-light leading-6 uppercase self-stretch border w-[83px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-gray-300 max-md:pl-5"
-              >
-                <option value="01">01</option>
-                <option value="02">02</option>
-                <option value="03">03</option>
-                <option value="04">04</option>
-                <option value="05">05</option>
-                <option value="06">06</option>
-                <option value="07">07</option>
-                <option value="08">08</option>
-                <option value="09">09</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-              </select>
-            </div>
-
+          <div className="flex w-[1500px] max-w-full grow flex-col ml-5 mt-10 self-start max-md:mt-10">
 
             <div className="flex gap-4 mt-10">
               <div className="self-stretch flex items-center justify-between gap-2">
@@ -879,11 +883,8 @@ export default function Search(props) {
                     남성
                   </label>
                 </div>
+                
               </div>
-            </div>
-
-
-            <div className="flex w-[400px] max-w-full items-start justify-between gap-5 mt-10 self-end max-md:flex-wrap max-md:mt-10">
               <div className="border bg-white flex flex-col flex-1 px-8 py-4 rounded-[30px] border-solid border-gray-300 max-md:px-5">
                 <div className="self-center flex w-[84px] max-w-full items-start gap-0">
                   <img
@@ -913,6 +914,38 @@ export default function Search(props) {
                 </div>
               </div>
             </div>
+
+
+            {/* <div className="flex w-[400px] max-w-full items-start justify-between gap-5 mt-10 self-end max-md:flex-wrap max-md:mt-10">
+              <div className="border bg-white flex flex-col flex-1 px-8 py-4 rounded-[30px] border-solid border-gray-300 max-md:px-5">
+                <div className="self-center flex w-[84px] max-w-full items-start gap-0">
+                  <img
+                    loading="lazy"
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/7ee4812c-c045-44e9-aa52-0da59d97d0af?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
+                    className="aspect-[1.11] object-contain object-center w-[30px] overflow-hidden self-stretch max-w-full"
+                  />
+                  <div className="text-black text-base font-light self-center whitespace-nowrap my-auto">
+                    즐겨찾기
+                  </div>
+                </div>
+              </div>
+              <div
+                className="border bg-white flex flex-col flex-1 px-8 py-4 rounded-[30px] border-solid border-gray-300 max-md:px-5"
+                onClick={handleButtonClick}
+                style={{ cursor: "pointer" }}
+              >
+                <div className="self-center flex w-[84px] max-w-full items-start gap-0">
+                  <img
+                    loading="lazy"
+                    srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
+                    className="aspect-[1.11] object-contain object-center w-[30px] overflow-hidden self-stretch max-w-full"
+                  />
+                  <div className="text-black text-base font-light self-center whitespace-nowrap my-auto">
+                    조회하기
+                  </div>
+                </div>
+              </div>
+            </div> */}
 
           </div>
         </div>
