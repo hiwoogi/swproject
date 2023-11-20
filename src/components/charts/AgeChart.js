@@ -71,7 +71,7 @@ export default function AgeChart({
             labels: ['10대', '20대', '30대', '40대', '50대', '60대'],
             datasets: [
               {
-                label: '%',
+                label: ' ',
                 data: [A, B, C, D, E, F],
                 backgroundColor: [
                   'rgba(255, 99, 132, 1)',
@@ -94,7 +94,23 @@ export default function AgeChart({
             ],
           },
           options: {
+            //responsive: false,
             indexAxis: 'y', // 가로 그래프
+            scales: {
+              x: {
+                 display: false,
+              },
+              y: {
+                grid: {
+                   display: false
+                }
+              }
+           },
+            plugins: {
+              legend: {
+                display: false,
+              }
+            }
           },
         });
       }
@@ -103,10 +119,10 @@ export default function AgeChart({
 
 
   return (
-    <div className="w-120 h-80 border-2 border-gray-300 p-4 rounded-lg shadow-md flex justify-center items-center">
-      {startDate} ~ {endDate} <br />
+    <div className="w-full h-full border-2 border-gray-300 p-4 rounded-lg shadow-md flex justify-center items-center">
+      {/* {startDate} ~ {endDate} <br />
       -{timeUnit} <br />
-      AgeChart
+      AgeChart */}
       <canvas id="ageChart" />
     </div>
   );

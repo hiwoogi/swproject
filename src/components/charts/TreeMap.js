@@ -75,11 +75,13 @@ export default function TreeMap({ trend , field}) {
                   font: function(context) {
                     const { capacityMW } = context.raw._data;
                     const name = context.raw._data.name;
-                    let fontSize = 30;
+                    let fontSize = 40;
                     //작은 칸에 맞춰서 크기 조절
-                    if(capacityMW <= 30){
-                      fontSize = fontSize - name.length*2; 
-                    }
+                    if(capacityMW < 12)
+                      fontSize = fontSize - name.length*3.5; 
+                    else if(capacityMW <= 30)
+                      fontSize = fontSize - name.length*2;
+
                     return { size: fontSize, weight: 'bold' };
                   },
 
@@ -104,12 +106,12 @@ export default function TreeMap({ trend , field}) {
             plugins: {
               title: {
                 display: true,
-                text: '실시간 검색어 Treemap',
               },
               legend: {
                 display: false,
               },
               tooltip: {
+                enabled: false,
                 displayColors: false,
                 callbacks: {
                   title(items) {
@@ -148,7 +150,7 @@ export default function TreeMap({ trend , field}) {
   }, [trend]);
 
   return (
-    <div>
+    <div className="w-[1300px] max-w-full border-2 border-gray-300 p-4 rounded-lg shadow-md flex justify-center items-center mt-10">
       <canvas id="Treemap" />
     </div>
   );

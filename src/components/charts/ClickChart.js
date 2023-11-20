@@ -50,18 +50,24 @@ export default function ClickChart({
                 }
               },
             },
+            plugins: {
+              legend: {
+                display: false,
+              }
+            }
           },
         });
+
       }
     }
   }, [clickResults]);
 
 
   return (
-    <div className="w-120 h-80 border-2 border-gray-300 p-4 rounded-lg shadow-md flex justify-center items-center">
-      {startDate} ~ {endDate} <br />
+    <div className="w-full h-full border-2 border-gray-300 p-4 rounded-lg shadow-md flex justify-center items-center">
+      {/* {startDate} ~ {endDate} <br />
       -{timeUnit} <br />
-      ClickChart
+      ClickChart */}
       <canvas id="clickChart" />
     </div>
   );

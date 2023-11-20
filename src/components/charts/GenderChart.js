@@ -48,16 +48,17 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
         chartRefF.current = new Chart(ctxF, {
           type: 'doughnut',
           data: {
-            labels: ['Female'],
+            labels: ['여성'],
             datasets: [
               {
                 label: '%',
                 data: [female, 100 - female],
-                backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(0, 0, 0, 0.2)'],
+                backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(0, 0, 0, 0.2)'],
               },
             ],
           },
           options:{
+            responsive: false,
             rotation: -90,
             circumference: 180,
             
@@ -73,17 +74,17 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
         chartRefM.current = new Chart(ctxM, {
           type: 'doughnut',
           data: {
-            labels: ['Male'],
+            labels: ['남성'],
             datasets: [
               {
                 label: '%',
                 data: [male, 100 - male],
-                backgroundColor: ['rgba(54, 162, 235, 0.2)', 'rgba(0, 0, 0, 0.2)'],
+                backgroundColor: ['rgba(54, 162, 235, 0.5)', 'rgba(0, 0, 0, 0.2)'],
               },
             ],
           },
           options: {
-            //cutout: '60%',
+            responsive: false,
             rotation: -90,
             circumference: 180,
             
@@ -96,10 +97,10 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
   }, [genderResults]);
 
   return (
-    <div className="w-120 h-80 border-2 border-gray-300 p-4 rounded-lg shadow-md flex justify-center items-center">
-      {startDate} ~ {endDate} <br />
+    <div className="w-full h-full border-2 border-gray-300 p-4 rounded-lg flex justify-center items-center overflow-hidden">
+      {/* {startDate} ~ {endDate} <br />
       -{timeUnit} <br />
-      GenderChart
+      GenderChart */}
       <canvas id="femaleChart" />
       <canvas id="maleChart" />
     </div>

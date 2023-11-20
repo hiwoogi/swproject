@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-import { useLocation } from 'react-router-dom'; 
+import { useLocation } from 'react-router-dom';
 
 import { createRoot } from 'react-dom/client';
 import GenderChart from "./charts/GenderChart";
@@ -10,8 +10,6 @@ import DeviceChart from "./charts/DeviceChart";
 import ClickChart from "./charts/ClickChart";
 
 export default function Search(props) {
-
-  //요청 데이터1 (성별, 디바이스, 나이) state
   const [filterData, setFilterData] = useState({
     keyword: "",
     category: "50000000",
@@ -23,8 +21,6 @@ export default function Search(props) {
     gender: "",
   });
 
-  //요청 데이터2 (기간별 클릭량) state
-  //api요청에 필요한 데이터가 위와 다름 (keyword가 string이 아닌 5개의 객체배열로 구성되어있는점)
   const [clickFilterData, setClickFilterData] = useState({
     keyword: [
       {
@@ -40,18 +36,14 @@ export default function Search(props) {
     ages: [],
     gender: "",
   });
-
-  //동적으로 html생성 root state
   const [root, setRoot] = useState(null);
+
   const [ageRoot, setAgeRoot] = useState(null);
   const [deviceRoot, setDeviceRoot] = useState(null);
   const [clickRoot, setClickRoot] = useState(null);
-
-  //실시간 키워드 -> 검색창으로 들어갔는지 확인하는 bool 변ㅅ후
   const [isTrend, setIsTrend] = useState(false);
 
 
-  //api 응답데이터 state
   const [responseData, setResponseData] = useState({
     startDate: null,
     endDate: null,
@@ -59,11 +51,9 @@ export default function Search(props) {
     genderResults: null,
     ageResults: null,
     deviceResults: null,
-    clickResults : null,
-    
-  });
+    clickResults: null,
 
-  //달 체크
+  });
   const daysInMonth = {
     "01": 31,
     "02": 28,
@@ -79,19 +69,19 @@ export default function Search(props) {
     12: 31,
   };
 
-  // 윤년 체크 (하는 이유는 월별 말일이 다르기때문에)
+  // 윤년 체크
   function isLeapYear(year) {
     return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
   }
   const handleAgeCheckboxChange = (e) => {
     const ageValue = e.target.value;
     const isChecked = e.target.checked;
-  
+
     if (ageValue === "") {
       // If "전체" checkbox is clicked, update all age checkboxes
       const allAgeDivs = document.querySelectorAll(".self-stretch input[type=checkbox]");
       allAgeDivs.forEach((ageCheckbox) => {
-        ageCheckbox.checked = isChecked;  
+        ageCheckbox.checked = isChecked;
       });
       setFilterData({
         ...filterData,
@@ -118,16 +108,14 @@ export default function Search(props) {
     }
   };
 
-
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
-    
+
     makeChartData();
-    
+
 
   };
 
-  //폼 제출버튼 클릭이 됐는지 체크 후 submit
   const handleButtonClick = () => {
     const form = document.getElementById("searchForm");
 
@@ -138,26 +126,25 @@ export default function Search(props) {
     }
   };
 
-  //axios로 서버에 filterData를 보낸후 responseData state를 설정해주는 함수
   async function makeChartData() {
     const baseUrl = "http://localhost:8080";
 
     try {
-      // promise.all을 통해 비동기처리
+      // Make all requests concurrently
       const [genderResponse, ageResponse, deviceResponse, clickResponse] = await Promise.all([
         axios.post(baseUrl + "/test/gender", filterData),
         axios.post(baseUrl + "/test/age", filterData),
         axios.post(baseUrl + "/test/device", filterData),
         axios.post(baseUrl + "/test/click", clickFilterData)
-        
+
       ]);
-  
+
       // Extract data from responses
       const genderResults = genderResponse.data.results;
       const ageResults = ageResponse.data.results;
       const deviceResults = deviceResponse.data.results;
       const clickResults = clickResponse.data.results;
-      
+
       // Update state in a single call
       setResponseData((prevData) => ({
         ...prevData,
@@ -172,31 +159,30 @@ export default function Search(props) {
       console.log("star", responseData.startDate)
       console.log("end", responseData.endDate)
       console.log(responseData)
-   
+
     } catch (error) {
       console.log(error);
     }
   }
 
-  //trend에서 키워드 선택시 넘어오는 변수
+  //@@trend에서 보내는 값
   const location = useLocation();
   const trend = new URLSearchParams(location.search).get('trend');
   const field = new URLSearchParams(location.search).get('field');
-  
-  //
-  //검색창 들어간 즉시 trend field 확인
+
+  //@@우선 따로 빼서 확인만 해놨어요..
   useEffect(() => {
 
-
-    //trend와 field가 모두 존재한다면 요청데이터 설정해준 후 setIsTrend true로 바꿔줌
     if (trend && field) {
-  
+
+
+      // Update filterData state with trend and field values
       setFilterData((prevFilterData) => ({
         ...prevFilterData,
         keyword: trend,
         category: field,
       }));
-      
+
 
       setClickFilterData((prevFilterData) => ({
         ...prevFilterData,
@@ -214,14 +200,14 @@ export default function Search(props) {
 
   }, [trend, field]);
 
-  
-  //setIsTrend로 인해 state가 변경될 시 작동하는 함수 (각 그래프를 그려줌)
+
+
   useEffect(() => {
     makeChartData()
     console.log(responseData)
     if (responseData.startDate && responseData.endDate) {
       if (!root) {
-        
+
         const newRoot = createRoot(document.getElementById("graph1"));
         newRoot.render(
           <GenderChart
@@ -233,7 +219,7 @@ export default function Search(props) {
         );
         setRoot(newRoot);
       } else {
-      
+
         root.render(
           <GenderChart
             startDate={responseData.startDate}
@@ -244,10 +230,10 @@ export default function Search(props) {
         );
       }
     }
-  
-    if (responseData.ageResults) { 
+
+    if (responseData.ageResults) {
       if (!ageRoot) {
-       
+
         const newRoot2 = createRoot(document.getElementById("graph2"));
         newRoot2.render(
           <AgeChart
@@ -259,7 +245,7 @@ export default function Search(props) {
         );
         setAgeRoot(newRoot2);
       } else {
-        
+
         ageRoot.render(
           <AgeChart
             startDate={responseData.startDate}
@@ -269,11 +255,11 @@ export default function Search(props) {
           />
         );
       }
-    } 
-  
+    }
+
     if (responseData.deviceResults) { // Check if ageResults is available
       if (!deviceRoot) {
-        
+
         const newRoot3 = createRoot(document.getElementById("graph3"));
         newRoot3.render(
           <DeviceChart
@@ -285,7 +271,7 @@ export default function Search(props) {
         );
         setDeviceRoot(newRoot3);
       } else {
-      
+
         deviceRoot.render(
           <DeviceChart
             startDate={responseData.startDate}
@@ -296,10 +282,10 @@ export default function Search(props) {
         );
       }
     }
-  
+
     if (responseData.clickResults) { // Check if ageResults is available
       if (!clickRoot) {
-        
+
         const newRoot4 = createRoot(document.getElementById("graph4"));
         newRoot4.render(
           <ClickChart
@@ -311,7 +297,7 @@ export default function Search(props) {
         );
         setClickRoot(newRoot4);
       } else {
-      
+
         clickRoot.render(
           <ClickChart
             startDate={responseData.startDate}
@@ -322,193 +308,188 @@ export default function Search(props) {
         );
       }
     }
- 
+
   }, [isTrend]);
-  
 
-  //조회하기 버튼 누른경우 작동하는 함수 (그래프 컴포넌트를 그려준다)
-useEffect(() => {
-  if (responseData.startDate && responseData.endDate) {
-    if (!root) {
-      
-      const newRoot = createRoot(document.getElementById("graph1"));
-      newRoot.render(
-        <GenderChart
-          startDate={responseData.startDate}
-          endDate={responseData.endDate}
-          timeUnit={responseData.timeUnit}
-          genderResults={responseData.genderResults}
-        />
-      );
-      setRoot(newRoot);
-    } else {
-    
-      root.render(
-        <GenderChart
-          startDate={responseData.startDate}
-          endDate={responseData.endDate}
-          timeUnit={responseData.timeUnit}
-          genderResults={responseData.genderResults}
-        />
-      );
+  useEffect(() => {
+    if (responseData.startDate && responseData.endDate) {
+      if (!root) {
+
+        const newRoot = createRoot(document.getElementById("graph1"));
+        newRoot.render(
+          <GenderChart
+            startDate={responseData.startDate}
+            endDate={responseData.endDate}
+            timeUnit={responseData.timeUnit}
+            genderResults={responseData.genderResults}
+          />
+        );
+        setRoot(newRoot);
+      } else {
+
+        root.render(
+          <GenderChart
+            startDate={responseData.startDate}
+            endDate={responseData.endDate}
+            timeUnit={responseData.timeUnit}
+            genderResults={responseData.genderResults}
+          />
+        );
+      }
     }
-  }
 
-  if (responseData.ageResults) { 
-    if (!ageRoot) {
-     
-      const newRoot2 = createRoot(document.getElementById("graph2"));
-      newRoot2.render(
-        <AgeChart
-          startDate={responseData.startDate}
-          endDate={responseData.endDate}
-          timeUnit={responseData.timeUnit}
-          ageResults={responseData.ageResults}
-        />
-      );
-      setAgeRoot(newRoot2);
-    } else {
-      
-      ageRoot.render(
-        <AgeChart
-          startDate={responseData.startDate}
-          endDate={responseData.endDate}
-          timeUnit={responseData.timeUnit}
-          ageResults={responseData.ageResults}
-        />
-      );
+    if (responseData.ageResults) {
+      if (!ageRoot) {
+
+        const newRoot2 = createRoot(document.getElementById("graph2"));
+        newRoot2.render(
+          <AgeChart
+            startDate={responseData.startDate}
+            endDate={responseData.endDate}
+            timeUnit={responseData.timeUnit}
+            ageResults={responseData.ageResults}
+          />
+        );
+        setAgeRoot(newRoot2);
+      } else {
+
+        ageRoot.render(
+          <AgeChart
+            startDate={responseData.startDate}
+            endDate={responseData.endDate}
+            timeUnit={responseData.timeUnit}
+            ageResults={responseData.ageResults}
+          />
+        );
+      }
     }
-  }
 
-  if (responseData.deviceResults) { // Check if ageResults is available
-    if (!deviceRoot) {
-      
-      const newRoot3 = createRoot(document.getElementById("graph3"));
-      newRoot3.render(
-        <DeviceChart
-          startDate={responseData.startDate}
-          endDate={responseData.endDate}
-          timeUnit={responseData.timeUnit}
-          deviceResults={responseData.deviceResults}
-        />
-      );
-      setDeviceRoot(newRoot3);
-    } else {
-    
-      deviceRoot.render(
-        <DeviceChart
-          startDate={responseData.startDate}
-          endDate={responseData.endDate}
-          timeUnit={responseData.timeUnit}
-          deviceResults={responseData.deviceResults}
-        />
-      );
+    if (responseData.deviceResults) { // Check if ageResults is available
+      if (!deviceRoot) {
+
+        const newRoot3 = createRoot(document.getElementById("graph3"));
+        newRoot3.render(
+          <DeviceChart
+            startDate={responseData.startDate}
+            endDate={responseData.endDate}
+            timeUnit={responseData.timeUnit}
+            deviceResults={responseData.deviceResults}
+          />
+        );
+        setDeviceRoot(newRoot3);
+      } else {
+
+        deviceRoot.render(
+          <DeviceChart
+            startDate={responseData.startDate}
+            endDate={responseData.endDate}
+            timeUnit={responseData.timeUnit}
+            deviceResults={responseData.deviceResults}
+          />
+        );
+      }
     }
-  }
 
-  if (responseData.clickResults) { // Check if ageResults is available
-    if (!clickRoot) {
-      
-      const newRoot4 = createRoot(document.getElementById("graph4"));
-      newRoot4.render(
-        <ClickChart
-          startDate={responseData.startDate}
-          endDate={responseData.endDate}
-          timeUnit={responseData.timeUnit}
-          clickResults={responseData.clickResults}
-        />
-      );
-      setClickRoot(newRoot4);
-    } else {
-    
-      clickRoot.render(
-        <ClickChart
-          startDate={responseData.startDate}
-          endDate={responseData.endDate}
-          timeUnit={responseData.timeUnit}
-          clickResults={responseData.clickResults}
-        />
-      );
+    if (responseData.clickResults) { // Check if ageResults is available
+      if (!clickRoot) {
+
+        const newRoot4 = createRoot(document.getElementById("graph4"));
+        newRoot4.render(
+          <ClickChart
+            startDate={responseData.startDate}
+            endDate={responseData.endDate}
+            timeUnit={responseData.timeUnit}
+            clickResults={responseData.clickResults}
+          />
+        );
+        setClickRoot(newRoot4);
+      } else {
+
+        clickRoot.render(
+          <ClickChart
+            startDate={responseData.startDate}
+            endDate={responseData.endDate}
+            timeUnit={responseData.timeUnit}
+            clickResults={responseData.clickResults}
+          />
+        );
+      }
     }
-  }
 
-},  [responseData, ageRoot, deviceRoot, root,clickRoot ,responseData.clickResults]);
-  
+  }, [responseData, ageRoot, deviceRoot, root, clickRoot, responseData.clickResults]);
+
   return (
-    <div className="bg-white flex flex-col px-20 max-md:px-5">
+    <div className="bg-white flex flex-col px-20 max-md:px-5 font-['NEXON']">
       <form id="searchForm" onSubmit={handleSubmit}>
-        <div className="self-center flex w-full max-w-[1078px] flex-col mt-32 mb-24 max-md:max-w-full max-md:my-10">
+        <div className="self-center flex w-full max-w-[1078px] flex-col mt-20 mb-24 max-md:max-w-full max-md:my-10">
           <div className="text-black text-5xl max-w-[377px] self-center max-md:text-4xl">
             키워드 검색하기
           </div>
-          <div className="flex w-[356px] max-w-full items-start justify-between gap-5 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
-            <div className="text-black text-xl leading-8 uppercase self-center my-auto">
-              분야
+
+          {/* @@분야, 검색창 변경 */}
+          <div className="flex gap-4">
+            <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
+              <select
+                defaultValue={field ? field : "50000000"}
+                name="category"
+                onChange={(e) => {
+                  setFilterData({
+                    ...filterData,
+                    category: e.target.value,
+                  });
+
+                  setClickFilterData({
+                    ...clickFilterData,
+                    category: e.target.value,
+                  });
+                }}
+                className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
+              >
+                <option value="50000000">패션</option>
+                <option value="50000007">스포츠</option>
+                <option value="50000003">가전제품</option>
+                <option value="50005542">도서</option>
+                <option value="50000006">식품</option>
+              </select>
             </div>
 
-            <select
-              defaultValue={field ? field : "50000000"}
-              name="category"
-              onChange={(e) =>{
-                setFilterData({
-                  ...filterData,
-                  category: e.target.value,
-                })
+            <div className="self-center flex w-full items-start justify-between gap-5 mt-20 max-md:max-w-full max-md:flex-wrap max-md:mt-10">
+              <input
+                name="keyword"
+                defaultValue={trend ? trend : ""}
+                onChange={(e) => {
+                  const newKeyword = e.target.value;
+                  setFilterData((prevFilterData) => ({
+                    ...prevFilterData,
+                    keyword: newKeyword,
+                  }));
 
-                setClickFilterData({
-                  ...clickFilterData,
-                  category: e.target.value,
-                })
-              }
-              }
-              className="text-black text-base font-light leading-6 uppercase self-stretch border w-[269px] max-w-full grow shrink basis-auto items-start justify-between gap-5 pl-32 py-7 rounded-3xl border-solid border-black max-md:pl-5"
-            >
-              <option value="50000000">패션</option>
-              <option value="50000007">스포츠</option>
-              <option value="50000003">가전제품</option>
-              <option value="50005542">도서</option>
-              <option value="50000006">식품</option>
-            </select>
-          </div>
-          <div className="self-center flex w-full items-start justify-between gap-5 mt-16 max-md:max-w-full max-md:flex-wrap max-md:mt-10">
-            <div className="text-black text-xl leading-8 uppercase self-center my-auto">
-              검색어
+                  setClickFilterData((prevFilterData) => ({
+                    ...prevFilterData,
+                    keyword: [
+                      {
+                        name: newKeyword,
+                        param: [newKeyword],
+                      },
+                    ],
+                  }));
+                }}
+                type="text"
+                className="text-black text-xl leading-8 uppercase border w-[300px] h-[40px] md:w-[300px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
+                placeholder="검색어를 입력하세요"
+              />
             </div>
-            <input
-              name="keyword"
-              defaultValue={trend ? trend : ""}
-              onChange={(e) => {
-                const newKeyword = e.target.value;
-                setFilterData((prevFilterData) => ({
-                  ...prevFilterData,
-                  keyword: newKeyword,
-                 
-                }));
-
-                setClickFilterData((prevFilterData) => ({
-                  ...prevFilterData,
-                  keyword: [
-                    {
-                      name: newKeyword,
-                      param: [newKeyword],
-                    },
-                  ],
-                }));
-                
-              }}
-              type="text"
-              className="text-black text-xl leading-8 uppercase self-stretch border w-[975px] max-w-full grow shrink basis-auto items-start justify-between gap-5 stroke-[1px] stroke-black pl-5 py-3 rounded-3xl border-solid border-black max-md:pl-3"
-              placeholder="검색어를 입력하세요"
-            />
           </div>
-          <div className="flex w-[953px] max-w-full grow flex-col ml-5 mt-14 self-start max-md:mt-10">
+
+
+          <div className="flex w-[953px] max-w-full grow flex-col ml-5 mt-10 self-start max-md:mt-10">
             <div className="self-stretch flex items-start justify-between gap-4 pr-60 max-md:max-w-full max-md:flex-wrap max-md:pr-5">
               <div className="text-black text-xl leading-8 uppercase self-center my-auto">
                 기간
               </div>
               <div className="relative">
                 <select
-                  className="text-black text-base font-light leading-6 uppercase self-stretch border w-[102px] max-w-full items-start justify-between gap-4 pl-9 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5"
+                  className="text-black text-base font-light leading-6 uppercase self-stretch border w-[102px] max-w-full items-start justify-between gap-4 pl-9 pr-2.5 py-8 rounded-3xl border-solid border-gray-300 max-md:pl-5"
                   defaultValue="month" // Set the default selected option
                 >
                   <option value="date">일간</option>
@@ -538,10 +519,10 @@ useEffect(() => {
 
                   setClickFilterData({
                     ...clickFilterData,
-                    startDate:newStartDate
+                    startDate: newStartDate
                   })
                 }}
-                className="text-black text-base font-light leading-6 uppercase self-stretch border w-[102px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5"
+                className="text-black text-base font-light leading-6 uppercase self-stretch border w-[102px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-gray-300 max-md:pl-5"
               >
                 <option value="2017">2017</option>
                 <option value="2018">2018</option>
@@ -573,10 +554,10 @@ useEffect(() => {
 
                   setClickFilterData({
                     ...clickFilterData,
-                    startDate:newStartDate
+                    startDate: newStartDate
                   })
                 }}
-                className="text-black text-base font-light leading-6 uppercase self-stretch border w-[83px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5"
+                className="text-black text-base font-light leading-6 uppercase self-stretch border w-[83px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-gray-300 max-md:pl-5"
               >
                 <option value="01">01</option>
                 <option value="02">02</option>
@@ -614,10 +595,10 @@ useEffect(() => {
 
                   setClickFilterData({
                     ...clickFilterData,
-                    endDate:newStartDate
+                    endDate: newStartDate
                   })
                 }}
-                className="text-black text-base font-light leading-6 uppercase self-stretch border w-[102px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5"
+                className="text-black text-base font-light leading-6 uppercase self-stretch border w-[102px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-gray-300 max-md:pl-5"
               >
                 <option value="2017">2017</option>
                 <option value="2018">2018</option>
@@ -642,7 +623,7 @@ useEffect(() => {
 
                   const selectedDay = daysInMonth[selectedMonth];
                   const newStartDate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
-                  
+
                   setFilterData({
                     ...filterData,
                     endDate: newStartDate,
@@ -650,10 +631,10 @@ useEffect(() => {
 
                   setClickFilterData({
                     ...clickFilterData,
-                    endDate:newStartDate
+                    endDate: newStartDate
                   })
                 }}
-                className="text-black text-base font-light leading-6 uppercase self-stretch border w-[83px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-black max-md:pl-5"
+                className="text-black text-base font-light leading-6 uppercase self-stretch border w-[83px] max-w-full items-start justify-between gap-2.5 pl-8 pr-2.5 py-8 rounded-3xl border-solid border-gray-300 max-md:pl-5"
               >
                 <option value="01">01</option>
                 <option value="02">02</option>
@@ -669,154 +650,12 @@ useEffect(() => {
                 <option value="12">12</option>
               </select>
             </div>
-            <div className="flex w-[435px] max-w-full items-start justify-between gap-5 mt-14 self-start max-md:flex-wrap max-md:justify-center max-md:mt-10">
-              <div className="text-black text-lg self-center my-auto">기기</div>
-              <div className="self-stretch flex items-start justify-between gap-2">
-                <input type="radio" id="all-device" name="기기" value="" 
-                onChange={(e) =>{
-                  setFilterData({
-                    ...filterData,
-                    device: e.target.value,
-                  })
 
-                  setClickFilterData({
-                    ...clickFilterData,
-                    device:e.target.value,
-                  })
-                }
-                
-                }/>
-                <label
-                  htmlFor="all-device"
-                  className="text-black text-base font-light self-center whitespace-nowrap my-auto"
-                >
-                  전체
-                </label>
-              </div>
-              <div className="self-stretch flex items-start justify-between gap-2">
-                <input type="radio" id="pc-device" name="기기" value="pc"
-                onChange={(e) =>{
-                  setFilterData({
-                    ...filterData,
-                    device: e.target.value,
-                  })
-                  setClickFilterData({
-                    ...clickFilterData,
-                    device:e.target.value,
-                  })
-                }
-                } />
-                <label
-                  htmlFor="pc-device"
-                  className="text-black text-base font-light self-center whitespace-nowrap my-auto"
-                >
-                  PC
-                </label>
-              </div>
-              <div className="self-stretch flex items-start justify-between gap-2">
-                <input
-                  type="radio"
-                  id="mobile-device"
-                  name="기기"
-                  value="mo"
-                  onChange={(e) =>{
-                    setFilterData({
-                      ...filterData,
-                      device: e.target.value,
-                    })
-                    setClickFilterData({
-                      ...clickFilterData,
-                      device:e.target.value,
-                    })
-                  }
-                    
-                  }
-                />
-                <label
-                  htmlFor="mobile-device"
-                  className="text-black text-base font-light self-center whitespace-nowrap my-auto"
-                >
-                  모바일
-                </label>
-              </div>
-            </div>
-            <div className="flex w-[418px] max-w-full items-start justify-between gap-5 mt-6 self-start max-md:justify-center">
-              <div className="text-black text-lg self-center my-auto">성별</div>
-              <div className="self-stretch flex items-start justify-between gap-2">
-                <input type="radio" id="all-gender" name="성별" value=""
-                onChange={(e) =>
-                  {
 
-                    setFilterData({
-                      ...filterData,
-                      gender: e.target.value,
-                    })
-
-                    setClickFilterData({
-                      ...clickFilterData,
-                      gender:e.target.value,
-                    })
-                  }
-
-                } />
-                <label
-                  htmlFor="all-gender"
-                  className="text-black text-base font-light self-center whitespace-nowrap my-auto"
-                >
-                  전체
-                </label>
-              </div>
-              <div className="self-stretch flex items-start justify-between gap-2">
-                <input type="radio" id="female" name="성별" value="f"
-                onChange={(e) =>{
-
-                  setFilterData({
-                    ...filterData,
-                    gender: e.target.value,
-                  })
-                  setClickFilterData({
-                    ...clickFilterData,
-                    gender:e.target.value,
-                  })
-                }
-                }
-                />
-                <label
-                  htmlFor="female"
-                  className="text-black text-base font-light self-center whitespace-nowrap my-auto"
-                >
-                  여성
-                </label>
-              </div>
-              <div className="self-stretch flex items-start justify-between gap-2">
-                <input type="radio" id="male" name="성별" value="m" 
-                onChange={(e) => {
-
-                  setFilterData({
-                    ...filterData,
-                    gender: e.target.value,
-                  })
-                  setClickFilterData({
-                    ...clickFilterData,
-                    gender:e.target.value,
-                  })
-                }
-                
-              }
-                />
-                <label
-                  htmlFor="male"
-                  className="text-black text-base font-light self-center whitespace-nowrap my-auto"
-                >
-                  남성
-                </label>
-              </div>
-            </div>
-            <div className="self-stretch flex w-full items-start justify-between gap-5 mt-6 max-md:max-w-full max-md:flex-wrap max-md:justify-center">
-              <div className="text-black text-lg self-center my-auto">연령</div>
-              <div className="self-stretch flex items-start justify-between gap-2">
+            <div className="flex gap-4 mt-10">
+              <div className="self-stretch flex items-center justify-between gap-2">
                 <input type="checkbox" id="all-age" name="연령" value=""
-                onChange={handleAgeCheckboxChange}
+                  onChange={handleAgeCheckboxChange}
                 />
                 <label
                   htmlFor="all-age"
@@ -825,9 +664,9 @@ useEffect(() => {
                   전체
                 </label>
               </div>
-              <div className="self-stretch flex items-start justify-between gap-2">
+              <div className="self-stretch flex items-center justify-between gap-2">
                 <input type="checkbox" id="teens" name="연령" value="10"
-                onChange={handleAgeCheckboxChange} />
+                  onChange={handleAgeCheckboxChange} />
                 <label
                   htmlFor="teens"
                   className="text-black text-base font-light self-center whitespace-nowrap my-auto"
@@ -835,7 +674,7 @@ useEffect(() => {
                   10대
                 </label>
               </div>
-              <div className="self-stretch flex items-start justify-between gap-2">
+              <div className="self-stretch flex items-center justify-between gap-2">
                 <input
                   type="checkbox"
                   id="twenties"
@@ -850,7 +689,7 @@ useEffect(() => {
                   20대
                 </label>
               </div>
-              <div className="self-stretch flex items-start justify-between gap-2">
+              <div className="self-stretch flex items-center justify-between gap-2">
                 <input
                   type="checkbox"
                   id="thirties"
@@ -865,7 +704,7 @@ useEffect(() => {
                   30대
                 </label>
               </div>
-              <div className="self-stretch flex items-start justify-between gap-2">
+              <div className="self-stretch flex items-center justify-between gap-2">
                 <input
                   type="checkbox"
                   id="forties"
@@ -880,7 +719,7 @@ useEffect(() => {
                   40대
                 </label>
               </div>
-              <div className="self-stretch flex items-start justify-between gap-2">
+              <div className="self-stretch flex items-center justify-between gap-2">
                 <input
                   type="checkbox"
                   id="fifties"
@@ -895,7 +734,7 @@ useEffect(() => {
                   50대
                 </label>
               </div>
-              <div className="self-stretch flex items-start justify-between gap-2">
+              <div className="self-stretch flex items-center justify-between gap-2">
                 <input
                   type="checkbox"
                   id="sixties"
@@ -910,27 +749,159 @@ useEffect(() => {
                   60대
                 </label>
               </div>
+
+
+              {/* @@기기 radio 변경 */}
+              <div className="grid w-[21rem] grid-cols-3 gap-2 rounded-xl bg-gray-200 p-2 border border-gray-300">
+                <div>
+                  <input type="radio" id="all-device" name="기기" value="" className="peer hidden" checked={filterData.device === ""}
+                    onChange={(e) => {
+                      setFilterData({
+                        ...filterData,
+                        device: e.target.value,
+                      })
+
+                      setClickFilterData({
+                        ...clickFilterData,
+                        device: e.target.value,
+                      })
+                    }
+                    } />
+                  <label
+                    htmlFor="all-device"
+                    className="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
+                  >
+                    전체
+                  </label>
+                </div>
+                <div>
+                  <input type="radio" id="pc-device" name="기기" value="pc" className="peer hidden"
+                    onChange={(e) => {
+                      setFilterData({
+                        ...filterData,
+                        device: e.target.value,
+                      })
+                      setClickFilterData({
+                        ...clickFilterData,
+                        device: e.target.value,
+                      })
+                    }
+                    } />
+                  <label
+                    htmlFor="pc-device"
+                    className="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
+                  >
+                    PC
+                  </label>
+                </div>
+                <div>
+                  <input type="radio" id="mobile-device" name="기기" value="mo" className="peer hidden"
+                    onChange={(e) => {
+                      setFilterData({
+                        ...filterData,
+                        device: e.target.value,
+                      })
+                      setClickFilterData({
+                        ...clickFilterData,
+                        device: e.target.value,
+                      })
+                    }
+                    } />
+                  <label
+                    htmlFor="mobile-device"
+                    className="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
+                  >
+                    모바일
+                  </label>
+                </div>
+              </div>
+
+              {/* @@성별 radio 변경 */}
+              <div className="grid w-[20rem] grid-cols-3 gap-2 rounded-xl bg-gray-200 p-2 border border-gray-300">
+                <div>
+                  <input type="radio" id="all-gender" name="성별" value="" className="peer hidden" checked={filterData.gender === ""}
+                    onChange={(e) => {
+                      setFilterData({
+                        ...filterData,
+                        gender: e.target.value,
+                      })
+
+                      setClickFilterData({
+                        ...clickFilterData,
+                        gender: e.target.value,
+                      })
+                    }
+                    } />
+                  <label
+                    htmlFor="all-gender"
+                    className="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
+                  >
+                    전체
+                  </label>
+                </div>
+                <div>
+                  <input type="radio" id="female" name="성별" value="f" className="peer hidden"
+                    onChange={(e) => {
+                      setFilterData({
+                        ...filterData,
+                        gender: e.target.value,
+                      })
+                      setClickFilterData({
+                        ...clickFilterData,
+                        gender: e.target.value,
+                      })
+                    }
+                    } />
+                  <label
+                    htmlFor="female"
+                    className="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
+                  >
+                    여성
+                  </label>
+                </div>
+                <div>
+                  <input type="radio" id="male" name="성별" value="m" className="peer hidden"
+                    onChange={(e) => {
+                      setFilterData({
+                        ...filterData,
+                        gender: e.target.value,
+                      })
+                      setClickFilterData({
+                        ...clickFilterData,
+                        gender: e.target.value,
+                      })
+                    }
+                    } />
+                  <label
+                    htmlFor="male"
+                    className="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
+                  >
+                    남성
+                  </label>
+                </div>
+              </div>
             </div>
 
-            <div className="flex w-[864px] max-w-full items-start justify-between gap-5 mt-24 self-end max-md:flex-wrap max-md:mt-10">
-              <div className="border bg-white flex flex-col flex-1 px-20 py-7 rounded-[30px] border-solid border-black max-md:px-5">
-                <div className="self-center flex w-[84px] max-w-full items-start gap-1">
+
+            <div className="flex w-[400px] max-w-full items-start justify-between gap-5 mt-10 self-end max-md:flex-wrap max-md:mt-10">
+              <div className="border bg-white flex flex-col flex-1 px-8 py-4 rounded-[30px] border-solid border-gray-300 max-md:px-5">
+                <div className="self-center flex w-[84px] max-w-full items-start gap-0">
                   <img
                     loading="lazy"
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/7ee4812c-c045-44e9-aa52-0da59d97d0af?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
-                    className="aspect-[1.05] object-contain object-center w-[21px] overflow-hidden max-w-full self-start"
+                    className="aspect-[1.11] object-contain object-center w-[30px] overflow-hidden self-stretch max-w-full"
                   />
-                  <div className="text-black text-base font-light whitespace-nowrap mt-1.5 self-start">
+                  <div className="text-black text-base font-light self-center whitespace-nowrap my-auto">
                     즐겨찾기
                   </div>
                 </div>
               </div>
               <div
-                className="border bg-white flex flex-col flex-1 px-20 py-6 rounded-[30px] border-solid border-black max-md:px-5"
+                className="border bg-white flex flex-col flex-1 px-8 py-4 rounded-[30px] border-solid border-gray-300 max-md:px-5"
                 onClick={handleButtonClick}
                 style={{ cursor: "pointer" }}
               >
-                <div className="self-center flex w-[89px] max-w-full items-start gap-0">
+                <div className="self-center flex w-[84px] max-w-full items-start gap-0">
                   <img
                     loading="lazy"
                     srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
@@ -942,26 +913,21 @@ useEffect(() => {
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </form>
 
-      <div id="graph1">
-        
+
+      <div className="grid gap-5 lg:grid-cols-4">
+        <div id="graph4" className="col-span-3"> </div>
+
+        <div id="graph3"> </div>
+
+        <div id="graph2" className="col-span-2"> </div>
+
+        <div id="graph1" className="col-span-2"> </div>
       </div>
-
-      <div id="graph2">
-                
-      </div>
-
-      <div id="graph3">
-
-      </div>
-
-      <div id="graph4">
-
-      </div>
-      
     </div>
   );
 }

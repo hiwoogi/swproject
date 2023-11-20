@@ -20,7 +20,7 @@ export default function Banner(props) {
           백엔드메이커
         </h1>
         <p className="text-white text-center text-2xl font-light leading-9 uppercase self-center whitespace-nowrap mt-11 max-md:mt-10 font-['NEXON']">
-          이것은 배너입니다.
+          이재욱, 최재원
         </p>
       </div>
     </section>

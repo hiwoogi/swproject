@@ -9,9 +9,9 @@ export default function DeviceChart({
 }) {
   const chartRef = useRef(null);
 
-
+const filterPc = (data) => data.filter((item) => item.group === 'pc');
   const filterMo = (data) => data.filter((item) => item.group === 'mo');
-  const filterPc = (data) => data.filter((item) => item.group === 'pc');
+  
 
   const calculateRelativeRatio = (filteredData) => { //상대 비율 구하는 함수
     const sum = filteredData.reduce((total, item) => total + item.ratio, 0);
@@ -22,13 +22,11 @@ export default function DeviceChart({
   useEffect(() => {
     if (deviceResults.length > 0) {
      
-
+const filteredPcData = filterPc(deviceResults[0].data);
       const filteredMoData = filterMo(deviceResults[0].data);
-      const filteredPcData = filterPc(deviceResults[0].data);
-
+      
+ const pc = calculateRelativeRatio(filteredPcData);
       const mobail = calculateRelativeRatio(filteredMoData);
-      const pc = calculateRelativeRatio(filteredPcData);
-
      
 
       const ctx = document.getElementById('deviceChart');
@@ -39,17 +37,20 @@ export default function DeviceChart({
         chartRef.current = new Chart(ctx, {
           type: 'pie',
           data: {
-            labels: ['mobail', 'pc'],
+            labels: ['PC', '모바일'],
             datasets: [
               {
                 label: '%',
-                data: [mobail, pc],
-                backgroundColor: ['rgba(051, 206, 86, 0.6)', 'rgba(153, 102, 51, 0.6)'],
-                borderColor: [ 'rgba(051, 206, 86, 1)', 'rgba(153, 102, 51, 1)'],
-                borderWidth: 1,
+                data: [pc, mobail],
+                backgroundColor: ['rgba(153, 102, 51, 0.8)', 'rgba(51, 206, 86, 0.8)'],
+                // borderColor: [ 'rgba(153, 102, 51, 0.6)', 'rgba(51, 206, 86, 0.6)'],
+                // borderWidth: 1,
               },
             ],
           },
+          options: {
+            //responsive: false,
+          }
         });
       }
     }
@@ -57,10 +58,10 @@ export default function DeviceChart({
 
   
   return (
-    <div className="w-120 h-80 border-2 border-gray-300 p-4 rounded-lg shadow-md flex justify-center items-center">
-      {startDate} ~ {endDate} <br />
+    <div className="w-full h-full border-2 border-gray-300 p-4 rounded-lg shadow-md flex justify-center items-center">
+      {/* {startDate} ~ {endDate} <br />
       -{timeUnit} <br />
-      DeviceChart
+      DeviceChart */}
       <canvas id="deviceChart" />
     </div>
   );
