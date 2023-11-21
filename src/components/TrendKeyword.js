@@ -4,7 +4,7 @@ import TreeMap from './charts/TreeMap';
 import { useLocation } from 'react-router-dom';
 import Header from './main/Header';
 
-export default function Trend() {
+export default function TrendKeyword() {
 
   const location = useLocation();
   console.log(location)
@@ -42,7 +42,6 @@ export default function Trend() {
   return (
 
     <div className="font-['NEXON']">
-      <Header />
       <div className="text-black text-5xl max-w-[500px] self-center mx-auto max-md:text-4xl mt-20">
         실시간 검색어 순위
       </div>
