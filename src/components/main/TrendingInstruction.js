@@ -13,17 +13,10 @@ export default function TrendingInstruction(props) {
         </p>
         <img
           loading="lazy"
-          srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=100 100w, 
-          https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=200 200w, 
-          https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=400 400w, 
-          https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=800 800w, 
-          https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1200 1200w, 
-          https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1600 1600w, 
-          https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=2000 2000w, 
-          https://cdn.builder.io/api/v1/image/assets/TEMP/fe9c0523-a003-4734-a602-368a5c64a87f?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
+          srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/6e6d1187-41b2-408e-ab0d-f9c9e6b1a964?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=2000"
           className="aspect-[1.67] object-contain object-center w-[677px] overflow-hidden self-center max-w-full mt-12 max-md:mt-10"
         />
-        <div className="self-center flex w-full items-start justify-between gap-5 mt-20 max-md:max-w-full max-md:flex-wrap max-md:justify-center max-md:mt-10">
+        <div className="self-center flex w-full items-start justify-between gap-5 mt-10 max-md:max-w-full max-md:flex-wrap max-md:justify-center max-md:mt-10">
           <div className="text-center shadow-sm bg-white flex flex-col flex-1 px-9 py-3 rounded-3xl max-md:px-5">
             <Link to={"/trend"} state={{ fieldValue: 50000000 }}>
               <img

@@ -16,11 +16,11 @@ export default function Header(props) {
         <div className="text-black text-base font-light leading-6 uppercase self-stretch whitespace-nowrap bg-neutral-100 w-[110px] max-w-full pl-6 pr-6 py-3.5 rounded-md max-md:px-5 font-['NEXON']" >
         <Link to="/favorites">즐겨 찾기</Link>
         </div>
-        <div className="text-black text-base font-light leading-6 uppercase self-center my-auto font-['NEXON']">
-          <Link to="/keyword">키워드 검색</Link>
-        </div>
         <div className="text-black text-base font-light leading-6 uppercase self-center whitespace-nowrap my-auto font-['NEXON']">
           <Link to="/trend">실시간 검색어</Link>
+        </div>
+        <div className="text-black text-base font-light leading-6 uppercase self-center my-auto font-['NEXON']">
+          <Link to="/keyword">키워드 검색</Link>
         </div>
       </div>
       

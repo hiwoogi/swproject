@@ -150,7 +150,7 @@ export default function TreeMap({ trend , field}) {
   }, [trend]);
 
   return (
-    <div className="w-[1300px] max-w-full border-2 border-gray-300 p-4 rounded-lg shadow-md flex justify-center items-center mt-10">
+    <div className="w-[1600px] max-w-full border-2 border-gray-300 p-4 rounded-lg flex justify-center items-center mt-10">
       <canvas id="Treemap" />
     </div>
   );

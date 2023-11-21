@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import TreeMap from './charts/TreeMap';
 import { useLocation } from 'react-router-dom';
-import Header from './main/Header';
 
 export default function TrendKeyword() {
 
@@ -17,16 +16,15 @@ export default function TrendKeyword() {
   const [field, setField] = useState(fieldValue)
   // console.log("필드value : ", fieldValue)
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/test2/scrape/${field}`);
+        console.log('Response:', response.data);
+        const arr = response.data
+        const latestData = arr[arr.length - 1]
 
-    useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const response = await axios.get(`http://localhost:8080/test2/scrape/${field}`);
-            console.log('Response:', response.data);
-            const arr = response.data
-            const latestData = arr[arr.length-1]
-            
-            setTrend(latestData.ranks)
+        setTrend(latestData.ranks)
 
         console.log('트렌드값', trend)
         // Process the response data as needed
@@ -40,12 +38,11 @@ export default function TrendKeyword() {
 
 
   return (
-
-    <div className="font-['NEXON']">
+    <div className="flex flex-col items-center font-['NEXON']">
       <div className="text-black text-5xl max-w-[500px] self-center mx-auto max-md:text-4xl mt-20">
         실시간 검색어 순위
       </div>
-      <div className="flex items-center gap-3 ml-5 mt-10 self-start max-md:ml-2.5 max-md:mt-10">
+      <div className="flex self-start gap-3 ml-5 mt-10 max-md:ml-2.5 max-md:mt-10">
         <div className="text-black text-xl right-0 leading-8 uppercase self-center my-auto">
           분야
         </div>
@@ -73,8 +70,6 @@ export default function TrendKeyword() {
         />
       </div>
     </div>
-
-
 
   )
 }

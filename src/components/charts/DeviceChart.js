@@ -44,7 +44,6 @@ const filteredPcData = filterPc(deviceResults[0].data);
                 data: [pc, mobail],
                 backgroundColor: ['rgba(153, 102, 51, 0.8)', 'rgba(51, 206, 86, 0.8)'],
                 // borderColor: [ 'rgba(153, 102, 51, 0.6)', 'rgba(51, 206, 86, 0.6)'],
-                // borderWidth: 1,
               },
             ],
           },
