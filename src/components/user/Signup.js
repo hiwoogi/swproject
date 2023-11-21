@@ -1,7 +1,10 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup(props) {
+  const navigate = useNavigate();
+
   const [signupForm, setSignupForm] = useState({
     email: "",
     name: "",
@@ -18,28 +21,34 @@ export default function Signup(props) {
     }));
   };
 
-  
   const fetchData = async () => {
-
     const baseUrl = "http://localhost:8080";
 
     try {
       //서버로 스크래핑 요청보내고 응답데이터를 받아옴 (응답데이터는  1~10위 검색어 데이터가 10개의 배열로 들어가있음)
-      const response = await axios.post(baseUrl+`/test3/signup`,signupForm);
-      console.log('Response:', response.data);
-      
+      const response = await axios.post(baseUrl + `/test3/signup`, signupForm);
+      console.log("Response:", response.data);
+      if (response.data) {
+        console.log("Signup successful!");
+
+        // Redirect to the login page after successful signup
+        navigate("/login");
+      } else {
+        // Handle other scenarios based on the server response
+        console.log("Signup failed:", response.data.message);
+      }
+
       // Process the response data as needed
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetchData()
+    fetchData();
     console.log("Form submitted:", signupForm);
-
   };
 
   return (
