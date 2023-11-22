@@ -23,7 +23,7 @@ export default function Login(props) {
     try {
       // Replace 'YOUR_API_ENDPOINT' with the actual endpoint URL
       const apiUrl = 'http://localhost:8080/test3/login';
-  
+      
       const response = await axios.post(apiUrl, {
         email: email,
         password: password,
@@ -32,9 +32,10 @@ export default function Login(props) {
       // Handle the response as needed
       console.log('API Response:', response.data);
   
-      if (response.data) {
+      if (response.data.token) {
+        localStorage.setItem("ACCESS_TOKEN", response.data.token)
         // Redirect to the specified route after successful login using useNavigate
-        navigate('/favorites');
+        navigate('/');
       } else {
         // Handle other scenarios based on the server response
         console.log('Login failed:', response.data.message);
@@ -42,7 +43,10 @@ export default function Login(props) {
       // Redirect or perform other actions after successful login
     } catch (error) {
       // Handle errors, e.g., display an error message to the user
-      console.error('API Error:', error.message);
+      console.log(error.response.status);
+      if (error.response.status === 403) {
+        window.location.href = "/#/login"; // redirect
+      }
     }
 
     // Redirect or perform other actions after successful login
@@ -70,6 +74,7 @@ export default function Login(props) {
             id="email"
             value={email}
             onChange={handleEmailChange}
+            placeholder="이메일을 입력해주세요."
             className="aspect-[470] object-contain object-center w-[470px] stroke-[1px] stroke-blue-600  mt-7 max-md:mt-10
           border border-solid border-gray-300 "
           />
@@ -84,6 +89,7 @@ export default function Login(props) {
             id="password"
             value={password}
             onChange={handlePasswordChange}
+            placeholder="비밀번호를 입력해주세요."
             className="aspect-[470] object-contain object-center w-[470px] stroke-[1px] stroke-blue-600  mt-7 max-md:mt-10
           border border-solid border-gray-300 "
           />

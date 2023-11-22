@@ -16,12 +16,11 @@ export default function App() {
     isAuthenticated: false, // Change this to true if the user is authenticated
   };
   
-  const PrivateRoute = ({ element, ...rest }) => {
-    return fakeAuthentication.isAuthenticated ? (
-      <Route {...rest} element={element} />
-    ) : (
-      <Navigate to="/login" />
-    );
+  const PrivateRoute = ({ element }) => {
+    const accessToken = localStorage.getItem("ACCESS_TOKEN");
+  
+    // If the token exists, render the specified element, otherwise, redirect to the login page
+    return accessToken ? element : <Navigate to="/login" />;
   };
 
 
