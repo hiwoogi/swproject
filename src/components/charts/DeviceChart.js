@@ -42,13 +42,22 @@ const filteredPcData = filterPc(deviceResults[0].data);
               {
                 label: '%',
                 data: [pc, mobail],
-                backgroundColor: ['rgba(153, 102, 51, 0.8)', 'rgba(51, 206, 86, 0.8)'],
+                backgroundColor: ['rgba(208, 158, 136, 1)', 'rgba(155, 103, 129, 1)'],
                 // borderColor: [ 'rgba(153, 102, 51, 0.6)', 'rgba(51, 206, 86, 0.6)'],
               },
             ],
           },
           options: {
-            //responsive: false,
+            plugins: {
+              tooltip: {
+                titleFont: {
+                  size: 20
+                },
+                bodyFont: {
+                  size: 20
+                }
+              },
+            }
           }
         });
       }

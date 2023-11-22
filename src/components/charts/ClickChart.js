@@ -33,7 +33,7 @@ export default function ClickChart({
               {
                 label: '%',
                 data: ratios,
-                borderColor: 'rgba(111, 50, 255, 1)',
+                borderColor: 'rgba(106, 96, 169, 1)',
                 borderWidth: 4,
                 //pointStyle: false, //포인트 없애려면 false
                 pointRadius: 2, //포인트 크기 조절
@@ -44,11 +44,18 @@ export default function ClickChart({
           },
           options: {
             scales: {
+              x: {
+                ticks: {
+                  font : {
+                    size: 15,
+                  }
+                }
+              },
               y: {
                 min: 0,  // Y축 최소값
                 max: 120,  // Y축 최대값
                 ticks: {
-                  stepSize: 20, // y 축 간격 설정
+                  stepSize: 20, // y축 간격 설정
                 },
                 display: false, //y 축 제거
               },
@@ -58,14 +65,16 @@ export default function ClickChart({
                 display: false,
               },
               tooltip: {
+                bodyFont: {
+                  size: 20
+                },
                 callbacks: {
                   label: (context) => `${context.formattedValue}%`, // 툴팁에 표시될 값 설정
                 }
-              }
-            }
+              },
+            },
           },
         });
-
       }
     }
   }, [clickResults]);

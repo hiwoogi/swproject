@@ -20,7 +20,7 @@ export default function KeywordInstruction(props) {
             <div className="flex-col overflow-hidden relative flex min-h-[500px] grow pl-20 pr-5 pt-96 pb-2.5 max-md:max-w-full max-md:mt-10 max-md:pl-5 max-md:pt-24">
               <img
                 loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/e8e0b44b-56ff-430f-a9c1-22cc68a1a547?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/b2b74254-b223-45fc-834f-89427a8d6795?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=2000 2000w"
                 className="absolute h-full w-full object-cover object-center inset-0"
                 alt="Keyword Analysis"
               />

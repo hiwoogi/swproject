@@ -74,12 +74,12 @@ export default function AgeChart({
                 label: ' ',
                 data: [A, B, C, D, E, F],
                 backgroundColor: [
-                  'rgba(255, 99, 132, 1)',
-                  'rgba(54, 162, 235, 1)',
-                  'rgba(255, 206, 86, 1)',
-                  'rgba(75, 192, 192, 1)',
-                  'rgba(153, 102, 255, 1)',
-                  'rgba(255, 159, 64, 1)',
+                  'rgba(254, 67, 101, 1)',
+                  'rgba(252, 157, 154, 1)',
+                  'rgba(249, 205, 173, 1)',
+                  'rgba(200, 200, 169, 1)',
+                  'rgba(237, 229, 116, 1)',
+                  'rgba(249, 212, 35, 1)',
                 ],
                 // borderColor: [
                 //   'rgba(255, 99, 132, 0.5)',
@@ -103,12 +103,25 @@ export default function AgeChart({
               y: {
                 grid: {
                    display: false
+                },
+                ticks: {
+                  font : {
+                    size: 20,
+                  }
                 }
               }
            },
             plugins: {
               legend: {
                 display: false,
+              },
+              tooltip: {
+                titleFont: {
+                  size: 20
+                },
+                bodyFont: {
+                  size: 20
+                }
               }
             }
           },

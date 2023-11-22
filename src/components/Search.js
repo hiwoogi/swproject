@@ -611,7 +611,7 @@ export default function Search(props) {
             <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
             <select
               name="end-month"
-              defaultValue="08"
+              defaultValue="09"
               onChange={(e) => {
                 const selectedYear = document.querySelector(
                   'select[name="end-year"]'

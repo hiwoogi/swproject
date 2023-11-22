@@ -53,7 +53,7 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
               {
                 label: '%',
                 data: [female, 100 - female],
-                backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(0, 0, 0, 0.2)'],
+                backgroundColor: ['rgba(255, 116, 115, 0.5)', 'rgba(0, 0, 0, 0.2)'],
               },
             ],
           },
@@ -61,7 +61,16 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
             responsive: false,
             rotation: -90,
             circumference: 180,
-            
+            plugins: {
+              tooltip: {
+                titleFont: {
+                  size: 20
+                },
+                bodyFont: {
+                  size: 20
+                }
+              }
+            }
           }
         });
       }
@@ -79,7 +88,7 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
               {
                 label: '%',
                 data: [male, 100 - male],
-                backgroundColor: ['rgba(54, 162, 235, 0.5)', 'rgba(0, 0, 0, 0.2)'],
+                backgroundColor: ['rgba(71, 184, 224, 0.5)', 'rgba(0, 0, 0, 0.2)'],
               },
             ],
           },
@@ -87,7 +96,16 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
             responsive: false,
             rotation: -90,
             circumference: 180,
-            
+            plugins: {
+              tooltip: {
+                titleFont: {
+                  size: 20
+                },
+                bodyFont: {
+                  size: 20
+                },
+              }
+            }
           }
         });
       }
