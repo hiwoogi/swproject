@@ -51,7 +51,6 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
             labels: ['여성'],
             datasets: [
               {
-                label: '%',
                 data: [female, 100 - female],
                 backgroundColor: ['rgba(255, 116, 115, 0.5)', 'rgba(0, 0, 0, 0.2)'],
               },
@@ -68,6 +67,9 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
                 },
                 bodyFont: {
                   size: 20
+                },
+                callbacks: {
+                  label: (context) => `${context.formattedValue}%`, // 툴팁에 표시될 값 설정
                 }
               }
             }
@@ -86,7 +88,6 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
             labels: ['남성'],
             datasets: [
               {
-                label: '%',
                 data: [male, 100 - male],
                 backgroundColor: ['rgba(71, 184, 224, 0.5)', 'rgba(0, 0, 0, 0.2)'],
               },
@@ -104,6 +105,9 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
                 bodyFont: {
                   size: 20
                 },
+                callbacks: {
+                  label: (context) => `${context.formattedValue}%`, // 툴팁에 표시될 값 설정
+                }
               }
             }
           }

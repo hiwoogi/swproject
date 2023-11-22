@@ -75,47 +75,62 @@ export default function Search(props) {
   function isLeapYear(year) {
     return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
   }
+  
   const handleAgeCheckboxChange = (e) => {
     const ageValue = e.target.value;
     const isChecked = e.target.checked;
 
     if (ageValue === "") {
-      // If "전체" checkbox is clicked, update all age checkboxes
+      //전체 체크박스를 클릭한 경우, 모든 연령대 체크박스 업데이트
       const allAgeDivs = document.querySelectorAll(".self-stretch input[type=checkbox]");
       allAgeDivs.forEach((ageCheckbox) => {
         ageCheckbox.checked = isChecked;
       });
       setFilterData({
         ...filterData,
-        ages: [],
+        ages: isChecked ? ["10", "20", "30", "40", "50", "60"] : [], //전체가 체크된 경우 모든 연령대 값 추가
       });
       setClickFilterData({
         ...clickFilterData,
-        ages: [],
+        ages: isChecked ? ["10", "20", "30", "40", "50", "60"] : [], //전체가 체크된 경우 모든 연령대 값 추가
       });
     } else {
-      // For other age checkboxes, handle individually
+      //다른 연령대 체크박스에 대해 개별적으로 처리
+      const updatedAges = isChecked
+        ? [...filterData.ages, ageValue]
+        : filterData.ages.filter((age) => age !== ageValue);
+
       setFilterData((prevFilterData) => ({
         ...prevFilterData,
-        ages: isChecked
-          ? [...prevFilterData.ages, ageValue]
-          : prevFilterData.ages.filter((age) => age !== ageValue),
+        ages: updatedAges,
       }));
+
       setClickFilterData((prevClickFilterData) => ({
         ...prevClickFilterData,
-        ages: isChecked
-          ? [...prevClickFilterData.ages, ageValue]
-          : prevClickFilterData.ages.filter((age) => age !== ageValue),
+        ages: updatedAges,
       }));
+
+      //다른 어떤 체크박스라도 해제된 경우, 전체 체크박스도 해제
+      const allAgeCheckbox = document.querySelector(".self-stretch input[type=checkbox][value='']");
+      if (!isChecked) {
+        allAgeCheckbox.checked = false;
+        setFilterData({
+          ...filterData,
+          ages: updatedAges,
+        });
+        setClickFilterData({
+          ...clickFilterData,
+          ages: updatedAges,
+        });
+      }
     }
   };
+
 
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
 
     makeChartData();
-
-
   };
 
   const handleButtonClick = () => {
@@ -189,11 +204,10 @@ export default function Search(props) {
   const trend = new URLSearchParams(location.search).get('trend');
   const field = new URLSearchParams(location.search).get('field');
 
-  //@@우선 따로 빼서 확인만 해놨어요..
+  //@@trend 따로 빼서 확인
   useEffect(() => {
 
     if (trend && field) {
-
 
       // Update filterData state with trend and field values
       setFilterData((prevFilterData) => ({
@@ -218,7 +232,6 @@ export default function Search(props) {
     }
 
   }, [trend, field]);
-
 
 
   useEffect(() => {
@@ -514,164 +527,164 @@ export default function Search(props) {
               </select>
             </div>
             <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
-            <select
-              name="start-year"
-              defaultValue="2023"
-              onChange={(e) => {
-                const selectedYear = e.target.value;
-                const selectedMonth = document.querySelector(
-                  'select[name="start-month"]'
-                ).value;
+              <select
+                name="start-year"
+                defaultValue="2023"
+                onChange={(e) => {
+                  const selectedYear = e.target.value;
+                  const selectedMonth = document.querySelector(
+                    'select[name="start-month"]'
+                  ).value;
 
-                if (selectedMonth === "02" && isLeapYear(selectedYear)) {
-                  daysInMonth["02"] = 29;
-                }
+                  if (selectedMonth === "02" && isLeapYear(selectedYear)) {
+                    daysInMonth["02"] = 29;
+                  }
 
-                const selectedDay = daysInMonth[selectedMonth];
-                const newStartDate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
-                setFilterData({
-                  ...filterData,
-                  startDate: newStartDate,
-                });
+                  const selectedDay = daysInMonth[selectedMonth];
+                  const newStartDate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
+                  setFilterData({
+                    ...filterData,
+                    startDate: newStartDate,
+                  });
 
-                setClickFilterData({
-                  ...clickFilterData,
-                  startDate: newStartDate
-                })
-              }}
-              className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
-            >
-              <option value="2017">2017</option>
-              <option value="2018">2018</option>
-              <option value="2019">2019</option>
-              <option value="2020">2020</option>
-              <option value="2021">2021</option>
-              <option value="2022">2022</option>
-              <option value="2023">2023</option>
-            </select>
+                  setClickFilterData({
+                    ...clickFilterData,
+                    startDate: newStartDate
+                  })
+                }}
+                className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
+              >
+                <option value="2017">2017</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+              </select>
             </div>
             <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
-            <select
-              name="start-month"
-              defaultValue="08"
-              onChange={(e) => {
-                const selectedYear = document.querySelector(
-                  'select[name="start-year"]'
-                ).value;
-                const selectedMonth = e.target.value;
+              <select
+                name="start-month"
+                defaultValue="08"
+                onChange={(e) => {
+                  const selectedYear = document.querySelector(
+                    'select[name="start-year"]'
+                  ).value;
+                  const selectedMonth = e.target.value;
 
-                if (selectedMonth === "02" && isLeapYear(selectedYear)) {
-                  daysInMonth["02"] = 29;
-                }
+                  if (selectedMonth === "02" && isLeapYear(selectedYear)) {
+                    daysInMonth["02"] = 29;
+                  }
 
-                const selectedDay = daysInMonth[selectedMonth];
-                const newStartDate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
-                setFilterData({
-                  ...filterData,
-                  startDate: newStartDate,
-                });
+                  const selectedDay = daysInMonth[selectedMonth];
+                  const newStartDate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
+                  setFilterData({
+                    ...filterData,
+                    startDate: newStartDate,
+                  });
 
-                setClickFilterData({
-                  ...clickFilterData,
-                  startDate: newStartDate
-                })
-              }}
-              className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
-            >
-              <option value="01">01</option>
-              <option value="02">02</option>
-              <option value="03">03</option>
-              <option value="04">04</option>
-              <option value="05">05</option>
-              <option value="06">06</option>
-              <option value="07">07</option>
-              <option value="08">08</option>
-              <option value="09">09</option>
-              <option value="10">10</option>
-              <option value="11">11</option>
-              <option value="12">12</option>
-            </select>
+                  setClickFilterData({
+                    ...clickFilterData,
+                    startDate: newStartDate
+                  })
+                }}
+                className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
+              >
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+              </select>
             </div>
             <div className="bg-zinc-300 self-center flex w-[45px] h-[7px] flex-col mt-20  " />
             <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
-            <select
-              name="end-year"
-              defaultValue="2023"
-              onChange={(e) => {
-                const selectedYear = e.target.value;
-                const selectedMonth = document.querySelector(
-                  'select[name="end-month"]'
-                ).value;
+              <select
+                name="end-year"
+                defaultValue="2023"
+                onChange={(e) => {
+                  const selectedYear = e.target.value;
+                  const selectedMonth = document.querySelector(
+                    'select[name="end-month"]'
+                  ).value;
 
-                if (selectedMonth === "02" && isLeapYear(selectedYear)) {
-                  daysInMonth["02"] = 29;
-                }
+                  if (selectedMonth === "02" && isLeapYear(selectedYear)) {
+                    daysInMonth["02"] = 29;
+                  }
 
-                const selectedDay = daysInMonth[selectedMonth];
-                const newStartDate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
-                setFilterData({
-                  ...filterData,
-                  endDate: newStartDate
-                });
+                  const selectedDay = daysInMonth[selectedMonth];
+                  const newStartDate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
+                  setFilterData({
+                    ...filterData,
+                    endDate: newStartDate
+                  });
 
-                setClickFilterData({
-                  ...clickFilterData,
-                  endDate: newStartDate
-                })
-              }}
-              className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
-            >
-              <option value="2017">2017</option>
-              <option value="2018">2018</option>
-              <option value="2019">2019</option>
-              <option value="2020">2020</option>
-              <option value="2021">2021</option>
-              <option value="2022">2022</option>
-              <option value="2023">2023</option>
-            </select>
+                  setClickFilterData({
+                    ...clickFilterData,
+                    endDate: newStartDate
+                  })
+                }}
+                className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
+              >
+                <option value="2017">2017</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+              </select>
             </div>
             <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
             <select
               name="end-month"
-              defaultValue="08"
+              defaultValue="09"
               onChange={(e) => {
                 const selectedYear = document.querySelector(
                   'select[name="end-year"]'
                 ).value;
                 const selectedMonth = e.target.value;
 
-                if (selectedMonth === "02" && isLeapYear(selectedYear)) {
-                  daysInMonth["02"] = 29;
-                }
+                  if (selectedMonth === "02" && isLeapYear(selectedYear)) {
+                    daysInMonth["02"] = 29;
+                  }
 
-                const selectedDay = daysInMonth[selectedMonth];
-                const newStartDate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
+                  const selectedDay = daysInMonth[selectedMonth];
+                  const newStartDate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
 
-                setFilterData({
-                  ...filterData,
-                  endDate: newStartDate,
-                });
+                  setFilterData({
+                    ...filterData,
+                    endDate: newStartDate,
+                  });
 
-                setClickFilterData({
-                  ...clickFilterData,
-                  endDate: newStartDate
-                })
-              }}
-              className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
-            >
-              <option value="01">01</option>
-              <option value="02">02</option>
-              <option value="03">03</option>
-              <option value="04">04</option>
-              <option value="05">05</option>
-              <option value="06">06</option>
-              <option value="07">07</option>
-              <option value="08">08</option>
-              <option value="09">09</option>
-              <option value="10">10</option>
-              <option value="11">11</option>
-              <option value="12">12</option>
-            </select>
+                  setClickFilterData({
+                    ...clickFilterData,
+                    endDate: newStartDate
+                  })
+                }}
+                className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
+              >
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+              </select>
             </div>
           </div>
 
@@ -905,7 +918,7 @@ export default function Search(props) {
                     남성
                   </label>
                 </div>
-                
+
               </div>
               <div className="border bg-white flex flex-col flex-1 px-8 py-4 rounded-[30px] border-solid border-gray-300 max-md:px-5">
                 <div className="self-center flex w-[84px] max-w-full items-start gap-0">

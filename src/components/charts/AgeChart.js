@@ -71,7 +71,6 @@ export default function AgeChart({
             labels: ['10대', '20대', '30대', '40대', '50대', '60대'],
             datasets: [
               {
-                label: ' ',
                 data: [A, B, C, D, E, F],
                 backgroundColor: [
                   'rgba(254, 67, 101, 1)',
@@ -121,6 +120,9 @@ export default function AgeChart({
                 },
                 bodyFont: {
                   size: 20
+                },
+                callbacks: {
+                  label: (context) => `${context.formattedValue}%`,
                 }
               }
             }

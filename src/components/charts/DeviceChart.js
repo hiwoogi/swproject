@@ -40,7 +40,6 @@ const filteredPcData = filterPc(deviceResults[0].data);
             labels: ['PC', '모바일'],
             datasets: [
               {
-                label: '%',
                 data: [pc, mobail],
                 backgroundColor: ['rgba(208, 158, 136, 1)', 'rgba(155, 103, 129, 1)'],
                 // borderColor: [ 'rgba(153, 102, 51, 0.6)', 'rgba(51, 206, 86, 0.6)'],
@@ -55,6 +54,9 @@ const filteredPcData = filterPc(deviceResults[0].data);
                 },
                 bodyFont: {
                   size: 20
+                },
+                callbacks: {
+                  label: (context) => `${context.formattedValue}%`, // 툴팁에 표시될 값 설정
                 }
               },
             }

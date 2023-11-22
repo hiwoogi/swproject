@@ -31,7 +31,6 @@ export default function ClickChart({
             labels: days,
             datasets: [
               {
-                label: '%',
                 data: ratios,
                 borderColor: 'rgba(106, 96, 169, 1)',
                 borderWidth: 4,
@@ -69,7 +68,7 @@ export default function ClickChart({
                   size: 20
                 },
                 callbacks: {
-                  label: (context) => `${context.formattedValue}%`, // 툴팁에 표시될 값 설정
+                  label: (context) => `${context.formattedValue}%`,
                 }
               },
             },
