@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 export default function TrendKeyword() {
 
   const location = useLocation();
-  console.log(location)
+  // console.log(location)
   // keywordInstruction (키워드 소개하는 메인페이지) 에서 분야버튼을 클릭해 넘어온 경우 그 값 코드를 설정, 그게 아니라면 패션키워드로 default함
   const fieldValue = location.state ? location.state.fieldValue : '50000000';
   const [trend, setTrend] = useState({
@@ -20,16 +20,16 @@ export default function TrendKeyword() {
     const fetchData = async () => {
       try {
         const response = await axios.get(`http://localhost:8080/test2/scrape/${field}`);
-        console.log('Response:', response.data);
+        // console.log('Response:', response.data);
         const arr = response.data
         const latestData = arr[arr.length - 1]
 
         setTrend(latestData.ranks)
 
-        console.log('트렌드값', trend)
+        // console.log('트렌드값', trend)
         // Process the response data as needed
       } catch (error) {
-        console.error('Error:', error);
+        // console.error('Error:', error);
       }
     };
 

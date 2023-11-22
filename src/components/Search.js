@@ -44,7 +44,7 @@ export default function Search(props) {
   const [deviceRoot, setDeviceRoot] = useState(null);
   const [clickRoot, setClickRoot] = useState(null);
   const [isTrend, setIsTrend] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(true)
 
   const [responseData, setResponseData] = useState({
     startDate: null,
@@ -237,6 +237,8 @@ export default function Search(props) {
   useEffect(() => {
     if(isTrend === true)
     {
+      
+
       makeChartData()
       console.log(responseData)
       if (responseData.startDate && responseData.endDate) {
@@ -340,11 +342,22 @@ export default function Search(props) {
               clickResults={responseData.clickResults}
             />
           );
+
         }
       }
+      
+      
+
     }
 
-  }, [isTrend]);
+  },  [isLoading])
+
+  useEffect(()=> {
+    const loadingTimeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+  },[])
+
 
   useEffect(() => {
     if (responseData.startDate && responseData.endDate) {
@@ -454,6 +467,10 @@ export default function Search(props) {
   }, [responseData, ageRoot, deviceRoot, root, clickRoot, responseData.clickResults]);
 
   return (
+    <>
+    {isLoading ? (
+      <h1>Loading...</h1>
+    ) : (
     <div className="bg-white flex flex-col px-20 max-md:px-5 font-['NEXON']">
       <form id="searchForm" onSubmit={handleSubmit} className="">
         <div className="self-center flex w-full max-w-[1920px] flex-col mt-20 mb-16 max-md:max-w-full max-md:my-10">
@@ -998,5 +1015,6 @@ export default function Search(props) {
         </div>
       </div>
     </div>
-  );
-}
+  )};
+  </>
+)}
