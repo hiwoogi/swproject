@@ -21,7 +21,6 @@ export default function Login(props) {
     console.log("Password:", password);
 
     try {
-      // Replace 'YOUR_API_ENDPOINT' with the actual endpoint URL
       const apiUrl = 'http://localhost:8080/test3/login';
       
       const response = await axios.post(apiUrl, {
@@ -29,27 +28,25 @@ export default function Login(props) {
         password: password,
       });
   
-      // Handle the response as needed
       console.log('API Response:', response.data);
   
       if (response.data.token) {
         localStorage.setItem("ACCESS_TOKEN", response.data.token)
-        // Redirect to the specified route after successful login using useNavigate
         navigate('/');
       } else {
-        // Handle other scenarios based on the server response
+
         console.log('Login failed:', response.data.message);
       }
-      // Redirect or perform other actions after successful login
+ 
     } catch (error) {
-      // Handle errors, e.g., display an error message to the user
+ 
       console.log(error.response.status);
       if (error.response.status === 403) {
-        window.location.href = "/#/login"; // redirect
+        window.location.href = "/#/login";
       }
     }
 
-    // Redirect or perform other actions after successful login
+ 
   };
 
   return (

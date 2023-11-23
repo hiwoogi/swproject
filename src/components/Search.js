@@ -1,22 +1,24 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useLocation } from 'react-router-dom';
-import { createRoot } from 'react-dom/client';
+import { useLocation } from "react-router-dom";
+import { createRoot } from "react-dom/client";
 import GenderChart from "./charts/GenderChart";
 import AgeChart from "./charts/AgeChart";
 import DeviceChart from "./charts/DeviceChart";
 import ClickChart from "./charts/ClickChart";
-import { FadeLoader } from "react-spinners";
+import { SyncLoader } from "react-spinners";
+import SingleDatePicker from "./searchForms/SingleDatePicker";
+import dayjs, { Dayjs } from "dayjs";
 
 export default function Search(props) {
-  const ACCESS_TOKEN = "ACCESS_TOKEN"
+  const ACCESS_TOKEN = "ACCESS_TOKEN";
 
   const [filterData, setFilterData] = useState({
     keyword: "",
     category: "50000000",
-    timeUnit: "month",
-    startDate: "2023-08-01",
-    endDate: "2023-09-30",
+    timeUnit: "date",
+    startDate: dayjs().subtract(30, "days").format("YYYY-MM-DD"),
+    endDate: dayjs().format("YYYY-MM-DD"),
     device: "",
     ages: [],
     gender: "",
@@ -26,13 +28,13 @@ export default function Search(props) {
     keyword: [
       {
         name: "",
-        param: []
-      }
+        param: [],
+      },
     ],
     category: "50000000",
-    timeUnit: "month",
-    startDate: "2023-08-01",
-    endDate: "2023-09-30",
+    timeUnit: "date",
+    startDate: dayjs().subtract(30, "days").format("YYYY-MM-DD"),
+    endDate: dayjs().format("YYYY-MM-DD"),
     device: "",
     ages: [],
     gender: "",
@@ -43,7 +45,7 @@ export default function Search(props) {
   const [deviceRoot, setDeviceRoot] = useState(null);
   const [clickRoot, setClickRoot] = useState(null);
   const [isTrend, setIsTrend] = useState(false);
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
 
   const [responseData, setResponseData] = useState({
     startDate: null,
@@ -53,7 +55,6 @@ export default function Search(props) {
     ageResults: null,
     deviceResults: null,
     clickResults: null,
-
   });
   const daysInMonth = {
     "01": 31,
@@ -69,7 +70,27 @@ export default function Search(props) {
     11: 30,
     12: 31,
   };
+  const handleStartDateChange = (startDate) => {
+    setFilterData({
+      ...filterData,
+      startDate,
+    });
+    setClickFilterData({
+      ...clickFilterData,
+      startDate,
+    });
+  };
 
+  const handleEndDateChange = (endDate) => {
+    setFilterData({
+      ...filterData,
+      endDate,
+    });
+    setClickFilterData({
+      ...clickFilterData,
+      endDate,
+    });
+  };
   // 윤년 체크
   function isLeapYear(year) {
     return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
@@ -81,7 +102,9 @@ export default function Search(props) {
 
     if (ageValue === "") {
       //전체 체크박스를 클릭한 경우, 모든 연령대 체크박스 업데이트
-      const allAgeDivs = document.querySelectorAll(".self-stretch input[type=checkbox]");
+      const allAgeDivs = document.querySelectorAll(
+        ".self-stretch input[type=checkbox]"
+      );
       allAgeDivs.forEach((ageCheckbox) => {
         ageCheckbox.checked = isChecked;
       });
@@ -110,7 +133,9 @@ export default function Search(props) {
       }));
 
       //다른 어떤 체크박스라도 해제된 경우, 전체 체크박스도 해제
-      const allAgeCheckbox = document.querySelector(".self-stretch input[type=checkbox][value='']");
+      const allAgeCheckbox = document.querySelector(
+        ".self-stretch input[type=checkbox][value='']"
+      );
       if (!isChecked) {
         allAgeCheckbox.checked = false;
         setFilterData({
@@ -124,7 +149,6 @@ export default function Search(props) {
       }
     }
   };
-
 
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
@@ -146,26 +170,25 @@ export default function Search(props) {
     const baseUrl = "http://localhost:8080";
     let headers = {
       Authorization: "Bearer your_access_token", // Include any authorization token if required
-      "Content-Type": "application/json" // Set the content type according to your API requirements
+      "Content-Type": "application/json", // Set the content type according to your API requirements
       // Add any other headers as needed
     };
     try {
+      const accessToken = localStorage.getItem("ACCESS_TOKEN");
 
-
-      const accessToken = localStorage.getItem("ACCESS_TOKEN")
-      console.log(accessToken)
       if (accessToken && accessToken !== null) {
         headers.Authorization = `Bearer ${accessToken}`;
       }
       // Make all requests concurrently
-      const [genderResponse, ageResponse, deviceResponse, clickResponse] = await Promise.all([
-        axios.post(baseUrl + "/test/gender", filterData, { headers }),
-        axios.post(baseUrl + "/test/age", filterData, { headers }),
-        axios.post(baseUrl + "/test/device", filterData, { headers }),
-        axios.post(baseUrl + "/test/click", clickFilterData, { headers })
-
-      ]);
-
+      const [genderResponse, ageResponse, deviceResponse, clickResponse] =
+        await Promise.all([
+          axios.post(baseUrl + "/test/gender", filterData, { headers }),
+          axios.post(baseUrl + "/test/age", filterData, { headers }),
+          axios.post(baseUrl + "/test/device", filterData, { headers }),
+          axios.post(baseUrl + "/test/click", clickFilterData, { headers }),
+        ]);
+      console.log("전송 시작값 :", filterData.startDate);
+      console.log("전송 끝값 : ", filterData.endDate);
       // Extract data from responses
       const genderResults = genderResponse.data.results;
       const ageResults = ageResponse.data.results;
@@ -183,10 +206,9 @@ export default function Search(props) {
         deviceResults,
         clickResults,
       }));
-      console.log("star", responseData.startDate)
-      console.log("end", responseData.endDate)
-      console.log(responseData)
-
+      console.log("star", responseData.startDate);
+      console.log("end", responseData.endDate);
+      console.log(responseData);
     } catch (error) {
       console.log(error.response.status);
       if (error.response.status === 403) {
@@ -201,9 +223,7 @@ export default function Search(props) {
   const { trend, field } = location.state || {};
   //@@trend 처리 따로 빼서 확인
   useEffect(() => {
-
     if (trend && field) {
-
       // Update filterData state with trend and field values
       setFilterData((prevFilterData) => ({
         ...prevFilterData,
@@ -220,23 +240,18 @@ export default function Search(props) {
           },
         ],
         category: field,
-      }))
+      }));
 
-      setIsTrend(true)
+      setIsTrend(true);
     }
-
   }, [trend, field]);
-
 
   useEffect(() => {
     if (isTrend === true) {
-
-
-      makeChartData()
-      console.log(responseData)
+      makeChartData();
+      console.log(responseData);
       if (responseData.startDate && responseData.endDate) {
         if (!root) {
-
           const newRoot = createRoot(document.getElementById("graph1"));
           newRoot.render(
             <GenderChart
@@ -248,7 +263,6 @@ export default function Search(props) {
           );
           setRoot(newRoot);
         } else {
-
           root.render(
             <GenderChart
               startDate={responseData.startDate}
@@ -262,7 +276,6 @@ export default function Search(props) {
 
       if (responseData.ageResults) {
         if (!ageRoot) {
-
           const newRoot2 = createRoot(document.getElementById("graph2"));
           newRoot2.render(
             <AgeChart
@@ -274,7 +287,6 @@ export default function Search(props) {
           );
           setAgeRoot(newRoot2);
         } else {
-
           ageRoot.render(
             <AgeChart
               startDate={responseData.startDate}
@@ -286,9 +298,9 @@ export default function Search(props) {
         }
       }
 
-      if (responseData.deviceResults) { // Check if ageResults is available
+      if (responseData.deviceResults) {
+        // Check if ageResults is available
         if (!deviceRoot) {
-
           const newRoot3 = createRoot(document.getElementById("graph3"));
           newRoot3.render(
             <DeviceChart
@@ -300,7 +312,6 @@ export default function Search(props) {
           );
           setDeviceRoot(newRoot3);
         } else {
-
           deviceRoot.render(
             <DeviceChart
               startDate={responseData.startDate}
@@ -312,9 +323,9 @@ export default function Search(props) {
         }
       }
 
-      if (responseData.clickResults) { // Check if ageResults is available
+      if (responseData.clickResults) {
+        // Check if ageResults is available
         if (!clickRoot) {
-
           const newRoot4 = createRoot(document.getElementById("graph4"));
           newRoot4.render(
             <ClickChart
@@ -326,7 +337,6 @@ export default function Search(props) {
           );
           setClickRoot(newRoot4);
         } else {
-
           clickRoot.render(
             <ClickChart
               startDate={responseData.startDate}
@@ -335,27 +345,20 @@ export default function Search(props) {
               clickResults={responseData.clickResults}
             />
           );
-
         }
       }
-
-
-
     }
-
-  }, [isLoading])
+  }, [isLoading]);
 
   useEffect(() => {
     const loadingTimeout = setTimeout(() => {
       setIsLoading(false);
     }, 500);
-  }, [])
-
+  }, []);
 
   useEffect(() => {
     if (responseData.startDate && responseData.endDate) {
       if (!root) {
-
         const newRoot = createRoot(document.getElementById("graph1"));
         newRoot.render(
           <GenderChart
@@ -367,7 +370,6 @@ export default function Search(props) {
         );
         setRoot(newRoot);
       } else {
-
         root.render(
           <GenderChart
             startDate={responseData.startDate}
@@ -381,7 +383,6 @@ export default function Search(props) {
 
     if (responseData.ageResults) {
       if (!ageRoot) {
-
         const newRoot2 = createRoot(document.getElementById("graph2"));
         newRoot2.render(
           <AgeChart
@@ -393,7 +394,6 @@ export default function Search(props) {
         );
         setAgeRoot(newRoot2);
       } else {
-
         ageRoot.render(
           <AgeChart
             startDate={responseData.startDate}
@@ -405,9 +405,9 @@ export default function Search(props) {
       }
     }
 
-    if (responseData.deviceResults) { // Check if ageResults is available
+    if (responseData.deviceResults) {
+      // Check if ageResults is available
       if (!deviceRoot) {
-
         const newRoot3 = createRoot(document.getElementById("graph3"));
         newRoot3.render(
           <DeviceChart
@@ -419,7 +419,6 @@ export default function Search(props) {
         );
         setDeviceRoot(newRoot3);
       } else {
-
         deviceRoot.render(
           <DeviceChart
             startDate={responseData.startDate}
@@ -431,9 +430,9 @@ export default function Search(props) {
       }
     }
 
-    if (responseData.clickResults) { // Check if ageResults is available
+    if (responseData.clickResults) {
+      // Check if ageResults is available
       if (!clickRoot) {
-
         const newRoot4 = createRoot(document.getElementById("graph4"));
         newRoot4.render(
           <ClickChart
@@ -445,7 +444,6 @@ export default function Search(props) {
         );
         setClickRoot(newRoot4);
       } else {
-
         clickRoot.render(
           <ClickChart
             startDate={responseData.startDate}
@@ -456,15 +454,21 @@ export default function Search(props) {
         );
       }
     }
-
-  }, [responseData, ageRoot, deviceRoot, root, clickRoot, responseData.clickResults]);
+  }, [
+    responseData,
+    ageRoot,
+    deviceRoot,
+    root,
+    clickRoot,
+    responseData.clickResults,
+  ]);
 
   return (
     <>
       {isLoading ? (
         <div className="flex flex-col items-center justify-center h-screen font-['NEXON']">
-          <h1>Loading...</h1>
-          <FadeLoader color="#3490dc" />
+          <h1>Loading...</h1> <br />
+          <SyncLoader color="#3490dc" />
         </div>
       ) : (
         <div className="bg-white flex flex-col px-20 max-md:px-5 font-['NEXON']">
@@ -526,20 +530,29 @@ export default function Search(props) {
                     className="text-black text-xl leading-8 uppercase border w-[300px] h-[40px] md:w-[300px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
                     placeholder="검색어를 입력하세요"
                   />
-
-
                 </div>
                 <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
                   <select
                     className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
-                    defaultValue="month" // Set the default selected option
+                    defaultValue="date" // Set the default selected option
+                    onChange={(e) => {
+                      setFilterData({
+                        ...filterData,
+                        timeUnit: e.target.value,
+                      });
+
+                      setClickFilterData({
+                        ...clickFilterData,
+                        timeUnit: e.target.value,
+                      });
+                    }}
                   >
                     <option value="date">일간</option>
                     <option value="week">주간</option>
                     <option value="month">월간</option>
                   </select>
                 </div>
-                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
+                {/* <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
                   <select
                     name="start-year"
                     defaultValue="2023"
@@ -698,15 +711,59 @@ export default function Search(props) {
                     <option value="11">11</option>
                     <option value="12">12</option>
                   </select>
+                </div> */}
+                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10 ">
+                  <SingleDatePicker
+                    value={dayjs(filterData.startDate)}
+                    onDateChange={handleStartDateChange}
+                  />
+                  <SingleDatePicker
+                    value={dayjs(filterData.endDate)}
+                    onDateChange={handleEndDateChange}
+                  />
+                </div>
+                {/* <div
+                    onClick={handleButtonClick}
+                    style={{ cursor: "pointer" }}
+                  >
+                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
+                  <div className="flex flex-row text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300">
+                    <img
+                      loading="lazy"
+                      srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
+                      className="aspect-[1.11] object-contain object-center w-[30px] overflow-hidden self-stretch max-w-full"
+                    />
+                    <div className="text-black text-base font-light self-center whitespace-nowrap my-auto">
+                      조회하기
+                    </div>
+                  </div>
+                </div>
+                </div> */}
+
+                 <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
+                  <select
+                    // defaultValue={field ? field : "50000000"}
+                    name="며칠전인가조회"
+                    onChange={(e) => {
+                      
+                    }}
+                    className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
+                  >
+                    <option value="하루전이름">하루전</option>
+                    <option value="일주일전이름">일주일전</option>
+                    <option value="한달전이름">한달전</option>
+                  </select>
                 </div>
               </div>
 
-
-              <div className="flex w-[1500px] max-w-full grow flex-col ml-5 mt-10 self-start max-md:mt-10">
-
+              <div className="flex w-[1500] max-w-full grow flex-col ml-5 mt-10 self-start max-md:mt-10">
                 <div className="flex gap-4 mt-10">
                   <div className="self-stretch flex items-center justify-between gap-2">
-                    <input type="checkbox" id="all-age" name="연령" value=""
+                    <input
+                      type="checkbox"
+                      id="all-age"
+                      name="연령"
+                      value=""
                       onChange={handleAgeCheckboxChange}
                     />
                     <label
@@ -717,8 +774,13 @@ export default function Search(props) {
                     </label>
                   </div>
                   <div className="self-stretch flex items-center justify-between gap-2">
-                    <input type="checkbox" id="teens" name="연령" value="10"
-                      onChange={handleAgeCheckboxChange} />
+                    <input
+                      type="checkbox"
+                      id="teens"
+                      name="연령"
+                      value="10"
+                      onChange={handleAgeCheckboxChange}
+                    />
                     <label
                       htmlFor="teens"
                       className="text-black text-base font-light self-center whitespace-nowrap my-auto"
@@ -802,23 +864,28 @@ export default function Search(props) {
                     </label>
                   </div>
 
-
                   {/* @@기기 radio 변경 */}
                   <div className="grid w-[21rem] grid-cols-3 gap-2 rounded-xl bg-gray-200 p-2 border border-gray-300">
                     <div>
-                      <input type="radio" id="all-device" name="기기" value="" className="peer hidden" checked={filterData.device === ""}
+                      <input
+                        type="radio"
+                        id="all-device"
+                        name="기기"
+                        value=""
+                        className="peer hidden"
+                        checked={filterData.device === ""}
                         onChange={(e) => {
                           setFilterData({
                             ...filterData,
                             device: e.target.value,
-                          })
+                          });
 
                           setClickFilterData({
                             ...clickFilterData,
                             device: e.target.value,
-                          })
-                        }
-                        } />
+                          });
+                        }}
+                      />
                       <label
                         htmlFor="all-device"
                         className="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
@@ -827,18 +894,23 @@ export default function Search(props) {
                       </label>
                     </div>
                     <div>
-                      <input type="radio" id="pc-device" name="기기" value="pc" className="peer hidden"
+                      <input
+                        type="radio"
+                        id="pc-device"
+                        name="기기"
+                        value="pc"
+                        className="peer hidden"
                         onChange={(e) => {
                           setFilterData({
                             ...filterData,
                             device: e.target.value,
-                          })
+                          });
                           setClickFilterData({
                             ...clickFilterData,
                             device: e.target.value,
-                          })
-                        }
-                        } />
+                          });
+                        }}
+                      />
                       <label
                         htmlFor="pc-device"
                         className="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
@@ -847,18 +919,23 @@ export default function Search(props) {
                       </label>
                     </div>
                     <div>
-                      <input type="radio" id="mobile-device" name="기기" value="mo" className="peer hidden"
+                      <input
+                        type="radio"
+                        id="mobile-device"
+                        name="기기"
+                        value="mo"
+                        className="peer hidden"
                         onChange={(e) => {
                           setFilterData({
                             ...filterData,
                             device: e.target.value,
-                          })
+                          });
                           setClickFilterData({
                             ...clickFilterData,
                             device: e.target.value,
-                          })
-                        }
-                        } />
+                          });
+                        }}
+                      />
                       <label
                         htmlFor="mobile-device"
                         className="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
@@ -871,19 +948,25 @@ export default function Search(props) {
                   {/* @@성별 radio 변경 */}
                   <div className="grid w-[20rem] grid-cols-3 gap-2 rounded-xl bg-gray-200 p-2 border border-gray-300">
                     <div>
-                      <input type="radio" id="all-gender" name="성별" value="" className="peer hidden" checked={filterData.gender === ""}
+                      <input
+                        type="radio"
+                        id="all-gender"
+                        name="성별"
+                        value=""
+                        className="peer hidden"
+                        checked={filterData.gender === ""}
                         onChange={(e) => {
                           setFilterData({
                             ...filterData,
                             gender: e.target.value,
-                          })
+                          });
 
                           setClickFilterData({
                             ...clickFilterData,
                             gender: e.target.value,
-                          })
-                        }
-                        } />
+                          });
+                        }}
+                      />
                       <label
                         htmlFor="all-gender"
                         className="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
@@ -892,18 +975,23 @@ export default function Search(props) {
                       </label>
                     </div>
                     <div>
-                      <input type="radio" id="female" name="성별" value="f" className="peer hidden"
+                      <input
+                        type="radio"
+                        id="female"
+                        name="성별"
+                        value="f"
+                        className="peer hidden"
                         onChange={(e) => {
                           setFilterData({
                             ...filterData,
                             gender: e.target.value,
-                          })
+                          });
                           setClickFilterData({
                             ...clickFilterData,
                             gender: e.target.value,
-                          })
-                        }
-                        } />
+                          });
+                        }}
+                      />
                       <label
                         htmlFor="female"
                         className="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
@@ -912,18 +1000,23 @@ export default function Search(props) {
                       </label>
                     </div>
                     <div>
-                      <input type="radio" id="male" name="성별" value="m" className="peer hidden"
+                      <input
+                        type="radio"
+                        id="male"
+                        name="성별"
+                        value="m"
+                        className="peer hidden"
                         onChange={(e) => {
                           setFilterData({
                             ...filterData,
                             gender: e.target.value,
-                          })
+                          });
                           setClickFilterData({
                             ...clickFilterData,
                             gender: e.target.value,
-                          })
-                        }
-                        } />
+                          });
+                        }}
+                      />
                       <label
                         htmlFor="male"
                         className="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white"
@@ -931,7 +1024,6 @@ export default function Search(props) {
                         남성
                       </label>
                     </div>
-
                   </div>
                   <div className="border bg-white flex flex-col flex-1 px-8 py-4 rounded-[30px] border-solid border-gray-300 max-md:px-5">
                     <div className="self-center flex w-[84px] max-w-full items-start gap-0">
@@ -961,57 +1053,33 @@ export default function Search(props) {
                       </div>
                     </div>
                   </div>
+                  {/* <SingleDatePicker value={dayjs(filterData.startDate)} onDateChange={handleStartDateChange}/>
+                  <SingleDatePicker value={dayjs(filterData.endDate)} onDateChange={handleEndDateChange}/> */}
                 </div>
-
-
-                {/* <div className="flex w-[400px] max-w-full items-start justify-between gap-5 mt-10 self-end max-md:flex-wrap max-md:mt-10">
-              <div className="border bg-white flex flex-col flex-1 px-8 py-4 rounded-[30px] border-solid border-gray-300 max-md:px-5">
-                <div className="self-center flex w-[84px] max-w-full items-start gap-0">
-                  <img
-                    loading="lazy"
-                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/7ee4812c-c045-44e9-aa52-0da59d97d0af?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
-                    className="aspect-[1.11] object-contain object-center w-[30px] overflow-hidden self-stretch max-w-full"
-                  />
-                  <div className="text-black text-base font-light self-center whitespace-nowrap my-auto">
-                    즐겨찾기
-                  </div>
-                </div>
-              </div>
-              <div
-                className="border bg-white flex flex-col flex-1 px-8 py-4 rounded-[30px] border-solid border-gray-300 max-md:px-5"
-                onClick={handleButtonClick}
-                style={{ cursor: "pointer" }}
-              >
-                <div className="self-center flex w-[84px] max-w-full items-start gap-0">
-                  <img
-                    loading="lazy"
-                    srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
-                    className="aspect-[1.11] object-contain object-center w-[30px] overflow-hidden self-stretch max-w-full"
-                  />
-                  <div className="text-black text-base font-light self-center whitespace-nowrap my-auto">
-                    조회하기
-                  </div>
-                </div>
-              </div>
-            </div> */}
-
               </div>
             </div>
           </form>
 
           <div className="self-center flex w-full max-w-[1500px] flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
             <div className="grid gap-5 lg:grid-cols-4">
-              <div id="graph4" className="col-span-3"> </div>
+              <div id="graph4" className="col-span-3">
+                {" "}
+              </div>
 
               <div id="graph3"> </div>
 
-              <div id="graph2" className="col-span-2"> </div>
+              <div id="graph2" className="col-span-2">
+                {" "}
+              </div>
 
-              <div id="graph1" className="col-span-2"> </div>
+              <div id="graph1" className="col-span-2">
+                {" "}
+              </div>
             </div>
           </div>
         </div>
-      )};
+      )}
+      ;
     </>
-  )
+  );
 }

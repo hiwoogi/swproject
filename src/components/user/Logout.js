@@ -7,6 +7,7 @@ export default function Logout({setHasToken}) {
         // Clear the token from localStorage
         localStorage.removeItem("ACCESS_TOKEN");
         setHasToken(null)
+        alert("로그아웃 성공")
         
         
       };
