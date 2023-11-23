@@ -10,6 +10,7 @@ import {
 } from 'chart.js'; //Chart.js 및 필요한 모듈
 import { color } from 'chart.js/helpers';
 import { TreemapController, TreemapElement } from 'chartjs-chart-treemap';
+import { useNavigate } from 'react-router-dom';
 
 //Chart.js에 필요한 모듈
 ChartJS.register(
@@ -23,11 +24,10 @@ ChartJS.register(
   TreemapElement
 );
 
-export default function TreeMap({ trend , field}) {
+export default function TreeMap({ trend, field }) {
+  
   const chartRef = useRef(null);
-
-  // console.log('컴포넌트에 값 전달 확인:', trend);
-  // console.log('필드값', field)
+  const navigate = useNavigate(); //useNavigate 사용
 
   useEffect(() => {
     if (trend.length > 0) {
@@ -36,9 +36,6 @@ export default function TreeMap({ trend , field}) {
         capacityMW: 100 / item.rank, //capacityMW 값을 100/item.rank로 설정
         dataCoverage: 1,
         index: index, //색상 구별용 index
-
-        //@@keyword값으로 우선 사용했는데 linkId를 사용하고 싶으면 바꿔도 가능
-        link: `#/keyword?trend=${encodeURIComponent(item.keyword)}&field=${encodeURIComponent(field)}`, //링크 정보 추가
       }));
 
       //@@colorsMap
@@ -70,28 +67,25 @@ export default function TreeMap({ trend , field}) {
                 labels: {
                   display: true,
                   formatter: (context) => context.raw._data.name,
-                  
+
                   //@@font 설정
-                  font: function(context) {
+                  font: function (context) {
                     const { capacityMW } = context.raw._data;
                     const name = context.raw._data.name;
                     let fontSize = 40;
                     //작은 칸에 맞춰서 크기 조절
-                    if(capacityMW < 12)
-                      fontSize = fontSize - name.length*3.5; 
-                    else if(capacityMW <= 30)
-                      fontSize = fontSize - name.length*2;
+                    if (capacityMW < 12)
+                      fontSize = fontSize - name.length * 3.5;
+                    else if (capacityMW <= 30)
+                      fontSize = fontSize - name.length * 2;
 
                     return { size: fontSize, weight: 'bold' };
                   },
-
-                  //font: {size: 30, weight: 'bold'},
-                  //color: 'grey',
                 },
                 //각 칸 배경색 동적으로 설정
                 backgroundColor(context) {
                   if (context.type !== 'data') return 'transparent';
-                    
+
                   const { dataCoverage, capacityMW } = context.raw._data;
                   const alpha = capacityMW / maxCapacity * 0.5; //capacityMW에 따라 투명도 조절
 
@@ -129,18 +123,20 @@ export default function TreeMap({ trend , field}) {
                 },
               },
             },
-
+            
             //@@각 값 클릭 이벤트
             onClick(event, elements, chart) {
               if (elements && elements[0]) {
                 const datasetIndex = elements[0].datasetIndex;
                 const index = elements[0].index;
-                //클릭한 데이터셋 및 인덱스로부터 데이터 추출
                 const data = chart.data.datasets[datasetIndex].tree[index];
-                //데이터에서 link 속성 추출
-                const link = data.link;
-                //해당 링크로 이동
-                window.location.href = link;
+
+                navigate('/keyword', { //useNavigate 사용하여 페이지 이동
+                  state: {
+                    trend: data.name, //trend 값
+                    field: field, //field 값 전달
+                  }
+                });
               }
             },
           },
