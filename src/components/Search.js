@@ -96,7 +96,6 @@ export default function Search(props) {
     return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
   }
 
-
   const [isAllAgesChecked, setIsAllAgesChecked] = useState(true);
   const handleAgeCheckboxChange = (e) => {
     const ageValue = e.target.value;
@@ -106,7 +105,9 @@ export default function Search(props) {
       //전체 체크박스를 클릭한 경우, 모든 연령대 체크박스 업데이트
       const updatedAges = isChecked ? ["10", "20", "30", "40", "50", "60"] : [];
 
-      const allAgeDivs = document.querySelectorAll(".self-stretch input[type=checkbox]");
+      const allAgeDivs = document.querySelectorAll(
+        ".self-stretch input[type=checkbox]"
+      );
       allAgeDivs.forEach((ageCheckbox) => {
         ageCheckbox.checked = isChecked;
       });
@@ -144,7 +145,9 @@ export default function Search(props) {
       }));
 
       //다른 연령 체크박스가 해제된 경우, 전체 체크박스도 해제
-      const allAgeCheckbox = document.querySelector(".self-stretch input[type=checkbox][value='']");
+      const allAgeCheckbox = document.querySelector(
+        ".self-stretch input[type=checkbox][value='']"
+      );
       if (!isChecked) {
         allAgeCheckbox.checked = false;
       }
@@ -170,6 +173,63 @@ export default function Search(props) {
     }
   };
 
+  const handleFavButtonClick = () => {
+    const form = document.getElementById("searchForm");
+
+    if (form) {
+      const formData = new FormData(form);
+
+      handleFavSubmit(new Event("submit"));
+    }
+  };
+
+  const handleFavSubmit = async (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior
+
+    let headers = {
+      "Content-Type": "application/json",
+    };
+    
+    const memberId = localStorage.getItem("MEMBER_ID");
+    
+    console.log({
+      filterData,
+      clickFilterData,
+      member: { id: memberId }
+    },)
+
+    const apiUrl = "http://localhost:8080/favorites";
+   
+    try {
+      const accessToken = localStorage.getItem("ACCESS_TOKEN");
+      if (accessToken && accessToken !== null) {
+        headers.Authorization = `Bearer ${accessToken}`;
+        
+      }
+      const response = await axios.post(
+        apiUrl,
+        {
+          filterData,
+          clickFilterData,
+          member: { id: memberId }
+        },
+        {headers}
+      );
+
+      console.log("API Response:", response.data);
+    } catch (error) {
+      console.error(error);
+
+      // Check if error.response is defined
+      if (error.response && error.response.status === 403) {
+        window.location.href = "/#/login"; // redirect
+      } else {
+        // Handle other types of errors or display an error message
+        console.error("Error in API request:", error);
+      }
+    }
+  };
+
   async function makeChartData() {
     const baseUrl = "http://localhost:8080";
     let headers = {
@@ -184,6 +244,7 @@ export default function Search(props) {
         headers.Authorization = `Bearer ${accessToken}`;
       }
       // Make all requests concurrently
+      console.log(headers)
       const [genderResponse, ageResponse, deviceResponse, clickResponse] =
         await Promise.all([
           axios.post(baseUrl + "/test/gender", filterData, { headers }),
@@ -353,9 +414,6 @@ export default function Search(props) {
       }
     }
   }, [isLoading]);
-
-
-  
 
   useEffect(() => {
     const loadingTimeout = setTimeout(() => {
@@ -564,9 +622,7 @@ export default function Search(props) {
                   <select
                     // defaultValue={field ? field : "50000000"}
                     name="며칠전인가조회"
-                    onChange={(e) => {
-                      
-                    }}
+                    onChange={(e) => {}}
                     className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
                   >
                     <option value="하루전이름">하루 전</option>
@@ -766,8 +822,6 @@ export default function Search(props) {
                   </div>
                 </div>
                 </div> */}
-
-                 
               </div>
 
               <div className="flex w-[1500] max-w-full grow flex-col ml-5 self-start max-md:mt-10">
@@ -1040,7 +1094,11 @@ export default function Search(props) {
                       </label>
                     </div>
                   </div>
-                  <div className="border bg-white flex flex-col flex-1 px-8 py-4 rounded-[30px] border-solid border-gray-300 max-md:px-5">
+                  <div
+                    className="border bg-white flex flex-col flex-1 px-8 py-4 rounded-[30px] border-solid border-gray-300 max-md:px-5"
+                    onClick={handleFavButtonClick}
+                    style={{ cursor: "pointer" }}
+                  >
                     <div className="self-center flex w-[84px] max-w-full items-start gap-0">
                       <img
                         loading="lazy"

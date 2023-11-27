@@ -32,6 +32,8 @@ export default function Login(props) {
   
       if (response.data.token) {
         localStorage.setItem("ACCESS_TOKEN", response.data.token)
+        localStorage.setItem("MEMBER_ID", response.data.id)
+
         navigate('/');
       } else {
 
@@ -46,7 +48,6 @@ export default function Login(props) {
       }
     }
 
- 
   };
 
   return (

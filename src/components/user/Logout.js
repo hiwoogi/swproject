@@ -12,6 +12,7 @@ export default function Logout({ setHasToken }) {
   const handleConfirmLogout = () => {
     // Clear the token from localStorage
     localStorage.removeItem('ACCESS_TOKEN');
+    localStorage.removeItem("MEMBER_ID")
     setHasToken(null);
 
     setIsModalOpen(false);
