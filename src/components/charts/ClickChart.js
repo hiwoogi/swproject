@@ -64,6 +64,11 @@ export default function ClickChart({
                 display: false,
               },
               tooltip: {
+                bodySpacing: 20,
+                padding: 15,
+                titleFont: {
+                  size: 18
+                },
                 bodyFont: {
                   size: 20
                 },

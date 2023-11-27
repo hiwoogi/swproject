@@ -62,6 +62,8 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
             circumference: 180,
             plugins: {
               tooltip: {
+                bodySpacing: 20,
+                padding: 15,
                 titleFont: {
                   size: 20
                 },
@@ -99,6 +101,8 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
             circumference: 180,
             plugins: {
               tooltip: {
+                bodySpacing: 20,
+                padding: 15,
                 titleFont: {
                   size: 20
                 },

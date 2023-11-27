@@ -59,7 +59,7 @@ export default function MySlider(props) {
               className="absolute z-[-1] h-full w-full object-cover object-center inset-0" />
             <div className="relative flex flex-col mt-20 px-5 justify-center items-center max-md:max-w-full max-md:mt-10">
               <div className="text-black text-base uppercase whitespace-nowrap bg-white w-[90px] max-w-full -ml-2 px-3 py-1 rounded-3xl self-start font-['NEXON']">search</div>
-              <h1 className="text-black text-8xl font-light uppercase mt-3.5 self-start max-md:max-w-full max-md:text-4xl font-['NEXON']"> 키워드 검색</h1>
+              <h1 className="text-black text-8xl font-light uppercase mt-3.5 self-start max-md:max-w-full max-md:text-4xl font-['NEXON']"> 키워드 분석</h1>
               <div className="self-center flex w-full max-w-[1549px] grow flex-col mt-5 pl-2.5 max-md:max-w-full">
                 <p className="text-black text-xl font-light uppercase self-stretch whitespace-nowrap max-md:max-w-full font-['NEXON']"> 궁금한 키워드를 검색해서 데이터를 찾아보세요 </p>
                 <div className="self-center flex w-full max-w-[1539px] items-start justify-between gap-5 max-md:max-w-full max-md:flex-wrap">

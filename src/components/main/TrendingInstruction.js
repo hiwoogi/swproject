@@ -74,7 +74,7 @@ export default function TrendingInstruction(props) {
           </div>
         </div>
         <p className="text-black text-right text-2xl uppercase self-center whitespace-nowrap mt-24 max-md:max-w-full max-md:mt-10 font-['NEXON']">
-          지금 바로 궁금한 트렌드를 눌러 실시간 검색어 순위를 확인하세요!
+          지금 바로 궁금한 트렌드를 눌러 실시간 트렌드 순위를 확인하세요!
         </p>
       </section>
     </main>

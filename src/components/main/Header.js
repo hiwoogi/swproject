@@ -23,10 +23,10 @@ export default function Header(props) {
         <Link to="/favorites">즐겨 찾기</Link>
         </div>
         <div className="text-black text-base font-light leading-6 uppercase self-center whitespace-nowrap my-auto font-['NEXON']">
-          <Link to="/trend">실시간 검색어</Link>
+          <Link to="/trend">실시간 트렌드</Link>
         </div>
         <div className="text-black text-base font-light leading-6 uppercase self-center my-auto font-['NEXON']">
-          <Link to="/keyword">키워드 검색</Link>
+          <Link to="/keyword">키워드 분석</Link>
         </div>
       </div>
       

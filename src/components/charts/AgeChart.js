@@ -115,6 +115,8 @@ export default function AgeChart({
                 display: false,
               },
               tooltip: {
+                bodySpacing: 20,
+                padding: 15,
                 titleFont: {
                   size: 20
                 },

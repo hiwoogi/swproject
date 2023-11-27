@@ -40,7 +40,7 @@ export default function TrendKeyword() {
   return (
     <div className="flex flex-col items-center font-['NEXON']">
       <div className="text-black text-5xl max-w-[500px] self-center mx-auto max-md:text-4xl mt-20">
-        실시간 검색어 순위
+        실시간 트렌드 순위
       </div>
       <div className="flex self-start gap-3 ml-5 mt-10 max-md:ml-2.5 max-md:mt-10">
         <div className="text-black text-xl right-0 leading-8 uppercase self-center my-auto">

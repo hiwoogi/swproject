@@ -49,6 +49,8 @@ const filteredPcData = filterPc(deviceResults[0].data);
           options: {
             plugins: {
               tooltip: {
+                bodySpacing: 20,
+                padding: 15,
                 titleFont: {
                   size: 20
                 },
