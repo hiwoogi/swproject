@@ -55,7 +55,7 @@ export default function Login(props) {
   return (
     <div>
       <Header />
-      <section className="bg-white flex w-full flex-col items-center px-5 py-12 max-md:max-w-full font-['NEXON']">
+      <section className="mt-24 bg-white flex w-full flex-col items-center px-5 py-12 max-md:max-w-full font-['NEXON']">
         <article className="border shadow-2xl bg-white flex w-[670px] max-w-full flex-col items-center mb-5 px-20 py-12 rounded-3xl border-solid border-blue-300 max-md:px-5">
           <h1 className="text-blue-600 text-3xl font-medium leading-8 w-[466px] max-w-full mt-9">
             로그인

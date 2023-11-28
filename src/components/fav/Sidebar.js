@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SidebarItem from "./SidebarItem";
 
-export default function Sidebar({ data }) {
+export default function Sidebar({ data,setResponseData }) {
   const itemsPerPage = 15; //페이지당 아이템 수
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -34,7 +34,7 @@ export default function Sidebar({ data }) {
       <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800 font-['NEXON']">
 
         {currentItems.map((item, index) => (
-          <SidebarItem key={index} data={item} num={(currentPage - 1) * itemsPerPage + index} />
+          <SidebarItem key={index} data={item} setResponseData = {setResponseData} num={(currentPage - 1) * itemsPerPage + index} />
         ))}
 
         <div className="flex justify-between mt-4">

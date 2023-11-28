@@ -536,7 +536,7 @@ export default function Search(props) {
           <SyncLoader color="#3490dc" />
         </div>
       ) : (
-        <div className="bg-white flex flex-col px-20 max-md:px-5 font-['NEXON']">
+        <div className="bg-white flex flex-col px-20 max-md:px-5 font-['NEXON'] mt-24">
           <form id="searchForm" onSubmit={handleSubmit} className="self-center">
             <div className="self-center flex w-full max-w-[1920px] flex-col mt-20 mb-16 max-md:max-w-full max-md:my-10">
               <div className="text-black text-5xl max-w-[377px] self-center max-md:text-4xl">

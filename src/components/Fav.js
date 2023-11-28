@@ -65,7 +65,7 @@ export default function Fav() {
       {favResponse && favResponse.length !== 0 ? (
         <div>
           <Sidebar data={favResponse} setResponseData={setResponseData} />
-          <div className="p-4 sm:ml-64">
+          <div className="p-4 sm:ml-64 mt-24">
             <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
               {responseData.genderResults ? (
                 

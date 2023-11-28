@@ -9,7 +9,7 @@ export default function Header(props) {
   const [hasToken, setHasToken] = useState(localStorage.getItem('ACCESS_TOKEN'));
 
   return (
-    <div className="border bg-white flex items-start justify-between gap-5 pl-3.5 pr-4 border-solid border-black max-md:flex-wrap max-md:justify-center">
+    <div className="border bg-white flex items-start justify-between gap-5 pl-3.5 pr-4 border-solid border-black max-md:flex-wrap max-md:justify-center fixed top-0 left-0 right-0 z-50 ">
       <div className="text-black text-lg leading-7 uppercase my-auto">
         <Link to="/">
           <span className="font-bold font-['NEXON']">web</span>

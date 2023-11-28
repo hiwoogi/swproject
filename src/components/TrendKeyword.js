@@ -38,7 +38,7 @@ export default function TrendKeyword() {
 
 
   return (
-    <div className="flex flex-col items-center font-['NEXON']">
+    <div className="mt-24 flex flex-col items-center font-['NEXON']">
       <div className="text-black text-5xl max-w-[500px] self-center mx-auto max-md:text-4xl mt-20">
         실시간 트렌드 순위
       </div>
