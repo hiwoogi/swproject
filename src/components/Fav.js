@@ -1,7 +1,10 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import Sidebar from "./fav/Sidebar";
 
 export default function Fav() {
+  const [responseData, setResponseData] = useState();
+
   const fetchData = async () => {
     let headers = {
       "Content-Type": "application/json",
@@ -15,9 +18,9 @@ export default function Fav() {
         headers,
       });
       console.log(response);
+      setResponseData(response.data);
 
       // Handle the fetched data or update state as needed
-
     } catch (error) {
       console.error(error);
 
@@ -32,15 +35,33 @@ export default function Fav() {
   };
 
   useEffect(() => {
-    console.log('useEffect triggered');
+    console.log("useEffect triggered");
     fetchData();
-  }, []); // The empty dependency array ensures that useEffect runs only once when the component mounts
+  }, []); 
+
+  useEffect(() => {
+    console.log(responseData);
+  }, [responseData]);
 
   return (
-    <div className="text-black text-5xl max-w-[500px] self-center mx-auto max-md:text-4xl mt-20 font-['NEXON']">
-      로그인 성공!
-      <br />
-      아직 준비 중입니다.
+    <div>
+      {responseData &&responseData.length!==0 ? (
+        <div>
+          <Sidebar data = {responseData}/>
+          <div class="p-4 sm:ml-64">
+            <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
+              <p>Data is present</p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div>
+          <div className="text-black text-5xl max-w-[1000px] self-center mx-auto max-md:text-4xl mt-20 font-['NEXON']"
+>
+            <p>즐겨찾기 데이터가 존재하지 않습니다.</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
