@@ -1,8 +1,14 @@
 import React from "react";
 import { makeChartData } from "../../function/MakeChartData";
 import axios from "axios";
-export default function SidebarItem({ data, num, setResponseData}) {
-  const { id, filterCriteria, clickFilterCriteria} = data;
+export default function SidebarItem({
+  data,
+  num,
+  setResponseData,
+  setCurrentData,
+  currentData,
+}) {
+  const { id, filterCriteria, clickFilterCriteria } = data;
 
   const handleClick = async () => {
     try {
@@ -20,7 +26,8 @@ export default function SidebarItem({ data, num, setResponseData}) {
   const handleDeleteClick = async () => {
     try {
       await deleteData(id);
-      
+      const updatedData = currentData.filter((item) => item.id !== id);
+      setCurrentData(updatedData);
     } catch (error) {
       console.error("Error:", error);
     }

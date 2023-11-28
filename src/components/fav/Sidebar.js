@@ -4,12 +4,15 @@ import SidebarItem from "./SidebarItem";
 export default function Sidebar({ data, setResponseData }) {
   const itemsPerPage = 15; //페이지당 아이템 수
   const [currentPage, setCurrentPage] = useState(1);
-  //전체 데이터를 페이지별로 나누기
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentItems = data.slice(startIndex, endIndex);
-
+  
+  const [currentData, setCurrentData] = useState(currentItems);
+  //전체 데이터를 페이지별로 나누기
+  
+  
   //이전 페이지
   const goToPrevPage = () => {
     if (currentPage > 1) {
@@ -26,8 +29,8 @@ export default function Sidebar({ data, setResponseData }) {
 
   useEffect(() => {
     console.log("리렌더링 : ");
-    console.log(data)
-  }, [data]);
+    console.log(currentData)  
+  }, [currentData]);
 
   return (
     <aside
@@ -36,13 +39,14 @@ export default function Sidebar({ data, setResponseData }) {
       aria-label="Sidebar"
     >
       <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800 font-['NEXON']">
-        {currentItems.map((item, index) => (
+        {currentData.map((item, index) => (
           <SidebarItem
             key={index}
             data={item}
             setResponseData={setResponseData}
             num={(currentPage - 1) * itemsPerPage + index}
-           
+            setCurrentData = {setCurrentData}
+            currentData = {currentData}
           />
         ))}
 
