@@ -47,6 +47,34 @@ export default function Fav() {
     }
   };
 
+  const deleteData = async (id) => {
+    let headers = {
+      "Content-Type": "application/json",
+    };
+    try {
+      const accessToken = localStorage.getItem("ACCESS_TOKEN");
+      if (accessToken && accessToken !== null) {
+        headers.Authorization = `Bearer ${accessToken}`;
+      }
+      const response = await axios.delete(`http://localhost:8080/${id}`, {
+        headers,
+      });
+      console.log(response);
+
+      // Handle the fetched data or update state as needed
+    } catch (error) {
+      console.error(error);
+
+      // Check if error.response is defined
+      if (error.response && error.response.status === 403) {
+        window.location.href = "/#/login"; // redirect
+      } else {
+        // Handle other types of errors or display an error message
+        console.error("Error in API request:", error);
+      }
+    }
+  };
+
   useEffect(() => {
     console.log("useEffect triggered");
     fetchData();

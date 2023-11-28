@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SidebarItem from "./SidebarItem";
 
-export default function Sidebar({ data,setResponseData }) {
+export default function Sidebar({ data, setResponseData }) {
   const itemsPerPage = 15; //페이지당 아이템 수
   const [currentPage, setCurrentPage] = useState(1);
-
   //전체 데이터를 페이지별로 나누기
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -25,6 +24,11 @@ export default function Sidebar({ data,setResponseData }) {
     }
   };
 
+  useEffect(() => {
+    console.log("리렌더링 : ");
+    console.log(data)
+  }, [data]);
+
   return (
     <aside
       id="default-sidebar"
@@ -32,9 +36,14 @@ export default function Sidebar({ data,setResponseData }) {
       aria-label="Sidebar"
     >
       <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800 font-['NEXON']">
-
         {currentItems.map((item, index) => (
-          <SidebarItem key={index} data={item} setResponseData = {setResponseData} num={(currentPage - 1) * itemsPerPage + index} />
+          <SidebarItem
+            key={index}
+            data={item}
+            setResponseData={setResponseData}
+            num={(currentPage - 1) * itemsPerPage + index}
+           
+          />
         ))}
 
         <div className="flex justify-between mt-4">
@@ -54,9 +63,7 @@ export default function Sidebar({ data,setResponseData }) {
             다음
           </button>
         </div>
-
       </div>
-
     </aside>
   );
 }

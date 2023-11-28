@@ -9,9 +9,6 @@ export default function ClickChart({
 }) {
   const chartRef = useRef(null);
 
-  console.log('클릭응답값:', clickResults);
-  console.log(clickResults[0].data);
-
   useEffect(() => {
     if (clickResults.length > 0) {
 
