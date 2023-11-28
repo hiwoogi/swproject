@@ -47,6 +47,8 @@ export default function Search(props) {
   const [isTrend, setIsTrend] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [responseData, setResponseData] = useState({
     startDate: null,
     endDate: null,
@@ -168,8 +170,14 @@ export default function Search(props) {
 
     if (form) {
       const formData = new FormData(form);
+      const keyword = formData.get("keyword");
 
-      handleSubmit(new Event("submit"));
+      if (keyword && keyword.trim() !== "") {
+        setErrorMessage("");
+        handleSubmit(new Event("submit"));
+      } else {
+        setErrorMessage("키워드를 입력하세요.");
+      }
     }
   };
 
@@ -178,8 +186,14 @@ export default function Search(props) {
 
     if (form) {
       const formData = new FormData(form);
+      const keyword = formData.get("keyword");
 
-      handleFavSubmit(new Event("submit"));
+      if (keyword && keyword.trim() !== "") {
+        setErrorMessage("");
+        handleFavSubmit(new Event("submit"));
+      } else {
+        setErrorMessage("키워드를 입력하세요.");
+      }
     }
   };
 
@@ -189,9 +203,9 @@ export default function Search(props) {
     let headers = {
       "Content-Type": "application/json",
     };
-    
+
     const memberId = localStorage.getItem("MEMBER_ID");
-    
+
     console.log({
       filterData,
       clickFilterData,
@@ -199,12 +213,12 @@ export default function Search(props) {
     },)
 
     const apiUrl = "http://localhost:8080/favorites";
-   
+
     try {
       const accessToken = localStorage.getItem("ACCESS_TOKEN");
       if (accessToken && accessToken !== null) {
         headers.Authorization = `Bearer ${accessToken}`;
-        
+
       }
       const response = await axios.post(
         apiUrl,
@@ -213,7 +227,7 @@ export default function Search(props) {
           clickFilterData,
           member: { id: memberId }
         },
-        {headers}
+        { headers }
       );
 
       console.log("API Response:", response.data);
@@ -564,43 +578,50 @@ export default function Search(props) {
                   >
                     <option value="50000000">패션</option>
                     <option value="50000007">스포츠</option>
-                    <option value="50000003">가전제품</option>
-                    <option value="50005542">도서</option>
-                    <option value="50000006">식품</option>
-                  </select>
-                </div>
+                      <option value="50000003">가전제품</option>
+                      <option value="50005542">도서</option>
+                      <option value="50000006">식품</option>
+                    </select>
+                  </div>
+                  <div className="relative flex flex-col items-center">
+                    <div className="self-center flex items-start gap-5 mt-20 max-md:max-w-full max-md:flex-wrap max-md:mt-10">
+                      <input
+                        name="keyword"
+                        defaultValue={trend ? trend : ""}
+                        onChange={(e) => {
+                          const newKeyword = e.target.value;
+                          setFilterData((prevFilterData) => ({
+                            ...prevFilterData,
+                            keyword: newKeyword,
+                          }));
 
-                <div className="self-center flex  items-start  gap-5 mt-20 max-md:max-w-full max-md:flex-wrap max-md:mt-10">
-                  <input
-                    name="keyword"
-                    defaultValue={trend ? trend : ""}
-                    onChange={(e) => {
-                      const newKeyword = e.target.value;
-                      setFilterData((prevFilterData) => ({
-                        ...prevFilterData,
-                        keyword: newKeyword,
-                      }));
-
-                      setClickFilterData((prevFilterData) => ({
-                        ...prevFilterData,
-                        keyword: [
-                          {
-                            name: newKeyword,
-                            param: [newKeyword],
-                          },
-                        ],
-                      }));
-                    }}
-                    type="text"
-                    className="text-black text-xl leading-8 uppercase border w-[300px] h-[40px] md:w-[300px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
-                    placeholder="키워드를 입력하세요"
-                  />
-                </div>
-                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
-                  <select
-                    className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
-                    defaultValue="date" // Set the default selected option
-                    onChange={(e) => {
+                          setClickFilterData((prevFilterData) => ({
+                            ...prevFilterData,
+                            keyword: [
+                              {
+                                name: newKeyword,
+                                param: [newKeyword],
+                              },
+                            ],
+                          }));
+                        }}
+                        type="text"
+                        className="text-black text-xl leading-8 uppercase border w-[300px] h-[40px] md:w-[300px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
+                        placeholder="키워드를 입력하세요"
+                        required
+                      />
+                      {errorMessage && (
+                        <p className="text-red-500 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                          {errorMessage}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
+                    <select
+                      className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
+                      defaultValue="date" // Set the default selected option
+                      onChange={(e) => {
                       setFilterData({
                         ...filterData,
                         timeUnit: e.target.value,
@@ -622,13 +643,13 @@ export default function Search(props) {
                   <select
                     // defaultValue={field ? field : "50000000"}
                     name="며칠전인가조회"
-                    onChange={(e) => {}}
+                    onChange={(e) => { }}
                     className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
                   >
                     <option value="하루전이름">하루 전</option>
                     <option value="일주일전이름">일주일 전</option>
                     <option value="한달전이름">한 달 전</option>
-                    <option value="사용자정의이름">사용자 정의</option>
+                    <option value="직접선택이름">직접 선택</option>
                   </select>
                 </div>
 
