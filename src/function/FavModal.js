@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 
-const FavModal = ({ onClose, onSubmit }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+const FavModal = ({ onClose, onSubmit,setTitle,setDescription,title,description}) => {
+
 
   return (
     <>
