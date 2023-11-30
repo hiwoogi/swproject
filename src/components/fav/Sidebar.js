@@ -8,15 +8,21 @@ export default function Sidebar({ data, setResponseData }) {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentItems = data.slice(startIndex, endIndex);
-  
+
   const [currentData, setCurrentData] = useState(currentItems);
   //전체 데이터를 페이지별로 나누기
-  
-  
+
+  const handleDelete = (deletedId) => {
+    const updatedData = currentData.filter((item) => item.id !== deletedId);
+    setCurrentData(updatedData);
+  };
   //이전 페이지
   const goToPrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage((prev) => prev - 1);
+      const startIndex = (currentPage - 2) * itemsPerPage; // Adjusted index for previous page
+      const endIndex = startIndex + itemsPerPage;
+      setCurrentData(data.slice(startIndex, endIndex));
     }
   };
 
@@ -24,13 +30,21 @@ export default function Sidebar({ data, setResponseData }) {
   const goToNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage((prev) => prev + 1);
+      const startIndex = currentPage * itemsPerPage; // Adjusted index for next page
+      const endIndex = startIndex + itemsPerPage;
+      setCurrentData(data.slice(startIndex, endIndex));
     }
   };
 
   useEffect(() => {
     console.log("리렌더링 : ");
-    console.log(currentData)  
+    console.log(currentData);
   }, [currentData]);
+
+  useEffect(() => {
+    console.log(currentPage);
+    console.log(currentData);
+  }, [currentPage]);
 
   return (
     <aside
@@ -45,8 +59,10 @@ export default function Sidebar({ data, setResponseData }) {
             data={item}
             setResponseData={setResponseData}
             num={(currentPage - 1) * itemsPerPage + index}
-            setCurrentData = {setCurrentData}
-            currentData = {currentData}
+            setCurrentData={setCurrentData}
+            onDelete={handleDelete}  
+            currentData={currentData}
+            currentPage={currentPage}
           />
         ))}
 
