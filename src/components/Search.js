@@ -9,6 +9,7 @@ import ClickChart from "./charts/ClickChart";
 import { SyncLoader } from "react-spinners";
 import SingleDatePicker from "./searchForms/SingleDatePicker";
 import dayjs, { Dayjs } from "dayjs";
+import FavModal from "../function/FavModal";
 
 export default function Search(props) {
   const ACCESS_TOKEN = "ACCESS_TOKEN";
@@ -181,6 +182,11 @@ export default function Search(props) {
     }
   };
 
+  //@@즐겨찾기 모달창
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+
   const handleFavButtonClick = () => {
     const form = document.getElementById("searchForm");
 
@@ -190,12 +196,42 @@ export default function Search(props) {
 
       if (keyword && keyword.trim() !== "") {
         setErrorMessage("");
-        handleFavSubmit(new Event("submit"));
+        setIsModalOpen(true);
+        // handleFavSubmit(new Event("submit")); // handleFavSubmit 함수에서 처리할지 여부 확인 필요
       } else {
         setErrorMessage("키워드를 입력하세요.");
       }
     }
   };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSubmitModal = () => {
+    // FavModal에서 얻은 데이터를 사용하여 원하는 작업 수행
+    console.log('Title:', title);
+    console.log('Description:', description);
+    closeModal();
+  };
+
+  // const handleFavButtonClick = () => {
+  //   const form = document.getElementById("searchForm");
+
+  //   if (form) {
+  //     const formData = new FormData(form);
+  //     const keyword = formData.get("keyword");
+
+  //     if (keyword && keyword.trim() !== "") {
+  //       setErrorMessage("");
+  //       handleFavSubmit(new Event("submit"));
+  //     } else {
+  //       setErrorMessage("키워드를 입력하세요.");
+  //     }
+  //   }
+  // };
+
+
 
   const handleFavSubmit = async (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
@@ -937,6 +973,7 @@ export default function Search(props) {
                       </label>
                     </div>
                   </div>
+              <>
                   <div
                     className="border bg-white flex flex-col flex-1 px-8 py-4 rounded-[30px] border-solid border-gray-300 max-md:px-5"
                     onClick={handleFavButtonClick}
@@ -950,9 +987,23 @@ export default function Search(props) {
                       />
                       <div className="text-black text-base font-light self-center whitespace-nowrap my-auto">
                         즐겨찾기
+
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
+                      {isModalOpen && (
+                        <FavModal
+                          onClose={closeModal}
+                          onSubmit={handleSubmitModal}
+                          title={title}
+                          description={description}
+                          setTitle={setTitle}
+                          setDescription={setDescription}
+                        />
+                      )}
+                    </>
+
+
                   <div
                     className="border bg-white flex flex-col flex-1 px-8 py-4 rounded-[30px] border-solid border-gray-300 max-md:px-5"
                     onClick={handleButtonClick}
