@@ -196,6 +196,7 @@ export default function Search(props) {
 
       if (keyword && keyword.trim() !== "") {
         setErrorMessage("");
+        setTitle(keyword);
         setIsModalOpen(true);
         // handleFavSubmit(new Event("submit")); // handleFavSubmit 함수에서 처리할지 여부 확인 필요
       } else {
