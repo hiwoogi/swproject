@@ -10,20 +10,15 @@ export default function SidebarItem({
   onDelete,
   currentPage,
 }) {
-  const { id, filterCriteria, clickFilterCriteria, title, contents } = data;
+  const { id, filterCriteria, clickFilterCriteria, title, contents,registrationTime } = data;
 
   
 
   const handleClick = async () => {
     try {
-      // Example filterData and clickFilterData, replace with your actual data
+      await makeChartData(filterCriteria, clickFilterCriteria, setResponseData,contents,registrationTime);
 
-      // Call the makeChartData function
-      await makeChartData(filterCriteria, clickFilterCriteria, setResponseData);
-
-      // Additional logic after button click if needed
     } catch (error) {
-      // Handle errors if needed
       console.error("Error:", error);
     }
   };

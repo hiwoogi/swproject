@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from "react";
 import SidebarItem from "./SidebarItem";
 
-export default function Sidebar({ data, setResponseData }) {
+export default function Sidebar({ data, setResponseData,setData}) {
   const itemsPerPage = 15; //페이지당 아이템 수
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentItems = data.slice(startIndex, endIndex);
-
+  
   const [currentData, setCurrentData] = useState(currentItems);
   //전체 데이터를 페이지별로 나누기
 
   const handleDelete = (deletedId) => {
     const updatedData = currentData.filter((item) => item.id !== deletedId);
+    const updatedAllData =data.filter((item) => item.id !== deletedId);
     setCurrentData(updatedData);
+    setData(updatedAllData)
+    setCurrentData(updatedAllData.slice(startIndex, endIndex))
   };
   //이전 페이지
   const goToPrevPage = () => {
@@ -39,11 +42,14 @@ export default function Sidebar({ data, setResponseData }) {
   useEffect(() => {
     console.log("리렌더링 : ");
     console.log(currentData);
+    console.log(data)
   }, [currentData]);
 
   useEffect(() => {
     console.log(currentPage);
     console.log(currentData);
+    console.log(data)
+
   }, [currentPage]);
 
   return (

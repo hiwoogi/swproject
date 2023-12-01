@@ -13,7 +13,7 @@ const SingleDatePicker = React.memo(({ value, onDateChange }) => {
     onDateChange(date.format('YYYY-MM-DD'))
   }
 
-  console.log("value :", value)
+
   return (
     <Tooltip title="April 2017-08-01" open={!isValid && isFocus}>
       <Space direction="vertical">

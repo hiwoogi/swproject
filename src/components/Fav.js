@@ -16,6 +16,8 @@ export default function Fav() {
     ageResults: null,
     deviceResults: null,
     clickResults: null,
+    contents: null,
+    registrationTime: null
   });
 
   const fetchData = async () => {
@@ -66,12 +68,21 @@ export default function Fav() {
     <div>
       {favResponse && favResponse.length !== 0 ? (
         <div>
-          <Sidebar data={favResponse} setResponseData={setResponseData} />
+          <Sidebar data={favResponse} setResponseData={setResponseData} setData={setFavResponse} />
           <div className="p-4 sm:ml-64 mt-24">
             <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
               {responseData.genderResults ? (
                 
                 <div className="self-center flex w-full max-w-[1800px] flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
+                  <div>
+                    키워드 : {responseData.genderResults[0].title}
+                    </div>
+                  <div>
+                    등록일 : {responseData.registrationTime}
+                    </div>
+                    <div>
+                      내용 : {responseData.contents}
+                      </div>
                   <div className="grid gap-5 lg:grid-cols-4 ">
                     <div className="col-span-3">
                     <ClickChart
