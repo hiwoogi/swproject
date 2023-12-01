@@ -78,7 +78,7 @@ export default function Fav() {
                     키워드 : {responseData.genderResults[0].title}
                     </div>
                   <div>
-                    등록일 : {responseData.registrationTime}
+                    등록일 : {responseData.registrationTime.substring(0, 19).replace('T', '  ')}
                     </div>
                     <div>
                       내용 : {responseData.contents}
