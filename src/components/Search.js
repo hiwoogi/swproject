@@ -213,7 +213,7 @@ export default function Search(props) {
     // FavModal에서 얻은 데이터를 사용하여 원하는 작업 수행
     console.log('Title:', title);
     console.log('Description:', description);
-    handleFavSubmit(new Event("submit"))
+    handleFavSubmit(new Event("favSubmit"))
     closeModal();
   };
 

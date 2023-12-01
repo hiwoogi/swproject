@@ -3,6 +3,9 @@ import React, { useState } from 'react';
 const FavModal = ({ onClose, onSubmit, setTitle, setDescription, title, description }) => {
 
   const [errorMessage, setErrorMessage] = useState("");
+  const onTempSubmit = () => {
+    return
+  }
 
   return (
     <>
@@ -61,11 +64,14 @@ const FavModal = ({ onClose, onSubmit, setTitle, setDescription, title, descript
 
           <div className="flex justify-center items-center space-x-4">
             <button
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault()
                 if (title.trim() !== "") {
                   onSubmit(title, description);
                 } else {
                   setErrorMessage("제목은 필수 항목입니다.");
+                  
+                   
                 }
               }}
 
