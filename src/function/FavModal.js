@@ -7,7 +7,7 @@ const FavModal = ({ onClose, onSubmit,setTitle,setDescription,title,description}
     <>
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="fixed inset-0 bg-gray-800 bg-opacity-75"></div>
-          <div className="relative bg-white p-8 rounded-lg shadow-md w-96">
+          <div className="relative bg-white p-8 rounded-lg shadow-md w-100">
             {/* Close 버튼 */}
             <button
               onClick={onClose}
@@ -49,6 +49,7 @@ const FavModal = ({ onClose, onSubmit,setTitle,setDescription,title,description}
             <textarea
               id="description"
               value={description}
+              rows={10}
               onChange={(e) => setDescription(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />

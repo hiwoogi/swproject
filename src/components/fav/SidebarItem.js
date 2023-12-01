@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeChartData } from "../../function/MakeChartData";
 import axios from "axios";
+import FavDeleteModal from "../../function/FavDeleteModal";
+
 export default function SidebarItem({
   data,
   num,
@@ -10,26 +12,38 @@ export default function SidebarItem({
   onDelete,
   currentPage,
 }) {
-  const { id, filterCriteria, clickFilterCriteria, title, contents,registrationTime } = data;
+  const { id, filterCriteria, clickFilterCriteria, title, contents, registrationTime } = data;
 
-  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   const handleClick = async () => {
     try {
-      await makeChartData(filterCriteria, clickFilterCriteria, setResponseData,contents,registrationTime);
+      await makeChartData(filterCriteria, clickFilterCriteria, setResponseData, contents, registrationTime);
 
     } catch (error) {
       console.error("Error:", error);
     }
   };
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
   const handleDeleteClick = async () => {
-    try {
-      await deleteData(id);
-      onDelete(id);
-      console.log("현재 페이지 : ", currentPage);
-      
-    } catch (error) {
-      console.error("Error:", error);
+    //모달이 열려있는 경우에 삭제 처리
+    if (isModalOpen) {
+      try {
+        await deleteData(id);
+        onDelete(id);
+        console.log("현재 페이지: ", currentPage);
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        toggleModal();
+      }
+    } else {
+      toggleModal();
     }
   };
 
@@ -61,6 +75,7 @@ export default function SidebarItem({
   };
   return (
     <li className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group mb-5">
+       <div className="flex items-center w-full justify-between">
       <button
         className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
         onClick={handleClick}
@@ -79,11 +94,18 @@ export default function SidebarItem({
       </button>
 
       <button
-        className="float-right px-14 "
+        className=""
         onClick={() => handleDeleteClick()}
       >
         x
       </button>
+      </div>
+      <FavDeleteModal
+        title={title}
+        isOpen={isModalOpen}
+        onClose={toggleModal}
+        onDelete={handleDeleteClick}
+      />
 
       {/* <h3 className="text-xl font-bold">{`Item ${id}`}</h3> */}
     </li>

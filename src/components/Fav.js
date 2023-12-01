@@ -69,7 +69,7 @@ export default function Fav() {
       {favResponse && favResponse.length !== 0 ? (
         <div>
           <Sidebar data={favResponse} setResponseData={setResponseData} setData={setFavResponse} />
-          <div className="p-4 sm:ml-64 mt-24">
+          <div className="p-4 sm:ml-72 mt-24">
             <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
               {responseData.genderResults ? (
                 
@@ -125,7 +125,7 @@ export default function Fav() {
           </div>
         </div>
       ) : (
-        <div>
+        <div className="flex items-center justify-center h-screen">
           <div className="text-black text-5xl max-w-[1000px] self-center mx-auto max-md:text-4xl mt-20 font-['NEXON']">
             <p>즐겨찾기 데이터가 존재하지 않습니다.</p>
           </div>
