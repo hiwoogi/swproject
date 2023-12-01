@@ -67,22 +67,21 @@ export default function Fav() {
   return (
     <div>
       {favResponse && favResponse.length !== 0 ? (
-        <div>
+        <div className="font-['NEXON']">
           <Sidebar data={favResponse} setResponseData={setResponseData} setData={setFavResponse} />
           <div className="p-4 sm:ml-72 mt-24">
             <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
               {responseData.genderResults ? (
                 
                 <div className="self-center flex w-full max-w-[1800px] flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
-                  <div>
-                    키워드 : {responseData.genderResults[0].title}
+                  <div className="mb-5">
+                    <span className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300">{responseData.genderResults[0].title}</span>
+                    <span className="px-5">등록일 : {responseData.registrationTime.substring(0, 19).replace('T', '  ')}</span>
                     </div>
                   <div>
-                    등록일 : {responseData.registrationTime.substring(0, 19).replace('T', '  ')}
+                    
                     </div>
-                    <div>
-                      내용 : {responseData.contents}
-                      </div>
+                    
                   <div className="grid gap-5 lg:grid-cols-4 ">
                     <div className="col-span-3">
                     <ClickChart
@@ -117,6 +116,9 @@ export default function Fav() {
                     />
                     </div>
                   </div>
+                  <div className="mt-5 w-full h-full border-2 border-gray-300 p-4 rounded-lg flex">
+                      {responseData.contents}
+                      </div>
                 </div>
               ) : (
                 <p>Data is present</p>
