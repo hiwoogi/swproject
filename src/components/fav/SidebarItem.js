@@ -37,6 +37,10 @@ export default function SidebarItem({
         await deleteData(id);
         onDelete(id);
         console.log("현재 페이지: ", currentPage);
+
+        //데이터 삭제 후 페이지를 전체 새로 고침(로딩창 나오게)
+        window.location.reload()
+
       } catch (error) {
         console.error("Error:", error);
       } finally {

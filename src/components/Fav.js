@@ -89,12 +89,37 @@ export default function Fav() {
                   {responseData.genderResults ? (
 
                     <div className="self-center flex w-full max-w-[1800px] flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
-                      <div className="mb-5">
-                        <span className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300">{responseData.genderResults[0].title}</span>
-                        <span className="px-5">등록일시 : {responseData.registrationTime.substring(0, 19).replace('T', '  ')}</span>
+
+                      <div className="mb-5 grid lg:grid-cols-4">
+                        <div className="col-span-2">
+                          <span className="text-3xl font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300">{responseData.genderResults[0].title}</span>
+                          <div className="mt-2 w-full h-full p-4 rounded-lg flex flex-col">
+                            <span className="text-lg">등록일시 : {responseData.registrationTime.substring(0, 19).replace('T', '  ')}</span>
+                            <div className="mt-2">
+                              {responseData.contents}
+                            </div>
+                          </div>
+                        </div>
+
+                          <div className="col-span-2">
+                            <div className="mt-3 w-full h-full p-4 rounded-lg flex">
+                              @필터값@
+                              <br />
+                              분야?
+                              <br />
+                              기간 : {responseData.startDate} - {responseData.endDate}
+                              <br />
+                              age
+                              <br />
+                              device
+                              <br />
+                              gender
+                          </div>
+                        </div>
+
                       </div>
-                      
-                      <div className="grid gap-5 lg:grid-cols-4 ">
+
+                      <div className="grid gap-5 lg:grid-cols-4">
                         <div className="col-span-3">
                           <ClickChart
                             startDate={responseData.startDate}
@@ -111,14 +136,6 @@ export default function Fav() {
                             deviceResults={responseData.deviceResults}
                           />
                         </div>
-                        <div className="col-span-2"
-                        >                    <GenderChart
-                            startDate={responseData.startDate}
-                            endDate={responseData.endDate}
-                            timeUnit={responseData.timeUnit}
-                            genderResults={responseData.genderResults}
-                          />
-                        </div>
                         <div className="col-span-2">
                           <AgeChart
                             startDate={responseData.startDate}
@@ -127,10 +144,16 @@ export default function Fav() {
                             ageResults={responseData.ageResults}
                           />
                         </div>
+                        <div className="col-span-2">
+                          <GenderChart
+                            startDate={responseData.startDate}
+                            endDate={responseData.endDate}
+                            timeUnit={responseData.timeUnit}
+                            genderResults={responseData.genderResults}
+                          />
+                        </div>
                       </div>
-                      <div className="mt-5 w-full h-full border-2 border-gray-300 p-4 rounded-lg flex">
-                        {responseData.contents}
-                      </div>
+
                     </div>
                   ) : (
                     <div className="text-5xl max-w-[1000px] self-center mx-auto max-md:text-4xl mt-80 mb-80">
