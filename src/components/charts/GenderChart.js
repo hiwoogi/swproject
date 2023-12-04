@@ -2,8 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
 export default function GenderChart({ startDate, endDate, timeUnit, genderResults }) {
-  const chartRefF = useRef(null);
-  const chartRefM = useRef(null);
+  const chartRef = useRef(null);
 
   // console.log(startDate); // "2017-08-01"
   // console.log(endDate); // "2017-09-30"
@@ -40,66 +39,35 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
       // console.log('male 상대적 비율:', male);
 
 
-      const ctxF = document.getElementById('femaleChart');
-      if (ctxF) {
-        if (chartRefF.current) {
-          chartRefF.current.destroy();
+      const ctx = document.getElementById('genderChart');
+      if (ctx) {
+        if (chartRef.current) {
+          chartRef.current.destroy();
         }
-        chartRefF.current = new Chart(ctxF, {
+        chartRef.current = new Chart(ctx, {
           type: 'doughnut',
           data: {
-            labels: ['여성'],
+            labels: ['여성', '남성'],
             datasets: [
               {
-                data: [female, 100 - female],
-                backgroundColor: ['rgba(255, 116, 115, 0.5)', 'rgba(0, 0, 0, 0.2)'],
+                data: [female, male],
+                backgroundColor: ['rgba(255, 116, 115, 0.5)', 'rgba(71, 184, 224, 0.5)'],
               },
             ],
           },
           options:{
-            responsive: false,
+            //responsive: false,
+            maintainAspectRatio: false,
             rotation: -90,
             circumference: 180,
             plugins: {
-              tooltip: {
-                bodySpacing: 20,
-                padding: 15,
-                titleFont: {
-                  size: 20
-                },
-                bodyFont: {
-                  size: 20
-                },
-                callbacks: {
-                  label: (context) => `${context.formattedValue}%`, // 툴팁에 표시될 값 설정
+              legend: {
+                labels: {
+                  font: {
+                    size: 20,
+                  }
                 }
-              }
-            }
-          }
-        });
-      }
-
-      const ctxM = document.getElementById('maleChart');
-      if (ctxM) {
-        if (chartRefM.current) {
-          chartRefM.current.destroy();
-        }
-        chartRefM.current = new Chart(ctxM, {
-          type: 'doughnut',
-          data: {
-            labels: ['남성'],
-            datasets: [
-              {
-                data: [male, 100 - male],
-                backgroundColor: ['rgba(71, 184, 224, 0.5)', 'rgba(0, 0, 0, 0.2)'],
               },
-            ],
-          },
-          options: {
-            responsive: false,
-            rotation: -90,
-            circumference: 180,
-            plugins: {
               tooltip: {
                 bodySpacing: 20,
                 padding: 15,
@@ -117,8 +85,6 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
           }
         });
       }
-
-
     }
   }, [genderResults]);
 
@@ -127,8 +93,7 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
       {/* {startDate} ~ {endDate} <br />
       -{timeUnit} <br />
       GenderChart */}
-      <canvas id="femaleChart" />
-      <canvas id="maleChart" />
+      <canvas id="genderChart" />
     </div>
   );
 }

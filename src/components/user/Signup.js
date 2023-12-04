@@ -126,7 +126,7 @@ export default function Signup(props) {
             placeholder="name@email.com"
           />
           {errorMessages.email && (
-            <div className="text-red-500 text-sm mt-1 text-left">{errorMessages.email}</div>
+            <div className="text-red-500 text-sm mt-2 mr-auto">{errorMessages.email}</div>
           )}
 
           <div className="text-neutral-500 text-base leading-4 mr-auto mt-5 max-md:max-w-full">
@@ -141,7 +141,7 @@ export default function Signup(props) {
             placeholder="이름"
           />
           {errorMessages.name && (
-            <div className="text-red-500 text-sm mt-1 text-left">{errorMessages.name}</div>
+            <div className="text-red-500 text-sm mt-2 mr-auto">{errorMessages.name}</div>
           )}
 
           <div className="text-neutral-500 text-base leading-4 mr-auto mt-5 max-md:max-w-full">
@@ -156,7 +156,7 @@ export default function Signup(props) {
             placeholder="비밀번호"
           />
           {errorMessages.password && (
-            <div className="text-red-500 text-sm mt-1 text-left">{errorMessages.password}</div>
+            <div className="text-red-500 text-sm mt-2 mr-auto">{errorMessages.password}</div>
           )}
 
           <div className="text-neutral-500 text-base leading-4 mr-auto mt-5 max-md:max-w-full">
@@ -171,10 +171,10 @@ export default function Signup(props) {
             placeholder="비밀번호 확인"
           />
           {errorMessages.confirmPassword && (
-            <div className="text-red-500 text-sm mt-1 text-left">{errorMessages.confirmPassword}</div>
+            <div className="text-red-500 text-sm mt-2 mr-auto">{errorMessages.confirmPassword}</div>
           )}
 
-          <div className="flex w-[143px] max-w-full items-stretch justify-between gap-5 mt-12 max-md:mt-10">
+          <div className="mr-auto flex justify-start items-stretch gap-5 mt-12 max-md:mt-10">
             <div className="flex items-stretch justify-between gap-1.5">
               <div className="text-black text-base leading-4 grow whitespace-nowrap self-start">
                 <input
@@ -202,17 +202,17 @@ export default function Signup(props) {
             </div>
           </div>
           {errorMessages.gender && (
-            <div className="text-red-500 text-sm mt-1 text-left">{errorMessages.gender}</div>
+            <div className="text-red-500 text-sm mt-2 mr-auto">{errorMessages.gender}</div>
           )}
 
 
-          <div className="flex w-[434px] max-w-full gap-4 mt-14 max-md:flex-wrap max-md:mt-10">
+          <div className="flex w-[500px] max-w-full gap-4 mt-14 max-md:flex-wrap max-md:mt-10">
             <input
               type="checkbox"
               className="aspect-square object-contain object-center w-5 overflow-hidden shrink-0 max-w-full"
               alt="Terms and Conditions"
             />
-            <div className="text-black text-sm leading-4 self-stretch grow shrink basis-auto">
+            <div className="text-black text-sm self-stretch grow shrink basis-auto">
               이용약관 개인정보 수집 및 이용, 마케팅 활용 선택에 모두
               동의합니다.
             </div>
@@ -220,7 +220,7 @@ export default function Signup(props) {
           <div className="bg-neutral-200 flex w-[470px] shrink-0 h-px flex-col mt-6 max-md:max-w-full" />
           <button
             type="submit"
-            className="text-blue-600 text-center text-lg leading-5 whitespace-nowrap border bg-white w-[470px] max-w-full items-center mt-8 mb-9 pt-6 pb-9 px-5 rounded-xl border-solid border-blue-600"
+            className="text-blue-600 text-center text-2xl leading-5 whitespace-nowrap border bg-white w-[470px] max-w-full items-center mt-8 mb-9 pt-7 pb-7 px-5 rounded-xl border-solid border-blue-600"
           >
             가입하기
           </button>

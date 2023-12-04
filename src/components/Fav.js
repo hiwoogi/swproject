@@ -6,6 +6,7 @@ import AgeChart from "./charts/AgeChart";
 import DeviceChart from "./charts/DeviceChart";
 import ClickChart from "./charts/ClickChart";
 import { SyncLoader } from "react-spinners";
+import { Link } from "react-router-dom";
 
 export default function Fav() {
   const [isLoading, setIsLoading] = useState(true);
@@ -86,13 +87,13 @@ export default function Fav() {
               <div className="p-4 sm:ml-72 mt-24">
                 <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
                   {responseData.genderResults ? (
-                    
+
                     <div className="self-center flex w-full max-w-[1800px] flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
                       <div className="mb-5">
                         <span className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300">{responseData.genderResults[0].title}</span>
-                        <span className="px-5">등록일 : {responseData.registrationTime.substring(0, 19).replace('T', '  ')}</span>
+                        <span className="px-5">등록일시 : {responseData.registrationTime.substring(0, 19).replace('T', '  ')}</span>
                       </div>
-
+                      
                       <div className="grid gap-5 lg:grid-cols-4 ">
                         <div className="col-span-3">
                           <ClickChart
@@ -132,15 +133,23 @@ export default function Fav() {
                       </div>
                     </div>
                   ) : (
-                    <p>Data is present</p>
+                    <div className="text-5xl max-w-[1000px] self-center mx-auto max-md:text-4xl mt-80 mb-80">
+                      <p>저장한 즐겨찾기를 눌러 데이터를 확인해보세요!</p>
+                    </div>
                   )}
                 </div>
               </div>
             </div>
           ) : (
             <div className="flex items-center justify-center h-screen">
-              <div className="text-black text-5xl max-w-[1000px] self-center mx-auto max-md:text-4xl mt-20 font-['NEXON']">
-                <p>즐겨찾기 데이터가 존재하지 않습니다.</p>
+              <div className="text-5xl max-w-[1000px] self-center mx-auto max-md:text-4xl mt-20 font-['NEXON']">
+                즐겨찾기 데이터가 존재하지 않습니다.
+                <p className="text-3xl mt-8">지금 키워드를 분석하고 즐겨찾기에 데이터를 추가해보세요!</p>
+                <div className="flex flex-col items-center mt-10">
+                  <div className="bg-neutral-200 leading-6 uppercase whitespace-nowrap w-[130px] max-w-full pl-6 pr-6 py-3.5 rounded-md max-md:px-5">
+                    <Link to="/keyword" className="text-xl text-center font-light">바로 가기</Link>
+                  </div>
+                </div>
               </div>
             </div>
           )}

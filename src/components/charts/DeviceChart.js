@@ -48,6 +48,13 @@ const filteredPcData = filterPc(deviceResults[0].data);
           },
           options: {
             plugins: {
+              legend: {
+                labels: {
+                  font: {
+                    size: 17,
+                  }
+                }
+              },
               tooltip: {
                 bodySpacing: 20,
                 padding: 15,
