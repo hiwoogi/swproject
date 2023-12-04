@@ -90,33 +90,15 @@ export default function Fav() {
 
                     <div className="self-center flex w-full max-w-[1800px] flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
 
-                      <div className="mb-5 grid lg:grid-cols-4">
-                        <div className="col-span-2">
-                          <span className="text-3xl font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300">{responseData.genderResults[0].title}</span>
-                          <div className="mt-2 w-full h-full p-4 rounded-lg flex flex-col">
-                            <span className="text-lg">등록일시 : {responseData.registrationTime.substring(0, 19).replace('T', '  ')}</span>
-                            <div className="mt-2">
-                              {responseData.contents}
-                            </div>
+                      <div className="mb-5">
+                        <span className="text-3xl font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300">{responseData.genderResults[0].title}</span>
+                        <div className="mt-2 w-full h-full p-4 rounded-lg flex flex-col">
+                          <span className="text-xl">등록일시 : {responseData.registrationTime.substring(0, 19).replace('T', '  ')}</span>
+                          <span className="text-lg mt-2">데이터 기간 : {responseData.startDate} ~ {responseData.endDate}</span>
+                          <div className="mt-2">
+                            {responseData.contents}
                           </div>
                         </div>
-
-                          <div className="col-span-2">
-                            <div className="mt-3 w-full h-full p-4 rounded-lg flex">
-                              @필터값@
-                              <br />
-                              분야?
-                              <br />
-                              기간 : {responseData.startDate} - {responseData.endDate}
-                              <br />
-                              age
-                              <br />
-                              device
-                              <br />
-                              gender
-                          </div>
-                        </div>
-
                       </div>
 
                       <div className="grid gap-5 lg:grid-cols-4">
