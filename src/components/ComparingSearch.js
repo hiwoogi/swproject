@@ -2,15 +2,12 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { createRoot } from "react-dom/client";
-import GenderChart from "./charts/GenderChart";
-import AgeChart from "./charts/AgeChart";
-import DeviceChart from "./charts/DeviceChart";
 import ClickChart from "./charts/ClickChart";
 import { SyncLoader } from "react-spinners";
 import SingleDatePicker from "./searchForms/SingleDatePicker";
 import dayjs, { Dayjs } from "dayjs";
 import FavModal from "../function/FavModal";
-import { makeChartData } from "../function/MakeChartData";
+import { makeClickChartData } from "../function/MakeClickChartData";
 import SelectCategory from "./searchForms/SelectCategory";
 import InputKeyword from "./searchForms/InputKeyword";
 import SelectPeriod from "./searchForms/SelectPeriod";
@@ -19,8 +16,57 @@ import DeviceRadio from "./searchForms/DeviceRadio";
 import GenderRadio from "./searchForms/GenderRadio";
 import { WithContext as ReactTags } from "react-tag-input";
 
-export default function Search(props) {
- 
+export default function ComparingSearch(props) {
+  const ACCESS_TOKEN = "ACCESS_TOKEN";
+  const [tags, setTags] = useState([]);
+
+  const handleAddition = (tag) => {
+    const maxTags = 5;
+
+    if (tags.length < maxTags) {
+      const newKeyword = {
+        name: tag.text,
+        param: [tag.text],
+      };
+
+      setTags([...tags, tag]);
+
+      if (
+        clickFilterData.keyword &&
+        clickFilterData.keyword.length > 0 &&
+        clickFilterData.keyword[0].name === "" &&
+        clickFilterData.keyword[0].param.length === 0
+      ) {
+        setClickFilterData((prevFilterData) => ({
+          ...prevFilterData,
+          keyword: [newKeyword, ...prevFilterData.keyword.slice(1)],
+        }));
+      } else {
+        setClickFilterData((prevFilterData) => ({
+          ...prevFilterData,
+          keyword: [...prevFilterData.keyword, newKeyword],
+        }));
+      }
+    }
+  };
+
+  const handleDelete = (i) => {
+    const deletedTag = tags[i];
+
+    setTags(tags.filter((tag, index) => index !== i));
+
+    setClickFilterData((prevFilterData) => ({
+      ...prevFilterData,
+      keyword: prevFilterData.keyword.filter(
+        (keyword) => keyword.name !== deletedTag.text
+      ),
+    }));
+  };
+
+  useEffect(() => {
+    console.log(tags);
+  }, [tags]);
+
   const [filterData, setFilterData] = useState({
     keyword: "",
     category: "50000000",
@@ -47,10 +93,10 @@ export default function Search(props) {
     ages: [],
     gender: "",
   });
-  const [root, setRoot] = useState(null);
+  useEffect(() => {
+    console.log(clickFilterData);
+  }, [clickFilterData]);
 
-  const [ageRoot, setAgeRoot] = useState(null);
-  const [deviceRoot, setDeviceRoot] = useState(null);
   const [clickRoot, setClickRoot] = useState(null);
   const [isTrend, setIsTrend] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -61,9 +107,6 @@ export default function Search(props) {
     startDate: null,
     endDate: null,
     timeUnit: null,
-    genderResults: null,
-    ageResults: null,
-    deviceResults: null,
     clickResults: null,
     contents: null,
     registrationTime: null,
@@ -90,23 +133,6 @@ export default function Search(props) {
       ...clickFilterData,
       endDate,
     });
-  };
-
-  useEffect(() => {
-    console.log(clickFilterData.keyword)
-  
-    
-  }, [clickFilterData])
-  
-  //react tag input
-  const handleKeywordChange = (newKeywords) => {
-    setClickFilterData((prevFilterData) => ({
-      ...prevFilterData,
-      keyword: newKeywords.map((keyword) => ({
-        name: keyword,
-        param: [keyword],
-      })),
-    }));
   };
 
   //나이 조정
@@ -174,7 +200,7 @@ export default function Search(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    makeChartData(
+    makeClickChartData(
       filterData,
       clickFilterData,
       setResponseData,
@@ -190,94 +216,7 @@ export default function Search(props) {
       const formData = new FormData(form);
       const keyword = formData.get("keyword");
 
-      if (keyword && keyword.trim() !== "") {
-        setErrorMessage("");
-        handleSubmit(new Event("submit"));
-      } else {
-        setErrorMessage("키워드를 입력하세요.");
-      }
-    }
-  };
-
-  //@@즐겨찾기 모달창
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-
-  const handleFavButtonClick = () => {
-    const form = document.getElementById("searchForm");
-
-    if (form) {
-      const formData = new FormData(form);
-      const keyword = formData.get("keyword");
-
-      if (keyword && keyword.trim() !== "") {
-        setErrorMessage("");
-        setTitle(keyword);
-        setIsModalOpen(true);
-      } else {
-        setErrorMessage("키워드를 입력하세요.");
-      }
-    }
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleSubmitModal = () => {
-    // FavModal에서 얻은 데이터를 사용하여 원하는 작업 수행
-    console.log("Title:", title);
-    console.log("Description:", description);
-    handleFavSubmit(new Event("favSubmit"));
-    closeModal();
-  };
-
-  const handleFavSubmit = async (e) => {
-    e.preventDefault();
-
-    let headers = {
-      "Content-Type": "application/json",
-    };
-
-    const memberId = localStorage.getItem("MEMBER_ID");
-
-    console.log({
-      filterData,
-      clickFilterData,
-      member: { id: memberId },
-    });
-
-    const apiUrl = "http://localhost:8080/favorites";
-
-    try {
-      const accessToken = localStorage.getItem("ACCESS_TOKEN");
-      if (accessToken && accessToken !== null) {
-        headers.Authorization = `Bearer ${accessToken}`;
-      }
-      const response = await axios.post(
-        apiUrl,
-        {
-          filterData,
-          clickFilterData,
-          member: { id: memberId },
-          title: title,
-          contents: description,
-        },
-        { headers }
-      );
-
-      console.log("API Response:", response.data);
-    } catch (error) {
-      console.error(error);
-
-      // Check if error.response is defined
-      if (error.response && error.response.status === 403) {
-        window.location.href = "/#/login"; // redirect
-      } else {
-        // Handle other types of errors or display an error message
-        console.error("Error in API request:", error);
-      }
+      handleSubmit(new Event("submit"));
     }
   };
 
@@ -310,195 +249,12 @@ export default function Search(props) {
   }, [trend, field]);
 
   useEffect(() => {
-    if (isTrend === true) {
-      makeChartData(
-        filterData,
-        clickFilterData,
-        setResponseData,
-        responseData.contents,
-        responseData.registrationTime
-      );
-      console.log(responseData);
-      if (responseData.startDate && responseData.endDate) {
-        if (!root) {
-          const newRoot = createRoot(document.getElementById("graph1"));
-          newRoot.render(
-            <GenderChart
-              startDate={responseData.startDate}
-              endDate={responseData.endDate}
-              timeUnit={responseData.timeUnit}
-              genderResults={responseData.genderResults}
-            />
-          );
-          setRoot(newRoot);
-        } else {
-          root.render(
-            <GenderChart
-              startDate={responseData.startDate}
-              endDate={responseData.endDate}
-              timeUnit={responseData.timeUnit}
-              genderResults={responseData.genderResults}
-            />
-          );
-        }
-      }
-
-      if (responseData.ageResults) {
-        if (!ageRoot) {
-          const newRoot2 = createRoot(document.getElementById("graph2"));
-          newRoot2.render(
-            <AgeChart
-              startDate={responseData.startDate}
-              endDate={responseData.endDate}
-              timeUnit={responseData.timeUnit}
-              ageResults={responseData.ageResults}
-            />
-          );
-          setAgeRoot(newRoot2);
-        } else {
-          ageRoot.render(
-            <AgeChart
-              startDate={responseData.startDate}
-              endDate={responseData.endDate}
-              timeUnit={responseData.timeUnit}
-              ageResults={responseData.ageResults}
-            />
-          );
-        }
-      }
-
-      if (responseData.deviceResults) {
-        // Check if ageResults is available
-        if (!deviceRoot) {
-          const newRoot3 = createRoot(document.getElementById("graph3"));
-          newRoot3.render(
-            <DeviceChart
-              startDate={responseData.startDate}
-              endDate={responseData.endDate}
-              timeUnit={responseData.timeUnit}
-              deviceResults={responseData.deviceResults}
-            />
-          );
-          setDeviceRoot(newRoot3);
-        } else {
-          deviceRoot.render(
-            <DeviceChart
-              startDate={responseData.startDate}
-              endDate={responseData.endDate}
-              timeUnit={responseData.timeUnit}
-              deviceResults={responseData.deviceResults}
-            />
-          );
-        }
-      }
-
-      if (responseData.clickResults) {
-        // Check if ageResults is available
-        if (!clickRoot) {
-          const newRoot4 = createRoot(document.getElementById("graph4"));
-          newRoot4.render(
-            <ClickChart
-              startDate={responseData.startDate}
-              endDate={responseData.endDate}
-              timeUnit={responseData.timeUnit}
-              clickResults={responseData.clickResults}
-            />
-          );
-          setClickRoot(newRoot4);
-        } else {
-          clickRoot.render(
-            <ClickChart
-              startDate={responseData.startDate}
-              endDate={responseData.endDate}
-              timeUnit={responseData.timeUnit}
-              clickResults={responseData.clickResults}
-            />
-          );
-        }
-      }
-    }
-  }, [isLoading]);
-
-  useEffect(() => {
     const loadingTimeout = setTimeout(() => {
       setIsLoading(false);
     }, 500);
   }, []);
 
   useEffect(() => {
-    if (responseData.startDate && responseData.endDate) {
-      if (!root) {
-        const newRoot = createRoot(document.getElementById("graph1"));
-        newRoot.render(
-          <GenderChart
-            startDate={responseData.startDate}
-            endDate={responseData.endDate}
-            timeUnit={responseData.timeUnit}
-            genderResults={responseData.genderResults}
-          />
-        );
-        setRoot(newRoot);
-      } else {
-        root.render(
-          <GenderChart
-            startDate={responseData.startDate}
-            endDate={responseData.endDate}
-            timeUnit={responseData.timeUnit}
-            genderResults={responseData.genderResults}
-          />
-        );
-      }
-    }
-
-    if (responseData.ageResults) {
-      if (!ageRoot) {
-        const newRoot2 = createRoot(document.getElementById("graph2"));
-        newRoot2.render(
-          <AgeChart
-            startDate={responseData.startDate}
-            endDate={responseData.endDate}
-            timeUnit={responseData.timeUnit}
-            ageResults={responseData.ageResults}
-          />
-        );
-        setAgeRoot(newRoot2);
-      } else {
-        ageRoot.render(
-          <AgeChart
-            startDate={responseData.startDate}
-            endDate={responseData.endDate}
-            timeUnit={responseData.timeUnit}
-            ageResults={responseData.ageResults}
-          />
-        );
-      }
-    }
-
-    if (responseData.deviceResults) {
-      // Check if ageResults is available
-      if (!deviceRoot) {
-        const newRoot3 = createRoot(document.getElementById("graph3"));
-        newRoot3.render(
-          <DeviceChart
-            startDate={responseData.startDate}
-            endDate={responseData.endDate}
-            timeUnit={responseData.timeUnit}
-            deviceResults={responseData.deviceResults}
-          />
-        );
-        setDeviceRoot(newRoot3);
-      } else {
-        deviceRoot.render(
-          <DeviceChart
-            startDate={responseData.startDate}
-            endDate={responseData.endDate}
-            timeUnit={responseData.timeUnit}
-            deviceResults={responseData.deviceResults}
-          />
-        );
-      }
-    }
-
     if (responseData.clickResults) {
       // Check if ageResults is available
       if (!clickRoot) {
@@ -523,15 +279,7 @@ export default function Search(props) {
         );
       }
     }
-  }, [
-    responseData,
-    ageRoot,
-    deviceRoot,
-    root,
-    clickRoot,
-    responseData.clickResults,
-  ]);
-
+  }, [responseData, clickRoot, responseData.clickResults]);
 
   return (
     <>
@@ -545,7 +293,7 @@ export default function Search(props) {
           <form id="searchForm" onSubmit={handleSubmit} className="self-center">
             <div className="self-center flex w-full max-w-[1920px] flex-col mt-20 mb-16 max-md:max-w-full max-md:my-10">
               <div className="text-black text-5xl max-w-[377px] self-center max-md:text-4xl">
-                키워드 검색
+                키워드 비교분석
               </div>
 
               <div className="flex gap-4">
@@ -560,11 +308,22 @@ export default function Search(props) {
                 </div>
                 <div className="relative flex flex-col items-center">
                   <div className="self-center flex items-start gap-5 mt-20 max-md:max-w-full max-md:flex-wrap max-md:mt-10">
-                    <InputKeyword
-                      trend={trend}
-                      setFilterData={setFilterData}
-                      setClickFilterData={setClickFilterData}
+                    <ReactTags
+                      tags={tags}
+                      handleAddition={handleAddition}
+                      handleDelete={handleDelete}
+                      placeholder="태그를 입력해주세요"
+                      inputFieldPosition="inline"
+                      classNames={{
+                        tagInput: 'text-black text-xl leading-8 uppercase border w-[300px] h-[40px] md:w-[300px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300',
+                        tags: 'flex flex-wrap max-h-[100px] overflow-y-auto', // Added container style
+                        tagInputField: 'w-full', // Adjust as needed
+                        selected: 'selected-tag', // Add this if you want to style the selected tags
+                        tag: 'tag-style', // Add this if you want to style individual tags
+                        remove: 'remove-tag', // Add this if you want to style the remove icon on tags
+                      }}
                     />
+
                     {errorMessage && (
                       <p className="text-red-500 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                         {errorMessage}
@@ -630,35 +389,6 @@ export default function Search(props) {
                     clickFilterData={clickFilterData}
                   />
 
-                  <>
-                    <div
-                      className="border bg-white flex flex-col flex-1 px-8 py-4 rounded-[30px] border-solid border-gray-300 max-md:px-5"
-                      onClick={handleFavButtonClick}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <div className="self-center flex w-[84px] max-w-full items-start gap-0">
-                        <img
-                          loading="lazy"
-                          src="https://cdn.builder.io/api/v1/image/assets/TEMP/7ee4812c-c045-44e9-aa52-0da59d97d0af?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
-                          className="aspect-[1.11] object-contain object-center w-[30px] overflow-hidden self-stretch max-w-full"
-                        />
-                        <div className="text-black text-base font-light self-center whitespace-nowrap my-auto">
-                          즐겨찾기
-                        </div>
-                      </div>
-                    </div>
-                    {isModalOpen && (
-                      <FavModal
-                        onClose={closeModal}
-                        onSubmit={handleSubmitModal}
-                        title={title}
-                        description={description}
-                        setTitle={setTitle}
-                        setDescription={setDescription}
-                      />
-                    )}
-                  </>
-
                   <div
                     className="border bg-white flex flex-col flex-1 px-8 py-4 rounded-[30px] border-solid border-gray-300 max-md:px-5"
                     onClick={handleButtonClick}
@@ -683,16 +413,6 @@ export default function Search(props) {
           <div className="self-center flex w-full max-w-[1500px] flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
             <div className="grid gap-5 lg:grid-cols-4">
               <div id="graph4" className="col-span-3">
-                {" "}
-              </div>
-
-              <div id="graph3"> </div>
-
-              <div id="graph2" className="col-span-2">
-                {" "}
-              </div>
-
-              <div id="graph1" className="col-span-2">
                 {" "}
               </div>
             </div>

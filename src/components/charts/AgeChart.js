@@ -14,6 +14,7 @@ export default function AgeChart({
   // console.log("시간 단위 : ", timeUnit); // "month"
   // console.log("연령 결과:", ageResults);
 
+  
   const filterA = (data) => data.filter((item) => item.group === '10');
   const filterB = (data) => data.filter((item) => item.group === '20');
   const filterC = (data) => data.filter((item) => item.group === '30');

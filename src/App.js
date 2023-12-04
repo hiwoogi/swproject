@@ -9,6 +9,7 @@ import Keyword from './routes/Keyword.js';
 
 import Favorites from './routes/Favorites.js';
 import Trend from './routes/Trend.js';
+import ComparingKeyword from './routes/ComparingKeyword.js';
 
 export default function App() {
 
@@ -32,6 +33,8 @@ export default function App() {
         <Route path="/" exact = {true} element={<Home />} />
         <Route path="/keyword" element={<Keyword/>} />
         <Route path="/trend" element={<Trend/>} />
+        <Route path="/comparing" element={<ComparingKeyword/>} />
+        
         <Route
             path="/favorites"
             element={<PrivateRoute element={<Favorites />} />}
