@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export async function makeChartData(filterData, clickFilterData, setResponseData,contents,registrationTime) {
+export async function makeChartData(filterData, clickFilterData, setResponseData,contents,registrationTime,favId) {
     const baseUrl = "http://localhost:8080";
     let headers = {
       Authorization: "Bearer your_access_token", 
@@ -36,7 +36,8 @@ export async function makeChartData(filterData, clickFilterData, setResponseData
         deviceResults,
         clickResults,
         contents,
-        registrationTime
+        registrationTime,
+        favId
       }));
      
     } catch (error) {

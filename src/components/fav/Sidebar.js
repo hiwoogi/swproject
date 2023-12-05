@@ -8,7 +8,7 @@ export default function Sidebar({ data, setResponseData,setData}) {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentItems = data.slice(startIndex, endIndex);
-  
+
   const [currentData, setCurrentData] = useState(currentItems);
   //전체 데이터를 페이지별로 나누기
 
@@ -38,6 +38,10 @@ export default function Sidebar({ data, setResponseData,setData}) {
       setCurrentData(data.slice(startIndex, endIndex));
     }
   };
+  useEffect(() => {
+  
+    setCurrentData(data.slice(startIndex, endIndex));
+  }, [data]);
 
   useEffect(() => {
     console.log("리렌더링 : ");

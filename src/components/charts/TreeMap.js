@@ -75,7 +75,7 @@ export default function TreeMap({ trend, field }) {
                     let fontSize = 40;
                     //작은 칸에 맞춰서 크기 조절
                     if (capacityMW < 12)
-                      fontSize = fontSize - name.length * 3.5;
+                      fontSize = fontSize - name.length * 3;
                     else if (capacityMW <= 30)
                       fontSize = fontSize - name.length * 2;
 
