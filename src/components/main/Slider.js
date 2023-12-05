@@ -74,10 +74,10 @@ export default function MySlider(props) {
           {/* 슬라이드 창 3 */}
           <div>
             <section className="flex flex-col min-h-[580px] items-center justify-center gap-5 max-md:flex-wrap overflow-hidden relative">
-              <img loading="lazy" srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/6b34185c4b98ccc6ccb8d7fcae45df998a87cc137ccb2a03f200ef37142f3170?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=2000 2000w"
+              <img loading="lazy" srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/85c452619d1e013a8109f960b82b52d095acc9891a16da6c499147bd7fcf3fc9?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=2000 2000w"
                 className="absolute z-[-1] h-full w-full object-cover object-center inset-0" />
               <div className="relative flex flex-col mt-20 px-5 justify-center items-center max-md:max-w-full max-md:mt-10">
-                <div className="text-black text-base uppercase whitespace-nowrap bg-white w-[110px] max-w-full -ml-2 px-3 py-1 rounded-3xl self-start font-['NEXON']">Comparing</div>
+                <div className="text-black text-base uppercase whitespace-nowrap bg-white w-[125px] max-w-full -ml-2 px-3 py-1 rounded-3xl self-start font-['NEXON']">Comparing</div>
                 <h1 className="text-black text-8xl font-light uppercase mt-3.5 self-start max-md:max-w-full max-md:text-4xl font-['NEXON']"> 비교분석</h1>
                 <div className="self-center flex w-full max-w-[1549px] grow flex-col mt-5 pl-2.5 max-md:max-w-full">
                   <p className="text-black text-xl font-light uppercase self-stretch whitespace-nowrap max-md:max-w-full font-['NEXON']"> 비교하고 싶은 데이터의 클릭량을 비교해보세요 </p>

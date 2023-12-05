@@ -321,7 +321,7 @@ export default function Search(props) {
       console.log(responseData);
       if (responseData.startDate && responseData.endDate) {
         if (!root) {
-          const newRoot = createRoot(document.getElementById("graph1"));
+          const newRoot = createRoot(document.getElementById("genderGraph"));
           newRoot.render(
             <GenderChart
               startDate={responseData.startDate}
@@ -345,7 +345,7 @@ export default function Search(props) {
 
       if (responseData.ageResults) {
         if (!ageRoot) {
-          const newRoot2 = createRoot(document.getElementById("graph2"));
+          const newRoot2 = createRoot(document.getElementById("ageGraph"));
           newRoot2.render(
             <AgeChart
               startDate={responseData.startDate}
@@ -370,7 +370,7 @@ export default function Search(props) {
       if (responseData.deviceResults) {
         // Check if ageResults is available
         if (!deviceRoot) {
-          const newRoot3 = createRoot(document.getElementById("graph3"));
+          const newRoot3 = createRoot(document.getElementById("deviceGraph"));
           newRoot3.render(
             <DeviceChart
               startDate={responseData.startDate}
@@ -395,7 +395,7 @@ export default function Search(props) {
       if (responseData.clickResults) {
         // Check if ageResults is available
         if (!clickRoot) {
-          const newRoot4 = createRoot(document.getElementById("graph4"));
+          const newRoot4 = createRoot(document.getElementById("clickGraph"));
           newRoot4.render(
             <ClickChart
               startDate={responseData.startDate}
@@ -428,7 +428,7 @@ export default function Search(props) {
   useEffect(() => {
     if (responseData.startDate && responseData.endDate) {
       if (!root) {
-        const newRoot = createRoot(document.getElementById("graph1"));
+        const newRoot = createRoot(document.getElementById("genderGraph"));
         newRoot.render(
           <GenderChart
             startDate={responseData.startDate}
@@ -452,7 +452,7 @@ export default function Search(props) {
 
     if (responseData.ageResults) {
       if (!ageRoot) {
-        const newRoot2 = createRoot(document.getElementById("graph2"));
+        const newRoot2 = createRoot(document.getElementById("ageGraph"));
         newRoot2.render(
           <AgeChart
             startDate={responseData.startDate}
@@ -477,7 +477,7 @@ export default function Search(props) {
     if (responseData.deviceResults) {
       // Check if ageResults is available
       if (!deviceRoot) {
-        const newRoot3 = createRoot(document.getElementById("graph3"));
+        const newRoot3 = createRoot(document.getElementById("deviceGraph"));
         newRoot3.render(
           <DeviceChart
             startDate={responseData.startDate}
@@ -502,7 +502,7 @@ export default function Search(props) {
     if (responseData.clickResults) {
       // Check if ageResults is available
       if (!clickRoot) {
-        const newRoot4 = createRoot(document.getElementById("graph4"));
+        const newRoot4 = createRoot(document.getElementById("clickGraph"));
         newRoot4.render(
           <ClickChart
             startDate={responseData.startDate}
@@ -566,7 +566,7 @@ export default function Search(props) {
                       setClickFilterData={setClickFilterData}
                     />
                     {errorMessage && (
-                      <p className="text-red-500 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                      <p className="text-red-500 absolute top-1/2 left-24 transform -translate-x-1/2 -translate-y-1/2">
                         {errorMessage}
                       </p>
                     )}
@@ -682,17 +682,17 @@ export default function Search(props) {
 
           <div className="self-center flex w-full max-w-[1500px] flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
             <div className="grid gap-5 lg:grid-cols-4">
-              <div id="graph4" className="col-span-3">
+              <div id="clickGraph" className="col-span-3">
                 {" "}
               </div>
 
-              <div id="graph3"> </div>
+              <div id="deviceGraph"> </div>
 
-              <div id="graph2" className="col-span-2">
+              <div id="ageGraph" className="col-span-2">
                 {" "}
               </div>
 
-              <div id="graph1" className="col-span-2">
+              <div id="genderGraph" className="col-span-2">
                 {" "}
               </div>
             </div>

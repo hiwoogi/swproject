@@ -20,9 +20,10 @@ export default function ComparingSearch(props) {
   const ACCESS_TOKEN = "ACCESS_TOKEN";
   const [tags, setTags] = useState([]);
 
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleAddition = (tag) => {
     const maxTags = 5;
-
     if (tags.length < maxTags) {
       const newKeyword = {
         name: tag.text,
@@ -47,6 +48,9 @@ export default function ComparingSearch(props) {
           keyword: [...prevFilterData.keyword, newKeyword],
         }));
       }
+      setErrorMessage("");
+    } else {
+      setErrorMessage("키워드 비교는 5개까지만 가능합니다.");
     }
   };
 
@@ -100,8 +104,6 @@ export default function ComparingSearch(props) {
   const [clickRoot, setClickRoot] = useState(null);
   const [isTrend, setIsTrend] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
-  const [errorMessage, setErrorMessage] = useState("");
 
   const [responseData, setResponseData] = useState({
     startDate: null,
@@ -210,12 +212,10 @@ export default function ComparingSearch(props) {
   };
 
   const handleButtonClick = () => {
-    const form = document.getElementById("searchForm");
-
-    if (form) {
-      const formData = new FormData(form);
-      const keyword = formData.get("keyword");
-
+    if (tags.length === 0) {
+      setErrorMessage("키워드를 추가하세요.");
+    } else {
+      setErrorMessage("");
       handleSubmit(new Event("submit"));
     }
   };
@@ -258,7 +258,7 @@ export default function ComparingSearch(props) {
     if (responseData.clickResults) {
       // Check if ageResults is available
       if (!clickRoot) {
-        const newRoot4 = createRoot(document.getElementById("graph4"));
+        const newRoot4 = createRoot(document.getElementById("clickGraph"));
         newRoot4.render(
           <ClickChart
             startDate={responseData.startDate}
@@ -308,26 +308,26 @@ export default function ComparingSearch(props) {
                 </div>
                 <div className="relative flex flex-col items-center">
                   <div className="self-center flex items-start gap-5 ml-5 mt-20 max-md:max-w-full max-md:flex-wrap max-md:mt-10">
-                    
+
                     <ReactTags
                       tags={tags}
                       handleAddition={handleAddition}
                       handleDelete={handleDelete}
-                      placeholder="비교할 키워드들을 입력해주세요"
+                      placeholder="비교할 키워드들을 추가하세요"
                       inputFieldPosition="top"
+                      allowDeleteFromEmptyInput={false}
                       classNames={{
                         tagInput:
                           "text-black text-xl leading-8 uppercase border w-[600px] h-[40px] md:w-[450px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300",
-                        tags: "flex flex-wrap max-h-[100px]  text-black text-lg leading-10 justify-center text-center  ", // Added container style
+                        tags: "flex flex-wrap max-h-[100px] text-black text-lg leading-10 justify-center text-center  ", // Added container style
                         tagInputField: "w-full", // Adjust  as needed
                         selected: "selected-tag", // Add this if you want to style the selected tags
-                        tag: "ml-1 mr-2 mb-2 inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700", // Add this if you want to style individual tags
+                        tag: "ml-2 mb-2 inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700", // Add this if you want to style individual tags
                         remove: "remove-tag", // Add this if you want to style the remove icon on tags
                       }}
                     />
-
                     {errorMessage && (
-                      <p className="text-red-500 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                      <p className="text-red-500 absolute top-1/2 left-10 transform -translate-y-1/2">
                         {errorMessage}
                       </p>
                     )}
@@ -381,7 +381,7 @@ export default function ComparingSearch(props) {
                     <select
                       // defaultValue={field ? field : "50000000"}
                       name="며칠전인가조회"
-                      onChange={(e) => {}}
+                      onChange={(e) => { }}
                       className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
                     >
                       <option value="하루전이름">하루 전</option>
@@ -450,7 +450,7 @@ export default function ComparingSearch(props) {
 
           <div className="self-center flex w-full max-w-[1500px] flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
             <div className="">
-              <div id="graph4">
+              <div id="clickGraph" className="">
                 {" "}
               </div>
             </div>
