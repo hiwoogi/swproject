@@ -3,7 +3,7 @@ import React from "react";
 export default function AgeCheckbox({ handleAgeCheckboxChange,isAllAgesChecked}) {
   return (
     <>
-      <div>
+      <div className="self-stretch flex items-center justify-between">
         <input
           type="checkbox"
           id="all-age"

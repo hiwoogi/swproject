@@ -1,12 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
-export default function GenderChart({ startDate, endDate, timeUnit, genderResults }) {
+export default function GenderChart({ genderResults }) {
   const chartRef = useRef(null);
-
-  // console.log(startDate); // "2017-08-01"
-  // console.log(endDate); // "2017-09-30"
-  // console.log(timeUnit); // "month"
 
   const filterF = (data) => data.filter((item) => item.group === 'f');
   const filterM = (data) => data.filter((item) => item.group === 'm');
@@ -19,16 +15,6 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
 
   useEffect(() => {
     if (genderResults.length > 0) {
-      // console.log(genderResults[0].title); // 결과 데이터
-      // console.log(genderResults[0].data[0]);
-
-      // genderResults[0].data.map((data, index) => {
-      //   console.log(index);
-      //   console.log('기간', data.period);
-      //   console.log('비율', data.ratio);
-      //   console.log('성별그룹', data.group);
-      // });
-
       const filteredFData = filterF(genderResults[0].data);
       const filteredMData = filterM(genderResults[0].data);
 
@@ -37,7 +23,6 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
 
       // console.log('female 상대적 비율:', female);
       // console.log('male 상대적 비율:', male);
-
 
       const ctx = document.getElementById('genderChart');
       if (ctx) {
@@ -90,9 +75,6 @@ export default function GenderChart({ startDate, endDate, timeUnit, genderResult
 
   return (
     <div className="w-full h-full border-2 border-gray-300 p-4 rounded-lg flex justify-center items-center overflow-hidden">
-      {/* {startDate} ~ {endDate} <br />
-      -{timeUnit} <br />
-      GenderChart */}
       <canvas id="genderChart" />
     </div>
   );

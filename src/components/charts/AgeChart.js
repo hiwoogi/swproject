@@ -1,65 +1,33 @@
 import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 
-export default function AgeChart({
-  startDate,
-  endDate,
-  timeUnit,
-  ageResults,
-}) {
+export default function AgeChart({ ageResults }) {
   const chartRef = useRef(null);
 
-  // console.log("시작 날짜 :",startDate); // "2017-08-01"
-  // console.log("종료 날짜 :",endDate); // "2017-09-30"
-  // console.log("시간 단위 : ", timeUnit); // "month"
-  // console.log("연령 결과:", ageResults);
+  const filterData = (data, group) => data.filter(item => item.group === group);
 
-  
-  const filterA = (data) => data.filter((item) => item.group === '10');
-  const filterB = (data) => data.filter((item) => item.group === '20');
-  const filterC = (data) => data.filter((item) => item.group === '30');
-  const filterD = (data) => data.filter((item) => item.group === '40');
-  const filterE = (data) => data.filter((item) => item.group === '50');
-  const filterF = (data) => data.filter((item) => item.group === '60');
-
-  const calculateRelativeRatio = (filteredData) => { //상대 비율 구하는 함수
-    const sum = filteredData.reduce((total, item) => total + item.ratio, 0);
-    const totalSum = ageResults[0].data.reduce((total, item) => total + item.ratio, 0);
-    return (sum / totalSum) * 100;
-  };
+  //상대 비율 구하는 함수
+  const calculateRelativeRatio = (filteredData, totalSum) =>
+    ((filteredData.reduce((total, item) => total + item.ratio, 0) / totalSum) * 100).toFixed(2);
 
   useEffect(() => {
     if (ageResults.length > 0) {
-      // console.log(ageResults[0].title); // 결과 데이터
-      // console.log(ageResults[0].data[0]);
+      const totalSum = ageResults[0].data.reduce((total, item) => total + item.ratio, 0);
 
-      // ageResults[0].data.map((data, index) => {
-      //   console.log(index);
-      //   console.log('기간', data.period);
-      //   console.log('비율', data.ratio);
-      //   console.log('나이 그룹', data.group);
-      // });
+      const ageGroups = ['10', '20', '30', '40', '50', '60'];
+      const relativeRatios = ageGroups.map(group => {
+        const filteredData = filterData(ageResults[0].data, group);
+        return calculateRelativeRatio(filteredData, totalSum);
+      });
 
-      const filteredAData = filterA(ageResults[0].data);
-      const filteredBData = filterB(ageResults[0].data);
-      const filteredCData = filterC(ageResults[0].data);
-      const filteredDData = filterD(ageResults[0].data);
-      const filteredEData = filterE(ageResults[0].data);
-      const filteredFData = filterF(ageResults[0].data);
-
-      const A = calculateRelativeRatio(filteredAData);
-      const B = calculateRelativeRatio(filteredBData);
-      const C = calculateRelativeRatio(filteredCData);
-      const D = calculateRelativeRatio(filteredDData);
-      const E = calculateRelativeRatio(filteredEData);
-      const F = calculateRelativeRatio(filteredFData);
-
-      // console.log('10대 상대적 비율:', A);
-      // console.log('20대 상대적 비율:', B);
-      // console.log('30대 상대적 비율:', C);
-      // console.log('40대 상대적 비율:', D);
-      // console.log('50대 상대적 비율:', E);
-      // console.log('60대 상대적 비율:', F);
+      const colors = [
+        'rgba(254, 67, 101, 1)',
+        'rgba(252, 157, 154, 1)',
+        'rgba(249, 205, 173, 1)',
+        'rgba(200, 200, 169, 1)',
+        'rgba(237, 229, 116, 1)',
+        'rgba(249, 212, 35, 1)',
+      ];
 
       const ctx = document.getElementById('ageChart');
       if (ctx) {
@@ -72,24 +40,8 @@ export default function AgeChart({
             labels: ['10대', '20대', '30대', '40대', '50대', '60대'],
             datasets: [
               {
-                data: [A, B, C, D, E, F],
-                backgroundColor: [
-                  'rgba(254, 67, 101, 1)',
-                  'rgba(252, 157, 154, 1)',
-                  'rgba(249, 205, 173, 1)',
-                  'rgba(200, 200, 169, 1)',
-                  'rgba(237, 229, 116, 1)',
-                  'rgba(249, 212, 35, 1)',
-                ],
-                // borderColor: [
-                //   'rgba(255, 99, 132, 0.5)',
-                //   'rgba(54, 162, 235, 0.5)',
-                //   'rgba(255, 206, 86, 0.5)',
-                //   'rgba(75, 192, 192, 0.5)',
-                //   'rgba(153, 102, 255, 0.5)',
-                //   'rgba(255, 159, 64, 0.5)',
-                // ],
-                // borderWidth: 1,
+                data: relativeRatios,
+                backgroundColor: colors,
               },
             ],
           },
@@ -135,12 +87,8 @@ export default function AgeChart({
     }
   }, [ageResults]);
 
-
   return (
     <div className="w-full h-full border-2 border-gray-300 p-4 rounded-lg flex justify-center items-center">
-      {/* {startDate} ~ {endDate} <br />
-      -{timeUnit} <br />
-      AgeChart */}
       <canvas id="ageChart" />
     </div>
   );

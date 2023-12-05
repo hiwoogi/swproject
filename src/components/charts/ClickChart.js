@@ -1,21 +1,45 @@
 import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 
-export default function ClickChart({
-  startDate,
-  endDate,
-  timeUnit,
-  clickResults,
-}) {
+export default function ClickChart({ clickResults }) {
   const chartRef = useRef(null);
 
   useEffect(() => {
-    if (clickResults.length > 0) {
+    if (clickResults && clickResults.length > 0) {
+      const datasets = [];
+      const labels = [];
 
-      const data = clickResults[0].data;
+      clickResults.forEach((result, index) => {
+        if (result.data) {
 
-      const days = data.map(item => item.period);
-      const ratios = data.map(item => item.ratio);
+          if (index === 0) { //labels=기간
+            labels.push(...result.data.map(item => item.period));
+          }
+
+          const title = result.title || `Dataset ${index + 1}`; //키워드
+          const data = result.data.map(item => item.ratio); //각 데이터 값
+
+          const colors = [
+            'rgba(48, 99, 142, 1)',
+            'rgba(209, 73, 91, 1)',
+            'rgba(237, 174, 73, 1)',
+            'rgba(0, 121, 140, 1)',
+            'rgba(0, 61, 91, 1)',
+          ];
+          const colorIndex = index % colors.length;
+
+          datasets.push({
+            label: title,
+            data,
+            borderColor: colors[colorIndex],
+            backgroundColor: colors[colorIndex],
+            borderWidth: 4,
+            pointRadius: 2, //포인트 크기 조절
+            lineTension: 0.3, //곡선 설정
+          });
+        }
+      });
+
 
       const ctx = document.getElementById('clickChart');
       if (ctx) {
@@ -25,24 +49,14 @@ export default function ClickChart({
         chartRef.current = new Chart(ctx, {
           type: 'line',
           data: {
-            labels: days,
-            datasets: [
-              {
-                data: ratios,
-                borderColor: 'rgba(106, 96, 169, 1)',
-                borderWidth: 4,
-                //pointStyle: false, //포인트 없애려면 false
-                pointRadius: 2, //포인트 크기 조절
-                backgroundColor: 'rgba(111, 50, 255, 1)',
-                lineTension: 0.3, //곡선 설정
-              },
-            ],
+            labels,
+            datasets,
           },
           options: {
             scales: {
               x: {
                 ticks: {
-                  font : {
+                  font: {
                     size: 15,
                   }
                 }
@@ -58,7 +72,11 @@ export default function ClickChart({
             },
             plugins: {
               legend: {
-                display: false,
+                labels: {
+                  font: {
+                    size: 20,
+                  }
+                }
               },
               tooltip: {
                 bodySpacing: 20,
@@ -83,9 +101,6 @@ export default function ClickChart({
 
   return (
     <div className="w-full h-full border-2 border-gray-300 p-4 rounded-lg flex justify-center items-center">
-      {/* {startDate} ~ {endDate} <br />
-      -{timeUnit} <br />
-      ClickChart */}
       <canvas id="clickChart" />
     </div>
   );

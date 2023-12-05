@@ -449,8 +449,8 @@ export default function ComparingSearch(props) {
           </form>
 
           <div className="self-center flex w-full max-w-[1500px] flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
-            <div className="grid gap-5 lg:grid-cols-4">
-              <div id="graph4" className="col-span-3">
+            <div className="">
+              <div id="graph4">
                 {" "}
               </div>
             </div>

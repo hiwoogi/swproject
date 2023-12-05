@@ -1,12 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 
-export default function DeviceChart({
-  startDate,
-  endDate,
-  timeUnit,
-  deviceResults,
-}) {
+export default function DeviceChart({ deviceResults }) {
   const chartRef = useRef(null);
 
 const filterPc = (data) => data.filter((item) => item.group === 'pc');
@@ -42,7 +37,6 @@ const filteredPcData = filterPc(deviceResults[0].data);
               {
                 data: [pc, mobail],
                 backgroundColor: ['rgba(208, 158, 136, 1)', 'rgba(155, 103, 129, 1)'],
-                // borderColor: [ 'rgba(153, 102, 51, 0.6)', 'rgba(51, 206, 86, 0.6)'],
               },
             ],
           },
@@ -78,9 +72,6 @@ const filteredPcData = filterPc(deviceResults[0].data);
   
   return (
     <div className="w-full h-full border-2 border-gray-300 p-4 rounded-lg flex justify-center items-center">
-      {/* {startDate} ~ {endDate} <br />
-      -{timeUnit} <br />
-      DeviceChart */}
       <canvas id="deviceChart" />
     </div>
   );
