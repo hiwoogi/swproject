@@ -307,20 +307,22 @@ export default function ComparingSearch(props) {
                   />
                 </div>
                 <div className="relative flex flex-col items-center">
-                  <div className="self-center flex items-start gap-5 mt-20 max-md:max-w-full max-md:flex-wrap max-md:mt-10">
+                  <div className="self-center flex items-start gap-5 ml-5 mt-20 max-md:max-w-full max-md:flex-wrap max-md:mt-10">
+                    
                     <ReactTags
                       tags={tags}
                       handleAddition={handleAddition}
                       handleDelete={handleDelete}
-                      placeholder="태그를 입력해주세요"
-                      inputFieldPosition="inline"
+                      placeholder="비교할 키워드들을 입력해주세요"
+                      inputFieldPosition="top"
                       classNames={{
-                        tagInput: 'text-black text-xl leading-8 uppercase border w-[300px] h-[40px] md:w-[300px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300',
-                        tags: 'flex flex-wrap max-h-[100px] overflow-y-auto', // Added container style
-                        tagInputField: 'w-full', // Adjust as needed
-                        selected: 'selected-tag', // Add this if you want to style the selected tags
-                        tag: 'tag-style', // Add this if you want to style individual tags
-                        remove: 'remove-tag', // Add this if you want to style the remove icon on tags
+                        tagInput:
+                          "text-black text-xl leading-8 uppercase border w-[600px] h-[40px] md:w-[450px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300",
+                        tags: "flex flex-wrap max-h-[100px]  text-black text-lg leading-10 justify-center text-center  ", // Added container style
+                        tagInputField: "w-full", // Adjust  as needed
+                        selected: "selected-tag", // Add this if you want to style the selected tags
+                        tag: "ml-1 mr-2 mb-2 inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700", // Add this if you want to style individual tags
+                        remove: "remove-tag", // Add this if you want to style the remove icon on tags
                       }}
                     />
 
@@ -332,7 +334,7 @@ export default function ComparingSearch(props) {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
+                {/* <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
                   <SelectPeriod
                     setFilterData={setFilterData}
                     setClickFilterData={setClickFilterData}
@@ -363,12 +365,48 @@ export default function ComparingSearch(props) {
                     value={dayjs(filterData.endDate)}
                     onDateChange={handleEndDateChange}
                   />
-                </div>
+                </div> */}
               </div>
 
               <div className="flex w-[1500] max-w-full grow flex-col ml-5 self-start max-md:mt-10">
+                <div className="flex gap-4 ">
+                  <div className="flex items-center gap-3  mt-10 self-start max-md:ml-2.5 max-md:mt-10">
+                    <SelectPeriod
+                      setFilterData={setFilterData}
+                      setClickFilterData={setClickFilterData}
+                    />
+                  </div>
+
+                  <div className="flex items-center gap-3 ml-5 mt-10 self-start max-md:ml-2.5 max-md:mt-10">
+                    <select
+                      // defaultValue={field ? field : "50000000"}
+                      name="며칠전인가조회"
+                      onChange={(e) => {}}
+                      className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
+                    >
+                      <option value="하루전이름">하루 전</option>
+                      <option value="일주일전이름">일주일 전</option>
+                      <option value="한달전이름">한 달 전</option>
+                      <option value="직접선택이름">직접 선택</option>
+                    </select>
+                  </div>
+
+                  <div className="flex items-center gap-3 ml-5 mt-10 self-start max-md:ml-2.5 max-md:mt-10 ">
+                    <SingleDatePicker
+                      value={dayjs(filterData.startDate)}
+                      onDateChange={handleStartDateChange}
+                    />
+                    -
+                    <SingleDatePicker
+                      value={dayjs(filterData.endDate)}
+                      onDateChange={handleEndDateChange}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="flex w-[1500] max-w-full grow flex-col ml-5 self-start max-md:mt-10">
                 <div className="flex gap-4 mt-8">
-                  <div className="self-stretch flex items-center justify-between gap-2">
+                  <div className="self-stretch flex items-center justify-between gap-2 ml-2">
                     <AgeCheckbox
                       handleAgeCheckboxChange={handleAgeCheckboxChange}
                       isAllAgesChecked={isAllAgesChecked}

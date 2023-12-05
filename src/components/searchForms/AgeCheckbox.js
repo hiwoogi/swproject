@@ -14,7 +14,7 @@ export default function AgeCheckbox({ handleAgeCheckboxChange,isAllAgesChecked})
         />
         <label
           htmlFor="all-age"
-          className="text-black text-base font-light self-center whitespace-nowrap my-auto"
+          className="ml-2 text-black text-base font-light self-center whitespace-nowrap my-auto"
         >
           전체
         </label>
