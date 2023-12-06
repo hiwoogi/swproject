@@ -40,16 +40,16 @@ export default function TreeMap({ trend, field }) {
 
       //@@colorsMap
       let colorMap = {
-        50000000: 'skyblue',
-        50000007: 'green',
-        50000003: 'purple',
-        50000006: 'red',
-        50005542: 'orange',
-        50000002: 'yellow',
-        50000004: 'blue',
-        50000005: 'olive',
-        50000008: 'hotpink',
-        50000009: 'brown',
+        50000000: 'skyblue', //패션
+        50000007: 'green', //스포츠
+        50000003: 'purple', //가전
+        50005542: 'orange', //도서
+        50000006: 'red', //식품
+        50000002: 'yellow', //미용
+        50000004: 'blue', //가구
+        50000005: 'olive', //육아
+        50000008: 'hotpink', //생활건강
+        50000009: 'brown', //여가생활
       };
       let colors = colorMap[field];
 

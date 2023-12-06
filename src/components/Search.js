@@ -20,12 +20,15 @@ import GenderRadio from "./searchForms/GenderRadio";
 import { WithContext as ReactTags } from "react-tag-input";
 
 export default function Search(props) {
- 
+  const [selectedOption, setSelectedOption] = useState("day"); // Initial value can be set based on your default selection
+
+  
+
   const [filterData, setFilterData] = useState({
     keyword: "",
     category: "50000000",
     timeUnit: "date",
-    startDate: dayjs().subtract(30, "days").format("YYYY-MM-DD"),
+    startDate: dayjs().subtract(2, "days").format("YYYY-MM-DD"),
     endDate: dayjs().format("YYYY-MM-DD"),
     device: "",
     ages: [],
@@ -41,12 +44,42 @@ export default function Search(props) {
     ],
     category: "50000000",
     timeUnit: "date",
-    startDate: dayjs().subtract(30, "days").format("YYYY-MM-DD"),
+    startDate: dayjs().subtract(2, "days").format("YYYY-MM-DD"),
     endDate: dayjs().format("YYYY-MM-DD"),
     device: "",
     ages: [],
     gender: "",
   });
+  const handleSelectChange = (e) => {
+    const selectedValue = e.target.value;
+    setSelectedOption(selectedValue);
+
+    let newStartDate = filterData.startDate;
+    let newEndDate = filterData.endDate;
+
+    if (selectedValue === "day") {
+      newStartDate = dayjs().subtract(2, "day").format("YYYY-MM-DD");
+      newEndDate = dayjs().format("YYYY-MM-DD");
+    } else if (selectedValue === "week") {
+      newStartDate = dayjs().subtract(1, "week").format("YYYY-MM-DD");
+      newEndDate = dayjs().format("YYYY-MM-DD");
+    } else if (selectedValue === "month") {
+      newStartDate = dayjs().subtract(1, "month").format("YYYY-MM-DD");
+      newEndDate = dayjs().format("YYYY-MM-DD");
+    }
+
+    setFilterData({
+      ...filterData,
+      startDate: newStartDate,
+      endDate: newEndDate,
+    });
+
+    setClickFilterData({
+      ...clickFilterData,
+      startDate: newStartDate,
+      endDate: newEndDate,
+    });
+  };
   const [root, setRoot] = useState(null);
 
   const [ageRoot, setAgeRoot] = useState(null);
@@ -93,11 +126,9 @@ export default function Search(props) {
   };
 
   useEffect(() => {
-    console.log(clickFilterData.keyword)
-  
-    
-  }, [clickFilterData])
-  
+    console.log(clickFilterData.keyword);
+  }, [clickFilterData]);
+
   //react tag input
   const handleKeywordChange = (newKeywords) => {
     setClickFilterData((prevFilterData) => ({
@@ -532,7 +563,6 @@ export default function Search(props) {
     responseData.clickResults,
   ]);
 
-
   return (
     <>
       {isLoading ? (
@@ -584,7 +614,8 @@ export default function Search(props) {
                   <select
                     // defaultValue={field ? field : "50000000"}
                     name=""
-                    onChange={(e) => {}}
+                    onChange={handleSelectChange}
+                    value={selectedOption}
                     className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
                   >
                     <option value="day">하루 전</option>
@@ -593,18 +624,19 @@ export default function Search(props) {
                     <option value="custom">직접 선택</option>
                   </select>
                 </div>
-
-                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10 ">
-                  <SingleDatePicker
-                    value={dayjs(filterData.startDate)}
-                    onDateChange={handleStartDateChange}
-                  />
-                  -
-                  <SingleDatePicker
-                    value={dayjs(filterData.endDate)}
-                    onDateChange={handleEndDateChange}
-                  />
-                </div>
+                {selectedOption === "custom" && (
+                  <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10 ">
+                    <SingleDatePicker
+                      value={dayjs(filterData.startDate)}
+                      onDateChange={handleStartDateChange}
+                    />
+                    -
+                    <SingleDatePicker
+                      value={dayjs(filterData.endDate)}
+                      onDateChange={handleEndDateChange}
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="flex w-[1500] max-w-full grow flex-col ml-5 self-start max-md:mt-10">

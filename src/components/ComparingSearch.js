@@ -75,7 +75,7 @@ export default function ComparingSearch(props) {
     keyword: "",
     category: "50000000",
     timeUnit: "date",
-    startDate: dayjs().subtract(30, "days").format("YYYY-MM-DD"),
+    startDate: dayjs().subtract(2, "days").format("YYYY-MM-DD"),
     endDate: dayjs().format("YYYY-MM-DD"),
     device: "",
     ages: [],
@@ -91,7 +91,7 @@ export default function ComparingSearch(props) {
     ],
     category: "50000000",
     timeUnit: "date",
-    startDate: dayjs().subtract(30, "days").format("YYYY-MM-DD"),
+    startDate: dayjs().subtract(2, "days").format("YYYY-MM-DD"),
     endDate: dayjs().format("YYYY-MM-DD"),
     device: "",
     ages: [],
@@ -101,6 +101,38 @@ export default function ComparingSearch(props) {
     console.log(clickFilterData);
   }, [clickFilterData]);
 
+  const [selectedOption, setSelectedOption] = useState("day"); // Initial value can be set based on your default selection
+
+  const handleSelectChange = (e) => {
+    const selectedValue = e.target.value;
+    setSelectedOption(selectedValue);
+
+    let newStartDate = filterData.startDate;
+    let newEndDate = filterData.endDate;
+
+    if (selectedValue === "day") {
+      newStartDate = dayjs().subtract(2, "day").format("YYYY-MM-DD");
+      newEndDate = dayjs().format("YYYY-MM-DD");
+    } else if (selectedValue === "week") {
+      newStartDate = dayjs().subtract(1, "week").format("YYYY-MM-DD");
+      newEndDate = dayjs().format("YYYY-MM-DD");
+    } else if (selectedValue === "month") {
+      newStartDate = dayjs().subtract(1, "month").format("YYYY-MM-DD");
+      newEndDate = dayjs().format("YYYY-MM-DD");
+    }
+
+    setFilterData({
+      ...filterData,
+      startDate: newStartDate,
+      endDate: newEndDate,
+    });
+
+    setClickFilterData({
+      ...clickFilterData,
+      startDate: newStartDate,
+      endDate: newEndDate,
+    });
+  };
   const [clickRoot, setClickRoot] = useState(null);
   const [isTrend, setIsTrend] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -308,7 +340,6 @@ export default function ComparingSearch(props) {
                 </div>
                 <div className="relative flex flex-col items-center">
                   <div className="self-center flex items-start gap-5 ml-5 mt-20 max-md:max-w-full max-md:flex-wrap max-md:mt-10">
-
                     <ReactTags
                       tags={tags}
                       handleAddition={handleAddition}
@@ -380,27 +411,32 @@ export default function ComparingSearch(props) {
                   <div className="flex items-center gap-3 ml-5 mt-10 self-start max-md:ml-2.5 max-md:mt-10">
                     <select
                       // defaultValue={field ? field : "50000000"}
-                      name="며칠전인가조회"
-                      onChange={(e) => { }}
+                      name=""
+                      onChange={handleSelectChange}
+                      value={selectedOption}
                       className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
                     >
-                      <option value="하루전이름">하루 전</option>
-                      <option value="일주일전이름">일주일 전</option>
-                      <option value="한달전이름">한 달 전</option>
-                      <option value="직접선택이름">직접 선택</option>
+                      <option value="day">하루 전</option>
+                      <option value="week">일주일 전</option>
+                      <option value="month">한 달 전</option>
+                      <option value="custom">직접 선택</option>
                     </select>
                   </div>
 
-                  <div className="flex items-center gap-3 ml-5 mt-10 self-start max-md:ml-2.5 max-md:mt-10 ">
-                    <SingleDatePicker
-                      value={dayjs(filterData.startDate)}
-                      onDateChange={handleStartDateChange}
-                    />
-                    -
-                    <SingleDatePicker
-                      value={dayjs(filterData.endDate)}
-                      onDateChange={handleEndDateChange}
-                    />
+                  <div className="flex items-center gap-3 ml-1  self-start max-md:ml-2.5 max-md:mt-10 ">
+                    {selectedOption === "custom" && (
+                      <div className="flex items-center gap-3 ml-5 mt-10 self-start max-md:ml-2.5 max-md:mt-10 ">
+                        <SingleDatePicker
+                          value={dayjs(filterData.startDate)}
+                          onDateChange={handleStartDateChange}
+                        />
+                        -
+                        <SingleDatePicker
+                          value={dayjs(filterData.endDate)}
+                          onDateChange={handleEndDateChange}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
