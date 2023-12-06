@@ -19,7 +19,7 @@ export default function TrendKeyword() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/test2/scrape/${field}`);
+        const response = await axios.get(`http://localhost:8080/scrape/${field}`);
         // console.log('Response:', response.data);
         const arr = response.data
         const latestData = arr[arr.length - 1]
@@ -60,6 +60,12 @@ export default function TrendKeyword() {
           <option value="50000003">가전제품</option>
           <option value="50005542">도서</option>
           <option value="50000006">식품</option>
+          <option value="50000002">미용</option>
+          <option value="50000004">가구</option>
+          <option value="50000005">육아</option>
+          <option value="50000008">생활건강</option>
+          <option value="50000009">여가생활</option>
+          
         </select>
       </div>
 

@@ -1,6 +1,12 @@
 import React from "react";
 
-export default function SelectCategory({field,setFilterData,setClickFilterData,filterData,clickFilterData}) {
+export default function SelectCategory({
+  field,
+  setFilterData,
+  setClickFilterData,
+  filterData,
+  clickFilterData,
+}) {
   return (
     <select
       defaultValue={field ? field : "50000000"}
@@ -10,7 +16,7 @@ export default function SelectCategory({field,setFilterData,setClickFilterData,f
           ...filterData,
           category: e.target.value,
         });
-        
+
         setClickFilterData({
           ...clickFilterData,
           category: e.target.value,
@@ -23,6 +29,11 @@ export default function SelectCategory({field,setFilterData,setClickFilterData,f
       <option value="50000003">가전제품</option>
       <option value="50005542">도서</option>
       <option value="50000006">식품</option>
+      <option value="50000002">미용</option>
+      <option value="50000004">가구</option>
+      <option value="50000005">육아</option>
+      <option value="50000008">생활건강</option>
+      <option value="50000009">여가생활</option>
     </select>
   );
 }

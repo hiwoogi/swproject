@@ -24,7 +24,7 @@ export default function Login(props) {
     console.log("Password:", password);
 
     try {
-      const apiUrl = 'http://localhost:8080/test3/login';
+      const apiUrl = 'http://localhost:8080/user/login';
 
       const response = await axios.post(apiUrl, {
         email: email,

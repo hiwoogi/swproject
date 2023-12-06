@@ -15,7 +15,7 @@ export async function makeClickChartData(filterData, clickFilterData, setRespons
       const [clickResponse] =
         await Promise.all([
 
-          axios.post(baseUrl + "/test/click", clickFilterData, { headers }),
+          axios.post(baseUrl + "/naverapi/click", clickFilterData, { headers }),
         ]);
 
 

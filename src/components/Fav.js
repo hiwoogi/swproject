@@ -25,7 +25,7 @@ export default function Fav() {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [editedContents, setEditedContents] = useState();
-  const [originalContents, setOriginalContents] = useState(''); 
+  const [originalContents, setOriginalContents] = useState("");
   const fetchData = async () => {
     let headers = {
       "Content-Type": "application/json",
@@ -124,7 +124,6 @@ export default function Fav() {
   useEffect(() => {
     console.log(responseData);
     setEditedContents(responseData.contents);
-    setIsEditing(false)
   }, [responseData]);
 
   const handleEditStart = () => {
@@ -208,10 +207,17 @@ export default function Fav() {
                               </div>
                             ) : (
                               <div>
-                                <textarea id="message" rows="4" readOnly  class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here...">
-                                {editedContents}
+                                <textarea
+                                  id="message"
+                                  rows="4"
+                                  value={editedContents}
+                                  readOnly
+                                  class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                  placeholder="내용이 존재하지 않습니다."
+                                >
+                                  {editedContents}
                                 </textarea>
-                                
+
                                 <button
                                   onClick={handleEditStart}
                                   className=" mt-2 p-2 w-24 border rounded-3xl border-solid border-gray-300"

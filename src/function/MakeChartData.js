@@ -14,10 +14,10 @@ export async function makeChartData(filterData, clickFilterData, setResponseData
       }
       const [genderResponse, ageResponse, deviceResponse, clickResponse] =
         await Promise.all([
-          axios.post(baseUrl + "/test/gender", filterData, { headers }),
-          axios.post(baseUrl + "/test/age", filterData, { headers }),
-          axios.post(baseUrl + "/test/device", filterData, { headers }),
-          axios.post(baseUrl + "/test/click", clickFilterData, { headers }),
+          axios.post(baseUrl + "/naverapi/gender", filterData, { headers }),
+          axios.post(baseUrl + "/naverapi/age", filterData, { headers }),
+          axios.post(baseUrl + "/naverapi/device", filterData, { headers }),
+          axios.post(baseUrl + "/naverapi/click", clickFilterData, { headers }),
         ]);
 
       

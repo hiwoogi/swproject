@@ -80,7 +80,7 @@ export default function Signup(props) {
     try {
       if (validateForm()) {
         const response = await axios.post(
-          baseUrl + `/test3/signup`,
+          baseUrl + `/user/signup`,
           signupForm
         );
         console.log("Response:", response.data);

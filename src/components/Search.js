@@ -583,14 +583,14 @@ export default function Search(props) {
                 <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
                   <select
                     // defaultValue={field ? field : "50000000"}
-                    name="며칠전인가조회"
+                    name=""
                     onChange={(e) => {}}
                     className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
                   >
-                    <option value="하루전이름">하루 전</option>
-                    <option value="일주일전이름">일주일 전</option>
-                    <option value="한달전이름">한 달 전</option>
-                    <option value="직접선택이름">직접 선택</option>
+                    <option value="day">하루 전</option>
+                    <option value="week">일주일 전</option>
+                    <option value="month">한 달 전</option>
+                    <option value="custom">직접 선택</option>
                   </select>
                 </div>
 
