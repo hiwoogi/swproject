@@ -75,7 +75,7 @@ export default function ComparingSearch(props) {
     keyword: "",
     category: "50000000",
     timeUnit: "date",
-    startDate: dayjs().subtract(2, "days").format("YYYY-MM-DD"),
+    startDate: dayjs().subtract(1, "month").format("YYYY-MM-DD"),
     endDate: dayjs().format("YYYY-MM-DD"),
     device: "",
     ages: [],
@@ -91,7 +91,7 @@ export default function ComparingSearch(props) {
     ],
     category: "50000000",
     timeUnit: "date",
-    startDate: dayjs().subtract(2, "days").format("YYYY-MM-DD"),
+    startDate: dayjs().subtract(1, "month").format("YYYY-MM-DD"),
     endDate: dayjs().format("YYYY-MM-DD"),
     device: "",
     ages: [],
@@ -101,7 +101,7 @@ export default function ComparingSearch(props) {
     console.log(clickFilterData);
   }, [clickFilterData]);
 
-  const [selectedOption, setSelectedOption] = useState("day"); // Initial value can be set based on your default selection
+  const [selectedOption, setSelectedOption] = useState("month"); // Initial value can be set based on your default selection
 
   const handleSelectChange = (e) => {
     const selectedValue = e.target.value;
