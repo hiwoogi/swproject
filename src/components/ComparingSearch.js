@@ -256,29 +256,7 @@ export default function ComparingSearch(props) {
   const location = useLocation();
   const { trend, field } = location.state || {};
   //@@trend 처리 따로 빼서 확인
-  useEffect(() => {
-    if (trend && field) {
-      // Update filterData state with trend and field values
-      setFilterData((prevFilterData) => ({
-        ...prevFilterData,
-        keyword: trend,
-        category: field,
-      }));
-
-      setClickFilterData((prevFilterData) => ({
-        ...prevFilterData,
-        keyword: [
-          {
-            name: trend,
-            param: [trend],
-          },
-        ],
-        category: field,
-      }));
-
-      setIsTrend(true);
-    }
-  }, [trend, field]);
+  useEffect(() => {}, [trend, field]);
 
   useEffect(() => {
     const loadingTimeout = setTimeout(() => {
@@ -286,32 +264,7 @@ export default function ComparingSearch(props) {
     }, 500);
   }, []);
 
-  useEffect(() => {
-    if (responseData.clickResults) {
-      // Check if ageResults is available
-      if (!clickRoot) {
-        const newRoot4 = createRoot(document.getElementById("clickGraph"));
-        newRoot4.render(
-          <ClickChart
-            startDate={responseData.startDate}
-            endDate={responseData.endDate}
-            timeUnit={responseData.timeUnit}
-            clickResults={responseData.clickResults}
-          />
-        );
-        setClickRoot(newRoot4);
-      } else {
-        clickRoot.render(
-          <ClickChart
-            startDate={responseData.startDate}
-            endDate={responseData.endDate}
-            timeUnit={responseData.timeUnit}
-            clickResults={responseData.clickResults}
-          />
-        );
-      }
-    }
-  }, [responseData, clickRoot, responseData.clickResults]);
+  useEffect(() => {}, [responseData.clickResults]);
 
   return (
     <>
@@ -364,39 +317,6 @@ export default function ComparingSearch(props) {
                     )}
                   </div>
                 </div>
-
-                {/* <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
-                  <SelectPeriod
-                    setFilterData={setFilterData}
-                    setClickFilterData={setClickFilterData}
-                  />
-                </div>
-
-                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
-                  <select
-                    // defaultValue={field ? field : "50000000"}
-                    name="며칠전인가조회"
-                    onChange={(e) => {}}
-                    className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
-                  >
-                    <option value="하루전이름">하루 전</option>
-                    <option value="일주일전이름">일주일 전</option>
-                    <option value="한달전이름">한 달 전</option>
-                    <option value="직접선택이름">직접 선택</option>
-                  </select>
-                </div>
-
-                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10 ">
-                  <SingleDatePicker
-                    value={dayjs(filterData.startDate)}
-                    onDateChange={handleStartDateChange}
-                  />
-                  -
-                  <SingleDatePicker
-                    value={dayjs(filterData.endDate)}
-                    onDateChange={handleEndDateChange}
-                  />
-                </div> */}
               </div>
 
               <div className="flex w-[1500] max-w-full grow flex-col ml-5 self-start max-md:mt-10">
@@ -483,14 +403,20 @@ export default function ComparingSearch(props) {
               </div>
             </div>
           </form>
-
-          <div className="self-center flex w-full max-w-[1500px] flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
-            <div className="">
-              <div id="clickGraph" className="">
-                {" "}
+          {responseData.startDate && responseData.endDate && (
+            <div className="self-center flex w-full max-w-[1500px] flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
+              <div className="">
+                <div id="clickGraph" className="">
+                  <ClickChart
+                    startDate={responseData.startDate}
+                    endDate={responseData.endDate}
+                    timeUnit={responseData.timeUnit}
+                    clickResults={responseData.clickResults}
+                  />
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       )}
       ;
