@@ -1,14 +1,12 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { createRoot } from "react-dom/client";
 import GenderChart from "./charts/GenderChart";
 import AgeChart from "./charts/AgeChart";
 import DeviceChart from "./charts/DeviceChart";
 import ClickChart from "./charts/ClickChart";
 import { SyncLoader } from "react-spinners";
 import SingleDatePicker from "./searchForms/SingleDatePicker";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { makeChartData } from "../function/MakeChartData";
 import SelectCategory from "./searchForms/SelectCategory";
 import InputKeyword from "./searchForms/InputKeyword";
@@ -24,11 +22,11 @@ export default function FavComparingSearch(props) {
   const { state } = favLocation;
 
   // Access individual properties from the state object
-  const { filterCriteria, clickFilterCriteria, title } = state;
-
+  const { filterCriteria, clickFilterCriteria, title, field } = state;
+  console.log(field)
   const [filterData, setFilterData] = useState({
     keyword: title,
-    category: "50000000",
+    category: field,
     timeUnit: "date",
     startDate: dayjs().subtract(1, "month").format("YYYY-MM-DD"),
     endDate: dayjs().format("YYYY-MM-DD"),
@@ -44,7 +42,7 @@ export default function FavComparingSearch(props) {
         param: [title],
       },
     ],
-    category: "50000000",
+    category: field,
     timeUnit: "date",
     startDate: dayjs().subtract(1, "month").format("YYYY-MM-DD"),
     endDate: dayjs().format("YYYY-MM-DD"),
@@ -82,12 +80,8 @@ export default function FavComparingSearch(props) {
       endDate: newEndDate,
     });
   };
-  const [root, setRoot] = useState(null);
 
-  const [ageRoot, setAgeRoot] = useState(null);
-  const [deviceRoot, setDeviceRoot] = useState(null);
-  const [clickRoot, setClickRoot] = useState(null);
-  const [isTrend, setIsTrend] = useState(false);
+
   const [isLoading, setIsLoading] = useState(true);
 
   const [errorMessage, setErrorMessage] = useState("");
@@ -130,17 +124,6 @@ export default function FavComparingSearch(props) {
   useEffect(() => {
     console.log(clickFilterData.keyword);
   }, [clickFilterData]);
-
-  //react tag input
-  const handleKeywordChange = (newKeywords) => {
-    setClickFilterData((prevFilterData) => ({
-      ...prevFilterData,
-      keyword: newKeywords.map((keyword) => ({
-        name: keyword,
-        param: [keyword],
-      })),
-    }));
-  };
 
   //나이 조정
   const [isAllAgesChecked, setIsAllAgesChecked] = useState(true);
@@ -232,33 +215,7 @@ export default function FavComparingSearch(props) {
     }
   };
 
-  //@@treeMap에서 보내는 값
-  const location = useLocation();
-  const { trend, field } = location.state || {};
-  //@@trend 처리 따로 빼서 확인
-  useEffect(() => {
-    if (trend && field) {
-      // Update filterData state with trend and field values
-      setFilterData((prevFilterData) => ({
-        ...prevFilterData,
-        keyword: trend,
-        category: field,
-      }));
-
-      setClickFilterData((prevFilterData) => ({
-        ...prevFilterData,
-        keyword: [
-          {
-            name: trend,
-            param: [trend],
-          },
-        ],
-        category: field,
-      }));
-
-      setIsTrend(true);
-    }
-  }, [trend, field]);
+ 
 
   useEffect(() => {
 
@@ -436,6 +393,46 @@ export default function FavComparingSearch(props) {
               </div>
             </div>
           </div>)}
+
+          {/* {responseData.startDate && responseData.endDate && (
+          <div className="self-center flex w-full max-w-[1500px] flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
+            <div className="grid gap-5 lg:grid-cols-4">
+              <div id="clickGraph2" className="col-span-3">
+                <ClickChart
+                  startDate={responseData.startDate}
+                  endDate={responseData.endDate}
+                  timeUnit={responseData.timeUnit}
+                  clickResults={responseData.clickResults}
+                />
+              </div>
+
+              <div id="deviceGraph2">
+              <DeviceChart
+                startDate={responseData.startDate}
+                endDate={responseData.endDate}
+                timeUnit={responseData.timeUnit}
+                deviceResults={responseData.deviceResults}
+              />
+               </div>
+              <div id="ageGraph2" className="col-span-2">
+                <AgeChart
+                  startDate={responseData.startDate}
+                  endDate={responseData.endDate}
+                  timeUnit={responseData.timeUnit}
+                  ageResults={responseData.ageResults}
+                />
+              </div>
+
+              <div id="genderGraph2" className="col-span-2">
+                <GenderChart
+                  startDate={responseData.startDate}
+                  endDate={responseData.endDate}
+                  timeUnit={responseData.timeUnit}
+                  genderResults={responseData.genderResults}
+                />
+              </div>
+            </div>
+          </div>)} */}
         </div>
           
       )}

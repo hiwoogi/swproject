@@ -137,12 +137,16 @@ export default function Fav() {
       const filterCriteria = favResponse[index].filterCriteria;
       const clickFilterCriteria = favResponse[index].clickFilterCriteria;
       const title = favResponse[index].title;
+      
+      const field = JSON.parse(filterCriteria).category;
+
   
       navigate('/favcomparing', {
         state: {
           filterCriteria,
           clickFilterCriteria,
           title,
+          field
         },
       });
       // Assuming you have a route for FavComparingSearch component

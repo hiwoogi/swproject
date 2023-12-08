@@ -1,15 +1,11 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { createRoot } from "react-dom/client";
 import ClickChart from "./charts/ClickChart";
 import { SyncLoader } from "react-spinners";
 import SingleDatePicker from "./searchForms/SingleDatePicker";
-import dayjs, { Dayjs } from "dayjs";
-import FavModal from "../function/FavModal";
+import dayjs from "dayjs";
 import { makeClickChartData } from "../function/MakeClickChartData";
 import SelectCategory from "./searchForms/SelectCategory";
-import InputKeyword from "./searchForms/InputKeyword";
 import SelectPeriod from "./searchForms/SelectPeriod";
 import AgeCheckbox from "./searchForms/AgeCheckbox";
 import DeviceRadio from "./searchForms/DeviceRadio";
@@ -17,7 +13,6 @@ import GenderRadio from "./searchForms/GenderRadio";
 import { WithContext as ReactTags } from "react-tag-input";
 
 export default function ComparingSearch(props) {
-  const ACCESS_TOKEN = "ACCESS_TOKEN";
   const [tags, setTags] = useState([]);
 
   const [errorMessage, setErrorMessage] = useState("");
@@ -133,7 +128,6 @@ export default function ComparingSearch(props) {
       endDate: newEndDate,
     });
   };
-  const [clickRoot, setClickRoot] = useState(null);
   const [isTrend, setIsTrend] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 

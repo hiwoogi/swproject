@@ -1,14 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { createRoot } from "react-dom/client";
 import GenderChart from "./charts/GenderChart";
 import AgeChart from "./charts/AgeChart";
 import DeviceChart from "./charts/DeviceChart";
 import ClickChart from "./charts/ClickChart";
 import { SyncLoader } from "react-spinners";
 import SingleDatePicker from "./searchForms/SingleDatePicker";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import FavModal from "../function/FavModal";
 import { makeChartData } from "../function/MakeChartData";
 import SelectCategory from "./searchForms/SelectCategory";
@@ -17,7 +16,6 @@ import SelectPeriod from "./searchForms/SelectPeriod";
 import AgeCheckbox from "./searchForms/AgeCheckbox";
 import DeviceRadio from "./searchForms/DeviceRadio";
 import GenderRadio from "./searchForms/GenderRadio";
-import { WithContext as ReactTags } from "react-tag-input";
 
 export default function Search(props) {
   const [selectedOption, setSelectedOption] = useState("month"); // Initial value can be set based on your default selection
@@ -80,11 +78,7 @@ export default function Search(props) {
       endDate: newEndDate,
     });
   };
-  const [root, setRoot] = useState(null);
-
-  const [ageRoot, setAgeRoot] = useState(null);
-  const [deviceRoot, setDeviceRoot] = useState(null);
-  const [clickRoot, setClickRoot] = useState(null);
+  
   const [isTrend, setIsTrend] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -128,17 +122,6 @@ export default function Search(props) {
   useEffect(() => {
     console.log(clickFilterData.keyword);
   }, [clickFilterData]);
-
-  //react tag input
-  const handleKeywordChange = (newKeywords) => {
-    setClickFilterData((prevFilterData) => ({
-      ...prevFilterData,
-      keyword: newKeywords.map((keyword) => ({
-        name: keyword,
-        param: [keyword],
-      })),
-    }));
-  };
 
   //나이 조정
   const [isAllAgesChecked, setIsAllAgesChecked] = useState(true);
@@ -349,104 +332,7 @@ export default function Search(props) {
         responseData.contents,
         responseData.registrationTime
       );
-      console.log(responseData);
-      if (responseData.startDate && responseData.endDate) {
-        if (!root) {
-          const newRoot = createRoot(document.getElementById("genderGraph"));
-          newRoot.render(
-            <GenderChart
-              startDate={responseData.startDate}
-              endDate={responseData.endDate}
-              timeUnit={responseData.timeUnit}
-              genderResults={responseData.genderResults}
-            />
-          );
-          setRoot(newRoot);
-        } else {
-          root.render(
-            <GenderChart
-              startDate={responseData.startDate}
-              endDate={responseData.endDate}
-              timeUnit={responseData.timeUnit}
-              genderResults={responseData.genderResults}
-            />
-          );
-        }
-      }
-
-      if (responseData.ageResults) {
-        if (!ageRoot) {
-          const newRoot2 = createRoot(document.getElementById("ageGraph"));
-          newRoot2.render(
-            <AgeChart
-              startDate={responseData.startDate}
-              endDate={responseData.endDate}
-              timeUnit={responseData.timeUnit}
-              ageResults={responseData.ageResults}
-            />
-          );
-          setAgeRoot(newRoot2);
-        } else {
-          ageRoot.render(
-            <AgeChart
-              startDate={responseData.startDate}
-              endDate={responseData.endDate}
-              timeUnit={responseData.timeUnit}
-              ageResults={responseData.ageResults}
-            />
-          );
-        }
-      }
-
-      if (responseData.deviceResults) {
-        // Check if ageResults is available
-        if (!deviceRoot) {
-          const newRoot3 = createRoot(document.getElementById("deviceGraph"));
-          newRoot3.render(
-            <DeviceChart
-              startDate={responseData.startDate}
-              endDate={responseData.endDate}
-              timeUnit={responseData.timeUnit}
-              deviceResults={responseData.deviceResults}
-            />
-          );
-          setDeviceRoot(newRoot3);
-        } else {
-          deviceRoot.render(
-            <DeviceChart
-              startDate={responseData.startDate}
-              endDate={responseData.endDate}
-              timeUnit={responseData.timeUnit}
-              deviceResults={responseData.deviceResults}
-            />
-          );
-        }
-      }
-
-      if (responseData.clickResults) {
-        // Check if ageResults is available
-        if (!clickRoot) {
-          const newRoot4 = createRoot(document.getElementById("clickGraph"));
-          newRoot4.render(
-            <ClickChart
-              startDate={responseData.startDate}
-              endDate={responseData.endDate}
-              timeUnit={responseData.timeUnit}
-              clickResults={responseData.clickResults}
-            />
-          );
-          setClickRoot(newRoot4);
-        } else {
-          clickRoot.render(
-            <ClickChart
-              startDate={responseData.startDate}
-              endDate={responseData.endDate}
-              timeUnit={responseData.timeUnit}
-              clickResults={responseData.clickResults}
-            />
-          );
-        }
-      }
+  
     }
   }, [isLoading]);
 
@@ -457,109 +343,8 @@ export default function Search(props) {
   }, []);
 
   useEffect(() => {
-    if (responseData.startDate && responseData.endDate) {
-      if (!root) {
-        const newRoot = createRoot(document.getElementById("genderGraph"));
-        newRoot.render(
-          <GenderChart
-            startDate={responseData.startDate}
-            endDate={responseData.endDate}
-            timeUnit={responseData.timeUnit}
-            genderResults={responseData.genderResults}
-          />
-        );
-        setRoot(newRoot);
-      } else {
-        root.render(
-          <GenderChart
-            startDate={responseData.startDate}
-            endDate={responseData.endDate}
-            timeUnit={responseData.timeUnit}
-            genderResults={responseData.genderResults}
-          />
-        );
-      }
-    }
-
-    if (responseData.ageResults) {
-      if (!ageRoot) {
-        const newRoot2 = createRoot(document.getElementById("ageGraph"));
-        newRoot2.render(
-          <AgeChart
-            startDate={responseData.startDate}
-            endDate={responseData.endDate}
-            timeUnit={responseData.timeUnit}
-            ageResults={responseData.ageResults}
-          />
-        );
-        setAgeRoot(newRoot2);
-      } else {
-        ageRoot.render(
-          <AgeChart
-            startDate={responseData.startDate}
-            endDate={responseData.endDate}
-            timeUnit={responseData.timeUnit}
-            ageResults={responseData.ageResults}
-          />
-        );
-      }
-    }
-
-    if (responseData.deviceResults) {
-      // Check if ageResults is available
-      if (!deviceRoot) {
-        const newRoot3 = createRoot(document.getElementById("deviceGraph"));
-        newRoot3.render(
-          <DeviceChart
-            startDate={responseData.startDate}
-            endDate={responseData.endDate}
-            timeUnit={responseData.timeUnit}
-            deviceResults={responseData.deviceResults}
-          />
-        );
-        setDeviceRoot(newRoot3);
-      } else {
-        deviceRoot.render(
-          <DeviceChart
-            startDate={responseData.startDate}
-            endDate={responseData.endDate}
-            timeUnit={responseData.timeUnit}
-            deviceResults={responseData.deviceResults}
-          />
-        );
-      }
-    }
-
-    if (responseData.clickResults) {
-      // Check if ageResults is available
-      if (!clickRoot) {
-        const newRoot4 = createRoot(document.getElementById("clickGraph"));
-        newRoot4.render(
-          <ClickChart
-            startDate={responseData.startDate}
-            endDate={responseData.endDate}
-            timeUnit={responseData.timeUnit}
-            clickResults={responseData.clickResults}
-          />
-        );
-        setClickRoot(newRoot4);
-      } else {
-        clickRoot.render(
-          <ClickChart
-            startDate={responseData.startDate}
-            endDate={responseData.endDate}
-            timeUnit={responseData.timeUnit}
-            clickResults={responseData.clickResults}
-          />
-        );
-      }
-    }
+     
   }, [
-    responseData,
-    ageRoot,
-    deviceRoot,
-    root,
-    clickRoot,
     responseData.clickResults,
   ]);
 
@@ -712,23 +497,45 @@ export default function Search(props) {
             </div>
           </form>
 
+          {responseData.startDate && responseData.endDate && (
           <div className="self-center flex w-full max-w-[1500px] flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
             <div className="grid gap-5 lg:grid-cols-4">
               <div id="clickGraph" className="col-span-3">
-                {" "}
+                <ClickChart
+                  startDate={responseData.startDate}
+                  endDate={responseData.endDate}
+                  timeUnit={responseData.timeUnit}
+                  clickResults={responseData.clickResults}
+                />
               </div>
 
-              <div id="deviceGraph"> </div>
-
+              <div id="deviceGraph">
+              <DeviceChart
+                startDate={responseData.startDate}
+                endDate={responseData.endDate}
+                timeUnit={responseData.timeUnit}
+                deviceResults={responseData.deviceResults}
+              />
+               </div>
               <div id="ageGraph" className="col-span-2">
-                {" "}
+                <AgeChart
+                  startDate={responseData.startDate}
+                  endDate={responseData.endDate}
+                  timeUnit={responseData.timeUnit}
+                  ageResults={responseData.ageResults}
+                />
               </div>
 
               <div id="genderGraph" className="col-span-2">
-                {" "}
+                <GenderChart
+                  startDate={responseData.startDate}
+                  endDate={responseData.endDate}
+                  timeUnit={responseData.timeUnit}
+                  genderResults={responseData.genderResults}
+                />
               </div>
             </div>
-          </div>
+          </div>)}
         </div>
       )}
       ;
