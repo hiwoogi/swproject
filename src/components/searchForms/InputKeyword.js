@@ -1,10 +1,11 @@
 import React from "react";
 
-export default function InputKeyword({trend,setFilterData,setClickFilterData}) {
+export default function InputKeyword({trend,setFilterData,setClickFilterData, readonly}) {
   return (
     <input
       name="keyword"
       defaultValue={trend ? trend : ""}
+      readOnly={readonly}
       onChange={(e) => {
         const newKeyword = e.target.value;
         setFilterData((prevFilterData) => ({
