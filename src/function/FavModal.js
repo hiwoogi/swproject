@@ -3,9 +3,7 @@ import React, { useState } from 'react';
 const FavModal = ({ onClose, onSubmit, setTitle, setDescription, title, description }) => {
 
   const [errorMessage, setErrorMessage] = useState("");
-  const onTempSubmit = () => {
-    return
-  }
+ 
 
   return (
     <>

@@ -6,9 +6,12 @@ import AgeChart from "./charts/AgeChart";
 import DeviceChart from "./charts/DeviceChart";
 import ClickChart from "./charts/ClickChart";
 import { SyncLoader } from "react-spinners";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 
 export default function Fav() {
+  const navigate = useNavigate();
+
   const [isLoading, setIsLoading] = useState(true);
   const [favResponse, setFavResponse] = useState();
   const [responseData, setResponseData] = useState({
@@ -119,12 +122,37 @@ export default function Fav() {
 
   useEffect(() => {}, [isEditing]);
 
-  useEffect(() => {}, [favResponse]);
+  useEffect(() => {console.log("favres",favResponse)}, [favResponse]);
 
   useEffect(() => {
     console.log(responseData);
     setEditedContents(responseData.contents);
   }, [responseData]);
+
+  const handleComparing = () => {
+    
+    const index = favResponse.findIndex(item => item.id === responseData.favId);
+    if (index !== -1) {
+      // Access the matching item properties
+      const filterCriteria = favResponse[index].filterCriteria;
+      const clickFilterCriteria = favResponse[index].clickFilterCriteria;
+      const title = favResponse[index].title;
+  
+      navigate('/favcomparing', {
+        state: {
+          filterCriteria,
+          clickFilterCriteria,
+          title,
+        },
+      });
+      // Assuming you have a route for FavComparingSearch component
+  
+      // Use history to change the URL
+    } else {
+      // Handle the case when no match is found
+      console.log('Not matching favId in the array:', responseData.favId);
+    }
+  };
 
   const handleEditStart = () => {
     setOriginalContents(editedContents);
@@ -146,6 +174,7 @@ export default function Fav() {
     updateContents(responseData.favId);
     setIsEditing(false);
   };
+  
   return (
     <>
       {isLoading ? (
@@ -170,6 +199,12 @@ export default function Fav() {
                         <span className="text-3xl font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300">
                           {responseData.genderResults[0].title}
                         </span>
+                        <button
+                          onClick={handleComparing}
+                          className=" ml-5 mt-2 p-2 w-38 border rounded-3xl border-solid border-gray-300"
+                        >
+                          필터 비교
+                        </button>
                         <div className="mt-2 w-full h-full p-4 rounded-lg flex flex-col">
                           <span className="text-xl">
                             등록일시 :{" "}
@@ -181,6 +216,10 @@ export default function Fav() {
                             데이터 기간 : {responseData.startDate} ~{" "}
                             {responseData.endDate}
                           </span>
+                          <span className="text-lg mt-2">
+                            제목 : {favResponse[favResponse.findIndex(item => item.id === responseData.favId)].title}
+                          </span>
+                          
                           <div className="mt-2">
                             {isEditing ? (
                               <div>
