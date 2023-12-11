@@ -1,8 +1,8 @@
 import React from "react";
 
-export default function DeviceRadio({setFilterData,setClickFilterData,filterData,clickFilterData}) {
+export default function DeviceRadio({setFilterData,setClickFilterData,filterData,clickFilterData, width="[20rem]"}) {
   return (
-    <div className="grid w-[21rem] grid-cols-3 gap-2 rounded-xl bg-gray-200 p-2 border border-gray-300">    
+    <div className={`grid w-${width} grid-cols-3 gap-2 rounded-xl bg-gray-200 p-2 border border-gray-300`}>    
       <div>
         <input
           type="radio"
