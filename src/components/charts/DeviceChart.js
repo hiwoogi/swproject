@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 
-export default function DeviceChart({ deviceResults }) {
+export default function DeviceChart({ num, deviceResults }) {
   const chartRef = useRef(null);
 
 const filterPc = (data) => data.filter((item) => item.group === 'pc');
@@ -24,7 +24,7 @@ const filteredPcData = filterPc(deviceResults[0].data);
       const mobail = calculateRelativeRatio(filteredMoData);
      
 
-      const ctx = document.getElementById('deviceChart');
+      const ctx = document.getElementById(`deviceChart${num}`);
       if (ctx) {
         if (chartRef.current) {
           chartRef.current.destroy();
@@ -72,7 +72,7 @@ const filteredPcData = filterPc(deviceResults[0].data);
   
   return (
     <div className="w-full h-full border-2 border-gray-300 p-4 rounded-lg flex justify-center items-center">
-      <canvas id="deviceChart" />
+      <canvas id={`deviceChart${num}`} />
     </div>
   );
 }

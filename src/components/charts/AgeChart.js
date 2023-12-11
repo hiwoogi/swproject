@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 
-export default function AgeChart({ ageResults }) {
+export default function AgeChart({num, ageResults }) {
   const chartRef = useRef(null);
 
   const filterData = (data, group) => data.filter(item => item.group === group);
@@ -29,7 +29,7 @@ export default function AgeChart({ ageResults }) {
         'rgba(249, 212, 35, 1)',
       ];
 
-      const ctx = document.getElementById('ageChart');
+      const ctx = document.getElementById(`ageChart${num}`);
       if (ctx) {
         if (chartRef.current) {
           chartRef.current.destroy();
@@ -89,7 +89,7 @@ export default function AgeChart({ ageResults }) {
 
   return (
     <div className="w-full h-full border-2 border-gray-300 p-4 rounded-lg flex justify-center items-center">
-      <canvas id="ageChart" />
+      <canvas id={`ageChart${num}`}  />
     </div>
   );
 }

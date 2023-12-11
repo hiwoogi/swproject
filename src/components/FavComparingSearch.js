@@ -21,8 +21,8 @@ export default function FavComparingSearch(props) {
   const favLocation = useLocation();
   const { state } = favLocation;
 
-  // Access individual properties from the state object
-  const { filterCriteria, clickFilterCriteria, title, field } = state;
+  // 즐겨찾기에서 넘어온 데이터
+  const { filterCriteria, clickFilterCriteria, title, field } = state; //필터데이터, 클릭필터데이터, 키워드, 분야
   console.log(field)
   const [filterData, setFilterData] = useState({
     keyword: title,
@@ -87,6 +87,18 @@ export default function FavComparingSearch(props) {
   const [errorMessage, setErrorMessage] = useState("");
 
   const [responseData, setResponseData] = useState({
+    startDate: null,
+    endDate: null,
+    timeUnit: null,
+    genderResults: null,
+    ageResults: null,
+    deviceResults: null,
+    clickResults: null,
+    contents: null,
+    registrationTime: null,
+  });
+
+  const [favResponseData, setFavResponseData] = useState({
     startDate: null,
     endDate: null,
     timeUnit: null,
@@ -197,6 +209,13 @@ export default function FavComparingSearch(props) {
       responseData.contents,
       responseData.registrationTime
     );
+    makeChartData(
+      filterCriteria,
+      clickFilterCriteria,
+      setFavResponseData,
+      favResponseData.contents,
+      favResponseData.registrationTime
+    )
   };
 
   const handleButtonClick = () => {
@@ -228,9 +247,9 @@ export default function FavComparingSearch(props) {
   }, []);
 
   useEffect(() => {
-
   }, [
     responseData.clickResults,
+    favResponseData.clickResults
   ]);
 
   return (
@@ -363,6 +382,7 @@ export default function FavComparingSearch(props) {
                   endDate={responseData.endDate}
                   timeUnit={responseData.timeUnit}
                   clickResults={responseData.clickResults}
+                  num={1}
                 />
               </div>
 
@@ -372,6 +392,7 @@ export default function FavComparingSearch(props) {
                 endDate={responseData.endDate}
                 timeUnit={responseData.timeUnit}
                 deviceResults={responseData.deviceResults}
+                num={1}
               />
                </div>
               <div id="ageGraph" className="col-span-2">
@@ -380,6 +401,7 @@ export default function FavComparingSearch(props) {
                   endDate={responseData.endDate}
                   timeUnit={responseData.timeUnit}
                   ageResults={responseData.ageResults}
+                  num={1}
                 />
               </div>
 
@@ -389,50 +411,58 @@ export default function FavComparingSearch(props) {
                   endDate={responseData.endDate}
                   timeUnit={responseData.timeUnit}
                   genderResults={responseData.genderResults}
+                  num={1}
                 />
               </div>
             </div>
           </div>)}
 
-          {/* {responseData.startDate && responseData.endDate && (
+          {favResponseData.startDate && favResponseData.endDate && (
           <div className="self-center flex w-full max-w-[1500px] flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
             <div className="grid gap-5 lg:grid-cols-4">
               <div id="clickGraph2" className="col-span-3">
                 <ClickChart
-                  startDate={responseData.startDate}
-                  endDate={responseData.endDate}
-                  timeUnit={responseData.timeUnit}
-                  clickResults={responseData.clickResults}
+                  startDate={favResponseData.startDate}
+                  endDate={favResponseData.endDate}
+                  timeUnit={favResponseData.timeUnit}
+                  clickResults={favResponseData.clickResults}
+                  num={2}
                 />
               </div>
 
               <div id="deviceGraph2">
               <DeviceChart
-                startDate={responseData.startDate}
-                endDate={responseData.endDate}
-                timeUnit={responseData.timeUnit}
-                deviceResults={responseData.deviceResults}
+                startDate={favResponseData.startDate}
+                endDate={favResponseData.endDate}
+                timeUnit={favResponseData.timeUnit}
+                deviceResults={favResponseData.deviceResults}
+                num={2}
+
               />
                </div>
               <div id="ageGraph2" className="col-span-2">
                 <AgeChart
-                  startDate={responseData.startDate}
-                  endDate={responseData.endDate}
-                  timeUnit={responseData.timeUnit}
-                  ageResults={responseData.ageResults}
+                  startDate={favResponseData.startDate}
+                  endDate={favResponseData.endDate}
+                  timeUnit={favResponseData.timeUnit}
+                  ageResults={favResponseData.ageResults}
+                  num={2}
+
                 />
               </div>
 
               <div id="genderGraph2" className="col-span-2">
                 <GenderChart
-                  startDate={responseData.startDate}
-                  endDate={responseData.endDate}
-                  timeUnit={responseData.timeUnit}
-                  genderResults={responseData.genderResults}
+                  startDate={favResponseData.startDate}
+                  endDate={favResponseData.endDate}
+                  timeUnit={favResponseData.timeUnit}
+                  genderResults={favResponseData.genderResults}
+                  num={2}
+
                 />
               </div>
             </div>
-          </div>)} */}
+          </div>)}
         </div>
           
       )}

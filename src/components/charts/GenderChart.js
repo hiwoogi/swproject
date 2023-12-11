@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
-export default function GenderChart({ genderResults }) {
+export default function GenderChart({ num, genderResults }) {
   const chartRef = useRef(null);
 
   const filterF = (data) => data.filter((item) => item.group === 'f');
@@ -24,7 +24,7 @@ export default function GenderChart({ genderResults }) {
       // console.log('female 상대적 비율:', female);
       // console.log('male 상대적 비율:', male);
 
-      const ctx = document.getElementById('genderChart');
+      const ctx = document.getElementById(`genderChart${num}`);
       if (ctx) {
         if (chartRef.current) {
           chartRef.current.destroy();
@@ -75,7 +75,7 @@ export default function GenderChart({ genderResults }) {
 
   return (
     <div className="w-full h-full border-2 border-gray-300 p-4 rounded-lg flex justify-center items-center overflow-hidden">
-      <canvas id="genderChart" />
+      <canvas id={`genderChart${num}`} />
     </div>
   );
 }

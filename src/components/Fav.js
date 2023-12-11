@@ -7,7 +7,15 @@ import DeviceChart from "./charts/DeviceChart";
 import ClickChart from "./charts/ClickChart";
 import { SyncLoader } from "react-spinners";
 import { Link, useNavigate } from "react-router-dom";
-
+import dayjs from "dayjs";
+import { makeChartData } from "../function/MakeChartData";
+import SelectCategory from "./searchForms/SelectCategory";
+import InputKeyword from "./searchForms/InputKeyword";
+import SelectPeriod from "./searchForms/SelectPeriod";
+import SingleDatePicker from "./searchForms/SingleDatePicker";
+import AgeCheckbox from "./searchForms/AgeCheckbox";
+import DeviceRadio from "./searchForms/DeviceRadio";
+import GenderRadio from "./searchForms/GenderRadio";
 
 export default function Fav() {
   const navigate = useNavigate();
@@ -110,6 +118,198 @@ export default function Fav() {
     }
   };
 
+  const [selectedOption, setSelectedOption] = useState("month"); // Initial value can be set based on your default selection
+
+  const [filterData, setFilterData] = useState({
+    keyword: "",
+    category: "50000000",
+    timeUnit: "date",
+    startDate: dayjs().subtract(1, "month").format("YYYY-MM-DD"),
+    endDate: dayjs().format("YYYY-MM-DD"),
+    device: "",
+    ages: [],
+    gender: "",
+  });
+
+  const [clickFilterData, setClickFilterData] = useState({
+    keyword: [
+      {
+        name: "",
+        param: [],
+      },
+    ],
+    category: "50000000",
+    timeUnit: "date",
+    startDate: dayjs().subtract(1, "month").format("YYYY-MM-DD"),
+    endDate: dayjs().format("YYYY-MM-DD"),
+    device: "",
+    ages: [],
+    gender: "",
+  });
+  const handleSelectChange = (e) => {
+    const selectedValue = e.target.value;
+    setSelectedOption(selectedValue);
+
+    let newStartDate = filterData.startDate;
+    let newEndDate = filterData.endDate;
+
+    if (selectedValue === "day") {
+      newStartDate = dayjs().subtract(2, "day").format("YYYY-MM-DD");
+      newEndDate = dayjs().format("YYYY-MM-DD");
+    } else if (selectedValue === "week") {
+      newStartDate = dayjs().subtract(1, "week").format("YYYY-MM-DD");
+      newEndDate = dayjs().format("YYYY-MM-DD");
+    } else if (selectedValue === "month") {
+      newStartDate = dayjs().subtract(1, "month").format("YYYY-MM-DD");
+      newEndDate = dayjs().format("YYYY-MM-DD");
+    }
+
+    setFilterData({
+      ...filterData,
+      startDate: newStartDate,
+      endDate: newEndDate,
+    });
+
+    setClickFilterData({
+      ...clickFilterData,
+      startDate: newStartDate,
+      endDate: newEndDate,
+    });
+  };
+
+  const [isTrend, setIsTrend] = useState(false);
+
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const [filterResponseData, setFilterResponseData] = useState({
+    startDate: null,
+    endDate: null,
+    timeUnit: null,
+    genderResults: null,
+    ageResults: null,
+    deviceResults: null,
+    clickResults: null,
+    contents: null,
+    registrationTime: null,
+  });
+
+  //달력날짜조정
+  const handleStartDateChange = (startDate) => {
+    setFilterData({
+      ...filterData,
+      startDate,
+    });
+    setClickFilterData({
+      ...clickFilterData,
+      startDate,
+    });
+  };
+
+  const handleEndDateChange = (endDate) => {
+    setFilterData({
+      ...filterData,
+      endDate,
+    });
+    setClickFilterData({
+      ...clickFilterData,
+      endDate,
+    });
+  };
+
+  useEffect(() => {
+    console.log(clickFilterData.keyword);
+  }, [clickFilterData]);
+
+  //나이 조정
+  const [isAllAgesChecked, setIsAllAgesChecked] = useState(true);
+  const handleAgeCheckboxChange = (e) => {
+    const ageValue = e.target.value;
+    const isChecked = e.target.checked;
+
+    if (ageValue === "") {
+      //전체 체크박스를 클릭한 경우, 모든 연령대 체크박스 업데이트
+      const updatedAges = isChecked ? ["10", "20", "30", "40", "50", "60"] : [];
+
+      const allAgeDivs = document.querySelectorAll(
+        ".self-stretch input[type=checkbox]"
+      );
+      allAgeDivs.forEach((ageCheckbox) => {
+        ageCheckbox.checked = isChecked;
+      });
+
+      //전체 체크박스를 누를 때 다른 연령대 체크박스도 해제되도록 수정
+      if (!isChecked) {
+        setIsAllAgesChecked(false);
+      } else {
+        setIsAllAgesChecked(true);
+      }
+
+      setFilterData((prevFilterData) => ({
+        ...prevFilterData,
+        ages: updatedAges,
+      }));
+
+      setClickFilterData((prevClickFilterData) => ({
+        ...prevClickFilterData,
+        ages: updatedAges,
+      }));
+    } else {
+      //다른 연령대 체크박스에 대해 개별적으로 처리
+      const updatedAges = isChecked
+        ? [...filterData.ages, ageValue]
+        : filterData.ages.filter((age) => age !== ageValue);
+
+      setFilterData((prevFilterData) => ({
+        ...prevFilterData,
+        ages: updatedAges,
+      }));
+
+      setClickFilterData((prevClickFilterData) => ({
+        ...prevClickFilterData,
+        ages: updatedAges,
+      }));
+
+      //다른 연령 체크박스가 해제된 경우, 전체 체크박스도 해제
+      const allAgeCheckbox = document.querySelector(
+        ".self-stretch input[type=checkbox][value='']"
+      );
+      if (!isChecked) {
+        allAgeCheckbox.checked = false;
+      }
+
+      //전체 체크박스를 누를 때 다른 연령대 체크박스도 해제되도록 수정
+      setIsAllAgesChecked(false);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    makeChartData(
+      filterData,
+      clickFilterData,
+      setFilterResponseData,
+      filterResponseData.contents,
+      filterResponseData.registrationTime
+    );
+  };
+
+  const handleButtonClick = () => {
+    const form = document.getElementById("searchForm");
+
+    if (form) {
+      const formData = new FormData(form);
+      const keyword = formData.get("keyword");
+
+      if (keyword && keyword.trim() !== "") {
+        setErrorMessage("");
+        handleSubmit(new Event("submit"));
+      } else {
+        setErrorMessage("키워드를 입력하세요.");
+      }
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, [isLoading]);
@@ -122,7 +322,9 @@ export default function Fav() {
 
   useEffect(() => {}, [isEditing]);
 
-  useEffect(() => {console.log("favres",favResponse)}, [favResponse]);
+  useEffect(() => {
+    console.log("favres", favResponse);
+  }, [favResponse]);
 
   useEffect(() => {
     console.log(responseData);
@@ -130,31 +332,31 @@ export default function Fav() {
   }, [responseData]);
 
   const handleComparing = () => {
-    
-    const index = favResponse.findIndex(item => item.id === responseData.favId);
+    const index = favResponse.findIndex(
+      (item) => item.id === responseData.favId
+    );
     if (index !== -1) {
       // Access the matching item properties
       const filterCriteria = favResponse[index].filterCriteria;
       const clickFilterCriteria = favResponse[index].clickFilterCriteria;
       const title = favResponse[index].title;
-      
+
       const field = JSON.parse(filterCriteria).category;
 
-  
-      navigate('/favcomparing', {
+      navigate("/favcomparing", {
         state: {
           filterCriteria,
           clickFilterCriteria,
           title,
-          field
+          field,
         },
       });
       // Assuming you have a route for FavComparingSearch component
-  
+
       // Use history to change the URL
     } else {
       // Handle the case when no match is found
-      console.log('Not matching favId in the array:', responseData.favId);
+      console.log("Not matching favId in the array:", responseData.favId);
     }
   };
 
@@ -178,7 +380,7 @@ export default function Fav() {
     updateContents(responseData.favId);
     setIsEditing(false);
   };
-  
+
   return (
     <>
       {isLoading ? (
@@ -200,7 +402,7 @@ export default function Fav() {
                   {responseData.genderResults ? (
                     <div className="self-center flex w-full max-w-[1800px] flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
                       <div className="mb-5">
-                        <span className="text-3xl font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300">
+                        <span className="text-3xl font-semibold  leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-5 py-3 rounded-3xl border-solid border-gray-300">
                           {responseData.genderResults[0].title}
                         </span>
                         <button
@@ -221,9 +423,16 @@ export default function Fav() {
                             {responseData.endDate}
                           </span>
                           <span className="text-lg mt-2">
-                            제목 : {favResponse[favResponse.findIndex(item => item.id === responseData.favId)].title}
+                            제목 :{" "}
+                            {
+                              favResponse[
+                                favResponse.findIndex(
+                                  (item) => item.id === responseData.favId
+                                )
+                              ].title
+                            }
                           </span>
-                          
+
                           <div className="mt-2">
                             {isEditing ? (
                               <div>
@@ -233,7 +442,7 @@ export default function Fav() {
                                   onChange={handleInputChange}
                                   rows="4"
                                   class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                  placeholder="Write your thoughts here..."
+                                  placeholder="내용이 없습니다."
                                 ></textarea>
                                 <button
                                   onClick={handleEditSubmit}
@@ -270,43 +479,247 @@ export default function Fav() {
                               </div>
                             )}
                           </div>
+                          <form
+                            id="searchForm"
+                            onSubmit={handleSubmit}
+                            className="self-center"
+                          >
+                            <div className="self-center flex w-full max-w-[1920px] flex-col mt-20 mb-16 max-md:max-w-full max-md:my-10">
+                              <div className="flex gap-4">
+                                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
+                                  <SelectCategory
+                                    field={"50000000"}
+                                    setFilterData={setFilterData}
+                                    setClickFilterData={setClickFilterData}
+                                    filterData={filterData}
+                                    clickFilterData={clickFilterData}
+                                  />
+                                </div>
+                                <div className="relative flex flex-col items-center">
+                                  <div className="self-center flex items-start gap-5 mt-20 max-md:max-w-full max-md:flex-wrap max-md:mt-10">
+                                    <InputKeyword
+                                      trend={() => {
+                                        const index = favResponse.findIndex(
+                                          (item) =>
+                                            item.id === responseData.favId
+                                        );
+                                        return index !== -1
+                                          ? favResponse[index].title
+                                          : "";
+                                      }}
+                                      setFilterData={setFilterData}
+                                      setClickFilterData={setClickFilterData}
+                                    />
+                                    {errorMessage && (
+                                      <p className="text-red-500 absolute top-1/2 left-24 transform -translate-x-1/2 -translate-y-1/2">
+                                        {errorMessage}
+                                      </p>
+                                    )}
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
+                                  <SelectPeriod
+                                    setFilterData={setFilterData}
+                                    setClickFilterData={setClickFilterData}
+                                  />
+                                </div>
+
+                                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
+                                  <select
+                                    // defaultValue={field ? field : "50000000"}
+                                    name=""
+                                    onChange={handleSelectChange}
+                                    value={selectedOption}
+                                    className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
+                                  >
+                                    <option value="day">하루 전</option>
+                                    <option value="week">일주일 전</option>
+                                    <option value="month">한 달 전</option>
+                                    <option value="custom">직접 선택</option>
+                                  </select>
+                                </div>
+                                {selectedOption === "custom" && (
+                                  <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10 ">
+                                    <SingleDatePicker
+                                      value={dayjs(filterData.startDate)}
+                                      onDateChange={handleStartDateChange}
+                                    />
+                                    -
+                                    <SingleDatePicker
+                                      value={dayjs(filterData.endDate)}
+                                      onDateChange={handleEndDateChange}
+                                    />
+                                  </div>
+                                )}
+                              </div>
+
+                              <div className="flex w-[1500] max-w-full grow flex-col ml-5 self-start max-md:mt-10">
+                                <div className="flex gap-4 mt-8">
+                                  <div className="self-stretch flex items-center justify-between gap-2">
+                                    <AgeCheckbox
+                                      handleAgeCheckboxChange={
+                                        handleAgeCheckboxChange
+                                      }
+                                      isAllAgesChecked={isAllAgesChecked}
+                                    />
+                                  </div>
+
+                                  {/* @@기기 radio 변경 */}
+                                  <DeviceRadio
+                                    setFilterData={setFilterData}
+                                    setClickFilterData={setClickFilterData}
+                                    filterData={filterData}
+                                    clickFilterData={clickFilterData}
+                                  />
+                                  <GenderRadio
+                                    setFilterData={setFilterData}
+                                    setClickFilterData={setClickFilterData}
+                                    filterData={filterData}
+                                    clickFilterData={clickFilterData}
+                                  />
+
+                                  <div
+                                    className="border bg-white flex flex-col flex-1 px-8 py-4 rounded-[30px] border-solid border-gray-300 max-md:px-5"
+                                    onClick={handleButtonClick}
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    <div className="self-center flex w-[84px] max-w-full items-start gap-0">
+                                      <img
+                                        loading="lazy"
+                                        srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
+                                        className="aspect-[1.11] object-contain object-center w-[30px] overflow-hidden self-stretch max-w-full"
+                                      />
+                                      <div className="text-black text-base font-light self-center whitespace-nowrap my-auto">
+                                        조회하기
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </form>
                         </div>
                       </div>
 
-                      <div className="grid gap-5 lg:grid-cols-4">
-                        <div className="col-span-3">
-                          <ClickChart
-                            startDate={responseData.startDate}
-                            endDate={responseData.endDate}
-                            timeUnit={responseData.timeUnit}
-                            clickResults={responseData.clickResults}
-                          />
-                        </div>
-                        <div className="">
-                          <DeviceChart
-                            startDate={responseData.startDate}
-                            endDate={responseData.endDate}
-                            timeUnit={responseData.timeUnit}
-                            deviceResults={responseData.deviceResults}
-                          />
-                        </div>
-                        <div className="col-span-2">
-                          <AgeChart
-                            startDate={responseData.startDate}
-                            endDate={responseData.endDate}
-                            timeUnit={responseData.timeUnit}
-                            ageResults={responseData.ageResults}
-                          />
-                        </div>
-                        <div className="col-span-2">
-                          <GenderChart
-                            startDate={responseData.startDate}
-                            endDate={responseData.endDate}
-                            timeUnit={responseData.timeUnit}
-                            genderResults={responseData.genderResults}
-                          />
-                        </div>
-                      </div>
+                      {!filterResponseData.startDate &&
+                        responseData.startDate && (
+                          <div className="grid gap-5 lg:grid-cols-4">
+                            <div className="col-span-3">
+                              <ClickChart
+                                startDate={responseData.startDate}
+                                endDate={responseData.endDate}
+                                timeUnit={responseData.timeUnit}
+                                clickResults={responseData.clickResults}
+                                num={1}
+                              />
+                            </div>
+                            <div className="">
+                              <DeviceChart
+                                startDate={responseData.startDate}
+                                endDate={responseData.endDate}
+                                timeUnit={responseData.timeUnit}
+                                deviceResults={responseData.deviceResults}
+                                num={1}
+                              />
+                            </div>
+                            <div className="col-span-2">
+                              <AgeChart
+                                startDate={responseData.startDate}
+                                endDate={responseData.endDate}
+                                timeUnit={responseData.timeUnit}
+                                ageResults={responseData.ageResults}
+                                num={1}
+                              />
+                            </div>
+                            <div className="col-span-2">
+                              <GenderChart
+                                startDate={responseData.startDate}
+                                endDate={responseData.endDate}
+                                timeUnit={responseData.timeUnit}
+                                genderResults={responseData.genderResults}
+                                num={1}
+                              />
+                            </div>
+                          </div>
+                        )}
+                      {filterResponseData.startDate &&
+                        filterResponseData.endDate && (
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="col-span-2 sm:col-span-1">
+                              <ClickChart
+                                startDate={responseData.startDate}
+                                endDate={responseData.endDate}
+                                timeUnit={responseData.timeUnit}
+                                clickResults={responseData.clickResults}
+                                num={1}
+                              />
+                            </div>
+                            <div className="col-span-2 sm:col-span-1">
+                              <ClickChart
+                                startDate={filterResponseData.startDate}
+                                endDate={filterResponseData.endDate}
+                                timeUnit={filterResponseData.timeUnit}
+                                clickResults={filterResponseData.clickResults}
+                                num={2}
+                              />
+                            </div>
+                            <div className="col-span-2 sm:col-span-1">
+                              <DeviceChart
+                                startDate={responseData.startDate}
+                                endDate={responseData.endDate}
+                                timeUnit={responseData.timeUnit}
+                                deviceResults={responseData.deviceResults}
+                                num={1}
+                              />
+                            </div>
+                            <div className="col-span-2 sm:col-span-1">
+                              <DeviceChart
+                                startDate={filterResponseData.startDate}
+                                endDate={filterResponseData.endDate}
+                                timeUnit={filterResponseData.timeUnit}
+                                deviceResults={filterResponseData.deviceResults}
+                                num={2}
+                              />
+                            </div>
+                            <div className="col-span-2 sm:col-span-1">
+                              <AgeChart
+                                startDate={responseData.startDate}
+                                endDate={responseData.endDate}
+                                timeUnit={responseData.timeUnit}
+                                ageResults={responseData.ageResults}
+                                num={1}
+                              />
+                            </div>
+                            <div className="col-span-2 sm:col-span-1">
+                              <AgeChart
+                                startDate={filterResponseData.startDate}
+                                endDate={filterResponseData.endDate}
+                                timeUnit={filterResponseData.timeUnit}
+                                ageResults={filterResponseData.ageResults}
+                                num={2}
+                              />
+                            </div>
+                            <div className="col-span-2 sm:col-span-1">
+                              <GenderChart
+                                startDate={responseData.startDate}
+                                endDate={responseData.endDate}
+                                timeUnit={responseData.timeUnit}
+                                genderResults={responseData.genderResults}
+                                num={1}
+                              />
+                            </div>
+                            <div className="col-span-2 sm:col-span-1">
+                              <GenderChart
+                                startDate={filterResponseData.startDate}
+                                endDate={filterResponseData.endDate}
+                                timeUnit={filterResponseData.timeUnit}
+                                genderResults={filterResponseData.genderResults}
+                                num={2}
+                              />
+                            </div>
+                          </div>
+                        )}
                     </div>
                   ) : (
                     <div className="text-5xl max-w-[1000px] self-center mx-auto max-md:text-4xl mt-80 mb-80">

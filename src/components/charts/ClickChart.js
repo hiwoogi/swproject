@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 
-export default function ClickChart({ clickResults }) {
+export default function ClickChart({ num, clickResults }) {
   const chartRef = useRef(null);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function ClickChart({ clickResults }) {
       });
 
 
-      const ctx = document.getElementById('clickChart');
+      const ctx = document.getElementById(`clickChart${num}`);
       if (ctx) {
         if (chartRef.current) {
           chartRef.current.destroy();
@@ -101,7 +101,7 @@ export default function ClickChart({ clickResults }) {
 
   return (
     <div className="w-full h-full border-2 border-gray-300 p-4 rounded-lg flex justify-center items-center">
-      <canvas id="clickChart" />
+      <canvas id={`clickChart${num}`} />
     </div>
   );
 }
