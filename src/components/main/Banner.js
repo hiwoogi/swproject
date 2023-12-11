@@ -10,8 +10,8 @@ export default function Banner(props) {
         alt="Banner Image"
       />
       <div className="relative self-center flex w-[274px] max-w-full flex-col mt-32 mb-60 max-md:my-10">
-        <h1 className="text-white text-5xl uppercase self-stretch whitespace-nowrap max-md:text-4xl font-['NEXON']">
-          백엔드메이커
+        <h1 className="text-white text-5xl uppercase self-center whitespace-nowrap max-md:text-4xl font-['NEXON']">
+          데이터 메이커
         </h1>
         <p className="text-white text-center text-2xl font-light leading-9 uppercase self-center whitespace-nowrap mt-11 max-md:mt-10 font-['NEXON']">
           이재욱, 최재원

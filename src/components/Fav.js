@@ -402,204 +402,228 @@ export default function Fav() {
                   {responseData.genderResults ? (
                     <div className="self-center flex w-full max-w-[1800px] flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
                       <div className="mb-5">
-                        <span className="text-3xl font-semibold  leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-5 py-3 rounded-3xl border-solid border-gray-300">
-                          {responseData.genderResults[0].title}
-                        </span>
-                        <button
-                          onClick={handleComparing}
-                          className=" ml-5 mt-2 p-2 w-38 border rounded-3xl border-solid border-gray-300"
-                        >
-                          필터 비교
-                        </button>
-                        <div className="mt-2 w-full h-full p-4 rounded-lg flex flex-col">
-                          <span className="text-xl">
-                            등록일시 :{" "}
-                            {responseData.registrationTime
-                              .substring(0, 19)
-                              .replace("T", "  ")}
-                          </span>
-                          <span className="text-lg mt-2">
-                            데이터 기간 : {responseData.startDate} ~{" "}
-                            {responseData.endDate}
-                          </span>
-                          <span className="text-lg mt-2">
-                            제목 :{" "}
-                            {
-                              favResponse[
-                                favResponse.findIndex(
-                                  (item) => item.id === responseData.favId
-                                )
-                              ].title
-                            }
-                          </span>
+                        <div className="lg:grid lg:grid-cols-2">
+                          <div className="lg:col-span-1">
+                            <span className="text-3xl font-semibold  leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-5 py-3 rounded-3xl border-solid border-gray-300">
+                              {responseData.genderResults[0].title}
+                            </span>
+                            <div className="mt-2 w-full h-full p-4 rounded-lg flex flex-col">
+                              <span className="text-xl">
+                                등록일시 :{" "}
+                                {responseData.registrationTime
+                                  .substring(0, 19)
+                                  .replace("T", "  ")}
+                              </span>
+                              <span className="text-lg mt-2">
+                                데이터 기간 : {responseData.startDate} ~{" "}
+                                {responseData.endDate}
+                              </span>
+                              <span className="text-lg mt-2">
+                                제목 :{" "}
+                                {
+                                  favResponse[
+                                    favResponse.findIndex(
+                                      (item) => item.id === responseData.favId
+                                    )
+                                  ].title
+                                }
+                              </span>
 
-                          <div className="mt-2">
-                            {isEditing ? (
-                              <div>
-                                <textarea
-                                  id="message"
-                                  value={editedContents}
-                                  onChange={handleInputChange}
-                                  rows="4"
-                                  class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                  placeholder="내용이 없습니다."
-                                ></textarea>
-                                <button
-                                  onClick={handleEditSubmit}
-                                  className="mt-2 p-2 w-24 border rounded-3xl border-solid border-gray-300"
-                                >
-                                  저장
-                                </button>
-                                <button
-                                  onClick={handleEditCancel}
-                                  className="ml-5 mt-2 p-2 w-24 border rounded-3xl border-solid border-gray-300"
-                                >
-                                  취소
-                                </button>
-                              </div>
-                            ) : (
-                              <div>
-                                <textarea
-                                  id="message"
-                                  rows="4"
-                                  value={editedContents}
-                                  readOnly
-                                  class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                  placeholder="내용이 존재하지 않습니다."
-                                >
-                                  {editedContents}
-                                </textarea>
-
-                                <button
-                                  onClick={handleEditStart}
-                                  className=" mt-2 p-2 w-24 border rounded-3xl border-solid border-gray-300"
-                                >
-                                  수정
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                          <form
-                            id="searchForm"
-                            onSubmit={handleSubmit}
-                            className="self-center"
-                          >
-                            <div className="self-center flex w-full max-w-[1920px] flex-col mt-20 mb-16 max-md:max-w-full max-md:my-10">
-                              <div className="flex gap-4">
-                                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
-                                  <SelectCategory
-                                    field={"50000000"}
-                                    setFilterData={setFilterData}
-                                    setClickFilterData={setClickFilterData}
-                                    filterData={filterData}
-                                    clickFilterData={clickFilterData}
-                                  />
-                                </div>
-                                <div className="relative flex flex-col items-center">
-                                  <div className="self-center flex items-start gap-5 mt-20 max-md:max-w-full max-md:flex-wrap max-md:mt-10">
-                                    <InputKeyword
-                                      trend={() => {
-                                        const index = favResponse.findIndex(
-                                          (item) =>
-                                            item.id === responseData.favId
-                                        );
-                                        return index !== -1
-                                          ? favResponse[index].title
-                                          : "";
-                                      }}
-                                      setFilterData={setFilterData}
-                                      setClickFilterData={setClickFilterData}
-                                    />
-                                    {errorMessage && (
-                                      <p className="text-red-500 absolute top-1/2 left-24 transform -translate-x-1/2 -translate-y-1/2">
-                                        {errorMessage}
-                                      </p>
-                                    )}
+                              <div className="mt-2 relative">
+                                {isEditing ? (
+                                  <div>
+                                    <textarea
+                                      id="message"
+                                      value={editedContents}
+                                      onChange={handleInputChange}
+                                      rows="2"
+                                      className="block p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                      placeholder="Write your thoughts here..."
+                                    ></textarea>
+                                    <div className="absolute top-0 right-0 flex">
+                                      <button
+                                        onClick={handleEditSubmit}
+                                        className="p-2 w-8 h-8 border rounded border-solid border-gray-300"
+                                      >
+                                        <img
+                                          loading="lazy"
+                                          srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/7ac510d7bb297301375e4577b56caeefb3604b9c2de12d7834b7d1acd4be5f1a?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=100 100w"
+                                          alt="Save"
+                                          className="w-full h-full"
+                                        />
+                                      </button>
+                                      <button
+                                        onClick={handleEditCancel}
+                                        className="p-2 w-8 h-8 border rounded border-solid border-gray-300"
+                                      >
+                                        <img
+                                          loading="lazy"
+                                          srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/004c160b0de6227dba2157eea316523a1a98fb60589f4bd606ae8867c723a53d?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=100 100w"
+                                          alt="Cancel"
+                                          className="w-full h-full"
+                                        />
+                                      </button>
+                                    </div>
                                   </div>
-                                </div>
-
-                                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
-                                  <SelectPeriod
-                                    setFilterData={setFilterData}
-                                    setClickFilterData={setClickFilterData}
-                                  />
-                                </div>
-
-                                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
-                                  <select
-                                    // defaultValue={field ? field : "50000000"}
-                                    name=""
-                                    onChange={handleSelectChange}
-                                    value={selectedOption}
-                                    className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
-                                  >
-                                    <option value="day">하루 전</option>
-                                    <option value="week">일주일 전</option>
-                                    <option value="month">한 달 전</option>
-                                    <option value="custom">직접 선택</option>
-                                  </select>
-                                </div>
-                                {selectedOption === "custom" && (
-                                  <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10 ">
-                                    <SingleDatePicker
-                                      value={dayjs(filterData.startDate)}
-                                      onDateChange={handleStartDateChange}
-                                    />
-                                    -
-                                    <SingleDatePicker
-                                      value={dayjs(filterData.endDate)}
-                                      onDateChange={handleEndDateChange}
-                                    />
+                                ) : (
+                                  <div className="relative">
+                                    <textarea
+                                      id="message"
+                                      rows="2"
+                                      value={editedContents}
+                                      readOnly
+                                      className="block p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                      placeholder="내용이 존재하지 않습니다."
+                                    >
+                                      {editedContents}
+                                    </textarea>
+                                    <div className="absolute top-0 right-0 flex">
+                                      <button
+                                        onClick={handleEditStart}
+                                        className="p-2 w-8 h-8 border rounded border-solid border-gray-300"
+                                      >
+                                        <img
+                                          loading="lazy"
+                                          srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/a41f22bdbd5334a846c45bd23fb348f8393c012f7b967801c7a13941e5576f64?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=100 100w"
+                                          alt="Edit"
+                                          className="w-full h-full"
+                                        />
+                                      </button>
+                                    </div>
                                   </div>
                                 )}
                               </div>
+                            </div>
+                          </div>
+                          <div className="lg:col-span-1">
+                            <button
+                              onClick={handleComparing}
+                              className=" ml-5 mt-2 p-2 w-38 border rounded-3xl border-solid border-gray-300"
+                            >
+                              필터 비교
+                            </button>
+                          </div>
+                        </div>
 
-                              <div className="flex w-[1500] max-w-full grow flex-col ml-5 self-start max-md:mt-10">
-                                <div className="flex gap-4 mt-8">
-                                  <div className="self-stretch flex items-center justify-between gap-2">
-                                    <AgeCheckbox
-                                      handleAgeCheckboxChange={
-                                        handleAgeCheckboxChange
-                                      }
-                                      isAllAgesChecked={isAllAgesChecked}
+                        <form
+                          id="searchForm"
+                          onSubmit={handleSubmit}
+                          className="self-center"
+                        >
+                          <div className="self-center flex w-full max-w-[1920px] flex-col mt-20 mb-16 max-md:max-w-full max-md:my-10">
+                            <div className="flex gap-4">
+                              <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
+                                <SelectCategory
+                                  field={"50000000"}
+                                  setFilterData={setFilterData}
+                                  setClickFilterData={setClickFilterData}
+                                  filterData={filterData}
+                                  clickFilterData={clickFilterData}
+                                />
+                              </div>
+                              <div className="relative flex flex-col items-center">
+                                <div className="self-center flex items-start gap-5 mt-20 max-md:max-w-full max-md:flex-wrap max-md:mt-10">
+                                  <InputKeyword
+                                    trend={() => {
+                                      const index = favResponse.findIndex(
+                                        (item) => item.id === responseData.favId
+                                      );
+                                      return index !== -1
+                                        ? favResponse[index].title
+                                        : "";
+                                    }}
+                                    setFilterData={setFilterData}
+                                    setClickFilterData={setClickFilterData}
+                                  />
+                                  {errorMessage && (
+                                    <p className="text-red-500 absolute top-1/2 left-24 transform -translate-x-1/2 -translate-y-1/2">
+                                      {errorMessage}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+
+                              <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
+                                <SelectPeriod
+                                  setFilterData={setFilterData}
+                                  setClickFilterData={setClickFilterData}
+                                />
+                              </div>
+
+                              <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
+                                <select
+                                  // defaultValue={field ? field : "50000000"}
+                                  name=""
+                                  onChange={handleSelectChange}
+                                  value={selectedOption}
+                                  className="text-lg font-semibold leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
+                                >
+                                  <option value="day">하루 전</option>
+                                  <option value="week">일주일 전</option>
+                                  <option value="month">한 달 전</option>
+                                  <option value="custom">직접 선택</option>
+                                </select>
+                              </div>
+                              {selectedOption === "custom" && (
+                                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10 ">
+                                  <SingleDatePicker
+                                    value={dayjs(filterData.startDate)}
+                                    onDateChange={handleStartDateChange}
+                                  />
+                                  -
+                                  <SingleDatePicker
+                                    value={dayjs(filterData.endDate)}
+                                    onDateChange={handleEndDateChange}
+                                  />
+                                </div>
+                              )}
+                            </div>
+
+                            <div className="flex w-[1500] max-w-full grow flex-col ml-5 self-start max-md:mt-10">
+                              <div className="flex gap-4 mt-8">
+                                <div className="self-stretch flex items-center justify-between gap-2">
+                                  <AgeCheckbox
+                                    handleAgeCheckboxChange={
+                                      handleAgeCheckboxChange
+                                    }
+                                    isAllAgesChecked={isAllAgesChecked}
+                                  />
+                                </div>
+
+                                {/* @@기기 radio 변경 */}
+                                <DeviceRadio
+                                  setFilterData={setFilterData}
+                                  setClickFilterData={setClickFilterData}
+                                  filterData={filterData}
+                                  clickFilterData={clickFilterData}
+                                />
+                                <GenderRadio
+                                  setFilterData={setFilterData}
+                                  setClickFilterData={setClickFilterData}
+                                  filterData={filterData}
+                                  clickFilterData={clickFilterData}
+                                />
+
+                                <div
+                                  className="border bg-white flex flex-col flex-1 px-8 py-4 rounded-[30px] border-solid border-gray-300 max-md:px-5"
+                                  onClick={handleButtonClick}
+                                  style={{ cursor: "pointer" }}
+                                >
+                                  <div className="self-center flex w-[84px] max-w-full items-start gap-0">
+                                    <img
+                                      loading="lazy"
+                                      srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
+                                      className="aspect-[1.11] object-contain object-center w-[30px] overflow-hidden self-stretch max-w-full"
                                     />
-                                  </div>
-
-                                  {/* @@기기 radio 변경 */}
-                                  <DeviceRadio
-                                    setFilterData={setFilterData}
-                                    setClickFilterData={setClickFilterData}
-                                    filterData={filterData}
-                                    clickFilterData={clickFilterData}
-                                  />
-                                  <GenderRadio
-                                    setFilterData={setFilterData}
-                                    setClickFilterData={setClickFilterData}
-                                    filterData={filterData}
-                                    clickFilterData={clickFilterData}
-                                  />
-
-                                  <div
-                                    className="border bg-white flex flex-col flex-1 px-8 py-4 rounded-[30px] border-solid border-gray-300 max-md:px-5"
-                                    onClick={handleButtonClick}
-                                    style={{ cursor: "pointer" }}
-                                  >
-                                    <div className="self-center flex w-[84px] max-w-full items-start gap-0">
-                                      <img
-                                        loading="lazy"
-                                        srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
-                                        className="aspect-[1.11] object-contain object-center w-[30px] overflow-hidden self-stretch max-w-full"
-                                      />
-                                      <div className="text-black text-base font-light self-center whitespace-nowrap my-auto">
-                                        조회하기
-                                      </div>
+                                    <div className="text-black text-base font-light self-center whitespace-nowrap my-auto">
+                                      조회하기
                                     </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </form>
-                        </div>
+                          </div>
+                        </form>
                       </div>
 
                       {!filterResponseData.startDate &&

@@ -41,9 +41,16 @@ export default function TrendKeyword() {
       <div className="text-black text-5xl max-w-[500px] self-center mx-auto max-md:text-4xl mt-20">
         실시간 트렌드 순위
       </div>
+      <div className="text-black text-2xl self-center mx-auto max-md:text-4xl mt-5">
+        궁금한 키워드를 선택하면 더 자세한 데이터를 알아볼 수 있습니다!
+      </div>
+      <div className="text-black mx-auto max-md:text-4xl">
+            실시간 트렌드 순위의 데이터는 2일 전 데이터를 바탕으로
+            구성되어있습니다.
+          </div>
 
       <div id="treemap">
-        <div className="flex self-start gap-3 ml-5 mt-10 max-md:ml-2.5 max-md:mt-10">
+        <div className="flex self-start gap-3 ml-5 mt-5 max-md:ml-2.5 max-md:mt-10">
           <div className="text-black text-xl right-0 leading-8 uppercase self-center my-auto">
             분야
           </div>
@@ -67,7 +74,6 @@ export default function TrendKeyword() {
         </div>
 
         <TreeMap trend={trend} field={field} />
-        궁금한 키워드를 선택하면 더 자세한 데이터를 알아볼 수 있습니다!
       </div>
     </div>
   );

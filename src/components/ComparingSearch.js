@@ -296,11 +296,11 @@ export default function ComparingSearch(props) {
                       allowDeleteFromEmptyInput={false}
                       classNames={{
                         tagInput:
-                          "text-black text-xl leading-8 uppercase border w-[600px] h-[40px] md:w-[450px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300",
+                          "text-black text-xl leading-8 uppercase border w-[600px] h-[40px] md:w-[450px] md:h-[48px] px-3 py-1.5 rounded-3xl border-solid border-gray-300",
                         tags: "flex flex-wrap max-h-[100px] text-black text-lg leading-10 justify-center text-center  ", // Added container style
                         tagInputField: "w-full", // Adjust  as needed
                         selected: "selected-tag", // Add this if you want to style the selected tags
-                        tag: "ml-2 mb-2 inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700", // Add this if you want to style individual tags
+                        tag: "ml-2 mb-2 inline-block bg-gray-200 rounded-full px-3 py-2 text-lg font-semibold text-gray-700", // Add this if you want to style individual tags
                         remove: "remove-tag", // Add this if you want to style the remove icon on tags
                       }}
                     />

@@ -72,6 +72,7 @@ export default function ClickChart({ num, clickResults }) {
             },
             plugins: {
               legend: {
+                display: clickResults.length > 1,
                 labels: {
                   font: {
                     size: 20,
