@@ -6,7 +6,7 @@ import AgeChart from "./charts/AgeChart";
 import DeviceChart from "./charts/DeviceChart";
 import ClickChart from "./charts/ClickChart";
 import { SyncLoader } from "react-spinners";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, json, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import { makeChartData } from "../function/MakeChartData";
 import SelectCategory from "./searchForms/SelectCategory";
@@ -38,6 +38,7 @@ export default function Fav() {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContents, setEditedContents] = useState();
   const [originalContents, setOriginalContents] = useState("");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const fetchData = async () => {
     let headers = {
       "Content-Type": "application/json",
@@ -361,6 +362,7 @@ export default function Fav() {
       gender: "",
     });
     setIsAllAgesChecked(true);
+    setSelectedOption("month");
   }, [responseData]);
 
   const handleComparing = () => {
@@ -434,7 +436,25 @@ export default function Fav() {
     updateContents(responseData.favId);
     setIsEditing(false);
   };
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prev) => !prev); // Toggle sidebar visibility
+  };
+  const formatAges = (ages) => {
+    if (
+      !ages ||
+      (Array.isArray(ages) && ages.length === 0) ||
+      JSON.stringify(ages) ===
+        JSON.stringify(["10", "20", "30", "40", "50", "60"])
+    ) {
+      return "전체";
+    }
+    if (Array.isArray(ages)) {
+      const sortedAges = ages.sort((a, b) => a - b);
 
+      // Format the sorted ages as a string
+      return sortedAges.join(", ");
+    }
+  };
   return (
     <>
       {isLoading ? (
@@ -446,15 +466,29 @@ export default function Fav() {
         <div>
           {favResponse && favResponse.length !== 0 ? (
             <div className="font-['NEXON']">
+              <button
+                onClick={toggleSidebar}
+                className="px-2 py-2 fixed top-20 z-50"
+              >
+                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/e02589cae5808ab8a78c9fcf6faef90de7666044cddef6d6eac576c0cb2bd1ed?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=100 100w" alt="Button Image" className="w-5 h-6 mr-2" />
+              </button>
               <Sidebar
                 data={favResponse}
                 setResponseData={setResponseData}
                 setData={setFavResponse}
+                setIsSidebarOpen={setIsSidebarOpen}
+                isSidebarOpen={isSidebarOpen}
+                toggleSidebar={toggleSidebar}
               />
-              <div className="p-4 sm:ml-72 mt-24">
+
+              <div
+                className={`${
+                  isSidebarOpen ? "ml-72 mt-24" : "ml-0"
+                } transition-all flex-grow p-4 mt-24`}
+              >
                 <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
                   {responseData.genderResults ? (
-                    <div className="self-center flex w-full max-w-[1800px] flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
+                    <div className="self-center flex w-full flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
                       <div className="mb-5">
                         <div className="lg:grid lg:grid-cols-2">
                           <div className="lg:col-span-1">
@@ -471,6 +505,34 @@ export default function Fav() {
                               <span className="text-lg mt-2">
                                 데이터 기간 : {responseData.startDate} ~{" "}
                                 {responseData.endDate}
+                              </span>
+                              <span className="mt-2 text-lg">
+                                분류 :{" "}
+                                {(() => {
+                                  let categoryMap = {
+                                    50000000: "패션", //패션
+                                    50000007: "스포츠", //스포츠
+                                    50000003: "가전", //가전
+                                    50005542: "도서", //도서
+                                    50000006: "식품", //식품
+                                    50000002: "미용", //미용
+                                    50000004: "가구", //가구
+                                    50000005: "육아", //육아
+                                    50000008: "생활건강", //생활건강
+                                    50000009: "여가생활", //여가생활
+                                  };
+
+                                  const index = favResponse.findIndex(
+                                    (item) => item.id === responseData.favId
+                                  );
+                                  const filter =
+                                    index !== -1
+                                      ? JSON.parse(
+                                          favResponse[index].filterCriteria
+                                        ).category
+                                      : "";
+                                  return categoryMap[filter]; // Change keyword to filter
+                                })()}
                               </span>
                               <span className="text-lg mt-2">
                                 제목 :{" "}
@@ -547,16 +609,80 @@ export default function Fav() {
                                   </div>
                                 )}
                                 <div className="mt-5">
-                                  {(() => {
-                                    const index = favResponse.findIndex(
-                                      (item) => item.id === responseData.favId
-                                    );
-                                    const filter =
-                                      index !== -1
-                                        ? favResponse[index].filterCriteria
-                                        : "";
-                                    return filter; // Change keyword to filter
-                                  })()}
+                                  <span className=" text-lg mr-5">
+                                    성별 :{" "}
+                                    {(() => {
+                                      let genderMap = {
+                                        "": "전체",
+                                        f: "여성",
+                                        m: "남성",
+                                      };
+
+                                      const index = favResponse.findIndex(
+                                        (item) => item.id === responseData.favId
+                                      );
+                                      const filter =
+                                        index !== -1
+                                          ? JSON.parse(
+                                              favResponse[index].filterCriteria
+                                            ).gender
+                                          : "";
+                                      return genderMap[filter]; // Change keyword to filter
+                                    })()}
+                                  </span>
+
+                                  <span className=" text-lg mr-5">
+                                    기기 :{" "}
+                                    {(() => {
+                                      let deviceMap = {
+                                        "": "전체", //패션
+                                        pc: "pc", //스포츠
+                                        mo: "모바일",
+                                      };
+
+                                      const index = favResponse.findIndex(
+                                        (item) => item.id === responseData.favId
+                                      );
+                                      const filter =
+                                        index !== -1
+                                          ? JSON.parse(
+                                              favResponse[index].filterCriteria
+                                            ).device
+                                          : "";
+                                      return deviceMap[filter]; // Change keyword to filter
+                                    })()}
+                                  </span>
+
+                                  <span className=" text-lg ">
+                                    연령:{" "}
+                                    {(() => {
+                                      const index = favResponse.findIndex(
+                                        (item) => item.id === responseData.favId
+                                      );
+                                      let filter =
+                                        index !== -1
+                                          ? JSON.parse(
+                                              favResponse[index].filterCriteria
+                                            ).ages
+                                          : "";
+                                      let ageString = "";
+                                      if (Array.isArray(filter)) {
+                                        filter = filter.sort(
+                                          (a, b) => parseInt(a) - parseInt(b)
+                                        );
+                                        // If it's an array, display it as a comma-separated string
+                                        ageString = filter.join(", ");
+                                      } else {
+                                        // If it's a single value, just use that value
+                                        ageString = filter;
+                                      }
+
+                                      if (ageString === "") {
+                                        ageString = "전체";
+                                      }
+                                      return ageString; // Change keyword to filter
+                                    })()}
+                                  </span>
                                 </div>
                               </div>
                             </div>
@@ -568,7 +694,10 @@ export default function Fav() {
                             >
                               필터 비교
                             </button>
-                            <span className="text-lg ml-5">필터 비교를 사용하여 저장한 즐겨찾기의 다른 필터 값을 쉽게 비교해보세요!</span>
+                            <span className="text-lg ml-5">
+                              필터 비교를 사용하여 저장한 즐겨찾기의 다른 필터
+                              값을 쉽게 비교해보세요!
+                            </span>
                             {showForm ? (
                               <form
                                 id="searchForm"
@@ -576,60 +705,6 @@ export default function Fav() {
                                 className="self-center mt-8"
                               >
                                 <div className="self-center flex w-full flex-col max-md:max-w-full max-md:my-10">
-                                  {/* <div className="flex gap-4">
-                                    <div className="flex items-center gap-3 ml-5 self-start max-md:ml-2.5 max-md:mt-10">
-                                      <SelectCategory
-                                        field={(() => {
-                                          const index = favResponse.findIndex(
-                                            (item) =>
-                                              item.id === responseData.favId
-                                          );
-                                          const category =
-                                            index !== -1
-                                              ? JSON.parse(
-                                                  favResponse[index]
-                                                    .filterCriteria
-                                                ).category
-                                              : "";
-                                          return category;
-                                        })()}
-                                        setFilterData={setFilterData}
-                                        setClickFilterData={setClickFilterData}
-                                        filterData={filterData}
-                                        clickFilterData={clickFilterData}
-                                      />
-                                    </div>
-                                    <div className="relative flex flex-col items-center">
-                                      <div className="self-center flex items-start gap-5 max-md:max-w-full max-md:flex-wrap max-md:mt-10">
-                                        <InputKeyword
-                                          trend={(() => {
-                                            const index = favResponse.findIndex(
-                                              (item) =>
-                                                item.id === responseData.favId
-                                            );
-                                            const keyword =
-                                              index !== -1
-                                                ? JSON.parse(
-                                                    favResponse[index]
-                                                      .filterCriteria
-                                                  ).keyword
-                                                : "";
-                                            return keyword;
-                                          })()}
-                                          setFilterData={setFilterData}
-                                          setClickFilterData={
-                                            setClickFilterData
-                                          }
-                                        />
-                                        {errorMessage && (
-                                          <p className="text-red-500 absolute top-1/2 left-24 transform -translate-x-1/2 -translate-y-1/2">
-                                            {errorMessage}
-                                          </p>
-                                        )}
-                                      </div>
-                                    </div>
-                                  </div> */}
-
                                   <div className="flex gap-4 mt-3">
                                     <div className="flex items-center gap-3 ml-5 self-start max-md:ml-2.5 max-md:mt-10">
                                       <SelectPeriod
@@ -711,14 +786,31 @@ export default function Fav() {
                                     </div>
                                     {filterResponseData.startDate &&
                                       filterResponseData.endDate &&
-                                      showForm && 
-                                      <div className="mt-6">
-                                        {JSON.stringify(filterData)}
-                                        </div>}
+                                      showForm && (
+                                        <div className=" text-lg">
+                                          <span className="mr-5">
+                                            성별 :{" "}
+                                            {filterData.gender === ""
+                                              ? "전체"
+                                              : filterData.gender === "m"
+                                              ? "남성"
+                                              : "여성"}
+                                          </span>
+                                          <span className="mr-5">
+                                            기기 :{" "}
+                                            {filterData.device === ""
+                                              ? "전체"
+                                              : filterData.device === "mo"
+                                              ? "모바일"
+                                              : "pc"}
+                                          </span>
+                                          <span className="mr-5">
+                                            연령 : {formatAges(filterData.ages)}
+                                          </span>
+                                        </div>
+                                      )}
 
-                                    <div className="flex gap-4 mt-8">
-                                      
-                                    </div>
+                                    <div className="flex gap-4 mt-8"></div>
                                   </div>
                                 </div>
                               </form>
@@ -772,22 +864,15 @@ export default function Fav() {
                         showForm && (
                           <div className="grid grid-cols-2 gap-4">
                             <div className="sm:col-span-1 mr-5 border-2 border-red-300 p-4 rounded-lg">
-                              <span className="text-2xl text-red-300">A그룹</span>
+                              <span className="text-2xl text-red-300">
+                                A그룹
+                              </span>
                               <div className="mb-5">
                                 <ClickChart
                                   startDate={responseData.startDate}
                                   endDate={responseData.endDate}
                                   timeUnit={responseData.timeUnit}
                                   clickResults={responseData.clickResults}
-                                  num={1}
-                                />
-                              </div>
-                              <div className="mb-5">
-                                <DeviceChart
-                                  startDate={responseData.startDate}
-                                  endDate={responseData.endDate}
-                                  timeUnit={responseData.timeUnit}
-                                  deviceResults={responseData.deviceResults}
                                   num={1}
                                 />
                               </div>
@@ -800,7 +885,16 @@ export default function Fav() {
                                   num={1}
                                 />
                               </div>
-                              <div>
+                              <div className="flex items-center">
+                                <div className="mr-2">
+                                  <DeviceChart
+                                    startDate={responseData.startDate}
+                                    endDate={responseData.endDate}
+                                    timeUnit={responseData.timeUnit}
+                                    deviceResults={responseData.deviceResults}
+                                    num={1}
+                                  />
+                                </div>
                                 <GenderChart
                                   startDate={responseData.startDate}
                                   endDate={responseData.endDate}
@@ -812,24 +906,15 @@ export default function Fav() {
                             </div>
 
                             <div className="sm:col-span-1 ml-5 border-2 border-blue-300 p-4 rounded-lg">
-                            <span className="text-2xl text-blue-300">B그룹</span>
+                              <span className="text-2xl text-blue-300">
+                                B그룹
+                              </span>
                               <div className="mb-5">
                                 <ClickChart
                                   startDate={filterResponseData.startDate}
                                   endDate={filterResponseData.endDate}
                                   timeUnit={filterResponseData.timeUnit}
                                   clickResults={filterResponseData.clickResults}
-                                  num={2}
-                                />
-                              </div>
-                              <div className="mb-5">
-                                <DeviceChart
-                                  startDate={filterResponseData.startDate}
-                                  endDate={filterResponseData.endDate}
-                                  timeUnit={filterResponseData.timeUnit}
-                                  deviceResults={
-                                    filterResponseData.deviceResults
-                                  }
                                   num={2}
                                 />
                               </div>
@@ -842,7 +927,18 @@ export default function Fav() {
                                   num={2}
                                 />
                               </div>
-                              <div>
+                              <div className="flex items-center">
+                                <div className="mr-2">
+                                  <DeviceChart
+                                    startDate={filterResponseData.startDate}
+                                    endDate={filterResponseData.endDate}
+                                    timeUnit={filterResponseData.timeUnit}
+                                    deviceResults={
+                                      filterResponseData.deviceResults
+                                    }
+                                    num={2}
+                                  />
+                                </div>
                                 <GenderChart
                                   startDate={filterResponseData.startDate}
                                   endDate={filterResponseData.endDate}
