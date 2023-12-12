@@ -483,7 +483,7 @@ export default function Fav() {
                                 }
                               </span>
 
-                              <div className="mt-2 relative">
+                              <div className="mt-3 relative">
                                 {isEditing ? (
                                   <div>
                                     <textarea
@@ -546,7 +546,7 @@ export default function Fav() {
                                     </div>
                                   </div>
                                 )}
-                                <span>
+                                <div className="mt-5">
                                   {(() => {
                                     const index = favResponse.findIndex(
                                       (item) => item.id === responseData.favId
@@ -557,18 +557,18 @@ export default function Fav() {
                                         : "";
                                     return filter; // Change keyword to filter
                                   })()}
-                                </span>
+                                </div>
                               </div>
                             </div>
                           </div>
-                          <div className="lg:col-span-1">
+                          <div className="lg:col-span-1 ml-5">
                             <button
                               onClick={handleComparing}
-                              className="text-lg font-semibold ml-5 leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-3xl border-solid border-gray-300"
+                              className="text-xl font-semibold ml-5 leading-7 uppercase border w-[100px] h-[40px] md:w-[130px] md:h-[48px] px-3 py-1 rounded-2xl border-solid border-gray-300"
                             >
                               필터 비교
                             </button>
-
+                            <span className="text-lg ml-5">필터 비교를 사용하여 저장한 즐겨찾기의 다른 필터 값을 쉽게 비교해보세요!</span>
                             {showForm ? (
                               <form
                                 id="searchForm"
@@ -630,7 +630,7 @@ export default function Fav() {
                                     </div>
                                   </div> */}
 
-                                  <div className="flex gap-4 ">
+                                  <div className="flex gap-4 mt-3">
                                     <div className="flex items-center gap-3 ml-5 self-start max-md:ml-2.5 max-md:mt-10">
                                       <SelectPeriod
                                         setFilterData={setFilterData}
@@ -669,14 +669,14 @@ export default function Fav() {
                                     )}
 
                                     <div
-                                      className="border bg-white flex flex-col  px-3 py-2 rounded-[20px] border-solid border-gray-300 max-md:px-5 "
+                                      className="border bg-white ml-5 flex flex-col px-3 py-2 rounded-[20px] border-solid border-gray-300 max-md:px-5"
                                       onClick={handleButtonClick}
                                       style={{ cursor: "pointer" }}
                                     >
-                                      <div className="self-center flex w-[84px] max-w-full items-start gap-0">
+                                      <div className="self-center flex items-center mt-0.5 w-[84px] max-w-full gap-0">
                                         <img
                                           loading="lazy"
-                                          srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&"
+                                          srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=100 100w"
                                           className="aspect-[1.11] object-contain object-center w-[30px] overflow-hidden self-stretch max-w-full"
                                         />
                                         <div className="text-black text-base font-light self-center whitespace-nowrap my-auto">
@@ -687,7 +687,7 @@ export default function Fav() {
                                   </div>
 
                                   <div className="flex w-[1500] max-w-full grow flex-col ml-7 self-start max-md:mt-10">
-                                    <div className="self-stretch flex items-center justify-between gap-2 mt-8">
+                                    <div className="self-stretch flex items-center justify-between gap-2 mt-5">
                                       <AgeCheckbox
                                         handleAgeCheckboxChange={
                                           handleAgeCheckboxChange
@@ -711,10 +711,13 @@ export default function Fav() {
                                     </div>
                                     {filterResponseData.startDate &&
                                       filterResponseData.endDate &&
-                                      showForm && <span>{JSON.stringify(filterData)}</span>}
+                                      showForm && 
+                                      <div className="mt-6">
+                                        {JSON.stringify(filterData)}
+                                        </div>}
 
                                     <div className="flex gap-4 mt-8">
-                                      {/* @@기기 radio 변경 */}
+                                      
                                     </div>
                                   </div>
                                 </div>
@@ -768,7 +771,8 @@ export default function Fav() {
                         filterResponseData.endDate &&
                         showForm && (
                           <div className="grid grid-cols-2 gap-4">
-                            <div className="sm:col-span-1 border-2 border-red-300 p-4 rounded-lg">
+                            <div className="sm:col-span-1 mr-5 border-2 border-red-300 p-4 rounded-lg">
+                              <span className="text-2xl text-red-300">A그룹</span>
                               <div className="mb-5">
                                 <ClickChart
                                   startDate={responseData.startDate}
@@ -807,7 +811,8 @@ export default function Fav() {
                               </div>
                             </div>
 
-                            <div className="sm:col-span-1 border-2 border-blue-300 p-4 rounded-lg">
+                            <div className="sm:col-span-1 ml-5 border-2 border-blue-300 p-4 rounded-lg">
+                            <span className="text-2xl text-blue-300">B그룹</span>
                               <div className="mb-5">
                                 <ClickChart
                                   startDate={filterResponseData.startDate}
