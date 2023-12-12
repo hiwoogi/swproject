@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import SidebarItem from "./SidebarItem";
 
 export default function Sidebar({ data, setResponseData, setData, isSidebarOpen,toggleSidebar }) {
-  const itemsPerPage = 10; //페이지당 아이템 수
+  const itemsPerPage = 8; //페이지당 아이템 수
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
