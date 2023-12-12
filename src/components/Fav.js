@@ -468,9 +468,13 @@ export default function Fav() {
             <div className="font-['NEXON']">
               <button
                 onClick={toggleSidebar}
-                className="px-2 py-2 fixed top-20 z-50"
+                className="px-4 py-1 fixed top-21 z-50"
               >
-                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/e02589cae5808ab8a78c9fcf6faef90de7666044cddef6d6eac576c0cb2bd1ed?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=100 100w" alt="Button Image" className="w-5 h-6 mr-2" />
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/e02589cae5808ab8a78c9fcf6faef90de7666044cddef6d6eac576c0cb2bd1ed?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=100 100w"
+                  alt="Button Image"
+                  className="w-5 h-6 mr-2"
+                />
               </button>
               <Sidebar
                 data={favResponse}
@@ -609,30 +613,35 @@ export default function Fav() {
                                   </div>
                                 )}
                                 <div className="mt-5">
-                                  <span className=" text-lg mr-5">
+                                  <span className=" text-lg mr-10">
                                     성별 :{" "}
-                                    {(() => {
-                                      let genderMap = {
-                                        "": "전체",
-                                        f: "여성",
-                                        m: "남성",
-                                      };
+                                    <span className="bg-red-200 text-black-800 p-1 rounded">
+                                      {(() => {
+                                        let genderMap = {
+                                          "": "전체",
+                                          f: "여성",
+                                          m: "남성",
+                                        };
 
-                                      const index = favResponse.findIndex(
-                                        (item) => item.id === responseData.favId
-                                      );
-                                      const filter =
-                                        index !== -1
-                                          ? JSON.parse(
-                                              favResponse[index].filterCriteria
-                                            ).gender
-                                          : "";
-                                      return genderMap[filter]; // Change keyword to filter
-                                    })()}
+                                        const index = favResponse.findIndex(
+                                          (item) =>
+                                            item.id === responseData.favId
+                                        );
+                                        const filter =
+                                          index !== -1
+                                            ? JSON.parse(
+                                                favResponse[index]
+                                                  .filterCriteria
+                                              ).gender
+                                            : "";
+                                        return genderMap[filter]; // Change keyword to filter
+                                      })()}
+                                    </span>
                                   </span>
 
-                                  <span className=" text-lg mr-5">
+                                  <span className=" text-lg mr-10">
                                     기기 :{" "}
+                                    <span className="bg-red-200 text-black-800 p-1 rounded">
                                     {(() => {
                                       let deviceMap = {
                                         "": "전체", //패션
@@ -651,10 +660,12 @@ export default function Fav() {
                                           : "";
                                       return deviceMap[filter]; // Change keyword to filter
                                     })()}
+                                    </span>
                                   </span>
 
                                   <span className=" text-lg ">
                                     연령:{" "}
+                                    <span className="bg-red-200 text-black-800 p-1 rounded">
                                     {(() => {
                                       const index = favResponse.findIndex(
                                         (item) => item.id === responseData.favId
@@ -677,11 +688,12 @@ export default function Fav() {
                                         ageString = filter;
                                       }
 
-                                      if (ageString === "") {
+                                      if (ageString === "" || ageString === "10, 20, 30, 40, 50, 60") {
                                         ageString = "전체";
                                       }
                                       return ageString; // Change keyword to filter
                                     })()}
+                                    </span>
                                   </span>
                                 </div>
                               </div>
@@ -694,7 +706,7 @@ export default function Fav() {
                             >
                               필터 비교
                             </button>
-                            <span className="text-lg ml-5">
+                            <span className="text-sm ml-5">
                               필터 비교를 사용하여 저장한 즐겨찾기의 다른 필터
                               값을 쉽게 비교해보세요!
                             </span>
@@ -705,7 +717,7 @@ export default function Fav() {
                                 className="self-center mt-8"
                               >
                                 <div className="self-center flex w-full flex-col max-md:max-w-full max-md:my-10">
-                                  <div className="flex gap-4 mt-3">
+                                  <div className="flex gap-4 mt-10">
                                     <div className="flex items-center gap-3 ml-5 self-start max-md:ml-2.5 max-md:mt-10">
                                       <SelectPeriod
                                         setFilterData={setFilterData}
@@ -762,7 +774,7 @@ export default function Fav() {
                                   </div>
 
                                   <div className="flex w-[1500] max-w-full grow flex-col ml-7 self-start max-md:mt-10">
-                                    <div className="self-stretch flex items-center justify-between gap-2 mt-5">
+                                    <div className="self-stretch flex items-center justify-between gap-5 mt-8">
                                       <AgeCheckbox
                                         handleAgeCheckboxChange={
                                           handleAgeCheckboxChange
@@ -787,25 +799,34 @@ export default function Fav() {
                                     {filterResponseData.startDate &&
                                       filterResponseData.endDate &&
                                       showForm && (
-                                        <div className=" text-lg">
-                                          <span className="mr-5">
+                                        <div className="mt-5 text-lg">
+                                          <span className="mr-10 ">
+
                                             성별 :{" "}
+                                            <span className="bg-blue-200 text-black-800 p-1 rounded">
                                             {filterData.gender === ""
                                               ? "전체"
                                               : filterData.gender === "m"
                                               ? "남성"
                                               : "여성"}
+                                              </span>
                                           </span>
-                                          <span className="mr-5">
+                                          <span className="mr-10">
                                             기기 :{" "}
+                                            <span className="bg-blue-200 text-black-800 p-1 rounded">
                                             {filterData.device === ""
                                               ? "전체"
                                               : filterData.device === "mo"
                                               ? "모바일"
                                               : "pc"}
+                                              </span>
                                           </span>
-                                          <span className="mr-5">
-                                            연령 : {formatAges(filterData.ages)}
+                                          <span className="mr-10">
+                                            
+                                            연령 : 
+                                            <span className="bg-blue-200 text-black-800 p-1 rounded">
+                                            {formatAges(filterData.ages)}
+                                            </span>
                                           </span>
                                         </div>
                                       )}
