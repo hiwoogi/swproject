@@ -728,7 +728,7 @@ export default function Fav() {
                               <form
                                 id="searchForm"
                                 onSubmit={handleSubmit}
-                                className="self-center mt-8"
+                                className="self-center mt-5"
                               >
                                 <div className="self-center flex w-full flex-col max-md:max-w-full max-md:my-10">
                                   <div className="flex gap-4 mt-10">
