@@ -1,8 +1,8 @@
 import React from "react";
 
-export default function GenderRadio({setFilterData,setClickFilterData,filterData,clickFilterData,width="[20rem]"}) {
+export default function GenderRadio({setFilterData,setClickFilterData,filterData,clickFilterData,width="w-60"}) {
   return (
-    <div className={`grid w-${width} grid-cols-3 gap-2 rounded-xl bg-gray-200 p-2 border border-gray-300`}>
+    <div className={`grid ${width} grid-cols-3 gap-2 rounded-xl bg-gray-200 p-2 border border-gray-300`}>
       <div>
         <input
           type="radio"
