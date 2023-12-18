@@ -59,6 +59,7 @@ export default function AgeChart({num, ageResults }) {
                 ticks: {
                   font : {
                     size: 20,
+                    family: 'NEXON'
                   }
                 }
               }
@@ -67,14 +68,25 @@ export default function AgeChart({num, ageResults }) {
               legend: {
                 display: false,
               },
+              title: {
+                display: true,
+                text: '연령별 클릭량 차트',
+                font: {
+                  size: 20,
+                  family: 'NEXON'
+                },
+              },
               tooltip: {
                 bodySpacing: 20,
                 padding: 15,
                 titleFont: {
-                  size: 20
+                  size: 20,
+                  family: 'NEXON'
+                  
                 },
                 bodyFont: {
-                  size: 20
+                  size: 20,
+                  family: 'NEXON'
                 },
                 callbacks: {
                   label: (context) => `${context.formattedValue}%`,
@@ -88,7 +100,7 @@ export default function AgeChart({num, ageResults }) {
   }, [ageResults]);
 
   return (
-    <div className="w-full h-full border-2 border-gray-300 p-4 rounded-lg flex justify-center items-center">
+    <div className="w-full h-full border-2 border-gray-300 p-4 rounded-lg flex justify-center items-center fo  ">
       <canvas id={`ageChart${num}`}  />
     </div>
   );

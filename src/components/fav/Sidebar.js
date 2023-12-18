@@ -60,13 +60,19 @@ export default function Sidebar({ data, setResponseData, setData, isSidebarOpen,
 
   return (
     <>
+    {!isSidebarOpen && (
+      <div
+        className="fixed top-32 left-0 z-30 w-8  h-screen  bg-gray-200 dark:bg-gray-800 rounded-r-md "
+        onClick={toggleSidebar} // Clicking on the gray background can also toggle the sidebar
+      ></div>
+    )}
       {isSidebarOpen && (
         <aside
           id="default-sidebar"
           className={`fixed top-32 left-0 z-40 w-72 h-screen transition-transform sm:translate-x-0`}
           aria-label="Sidebar"
         >
-          <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800 font-['NEXON']">
+          <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800 font-['NEXON'] rounded-r-md">
             {currentData.map((item, index) => (
               <SidebarItem
                 key={index}

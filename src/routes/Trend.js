@@ -1,5 +1,7 @@
 import React from 'react'
 import Header from '../components/main/Header'
+import Footer from '../components/main/Footer'
+
 import TrendKeyword from '../components/TrendKeyword'
 
 export default function Trend() {
@@ -7,6 +9,7 @@ export default function Trend() {
     <div>
         <Header/>
         <TrendKeyword/>
+        <Footer/>
     </div>
   )
 }

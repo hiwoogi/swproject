@@ -487,10 +487,10 @@ export default function Fav() {
 
               <div
                 className={`${
-                  isSidebarOpen ? "ml-72 mt-24" : "ml-0"
+                  isSidebarOpen ? "ml-72 mt-24" : "ml-7"
                 } transition-all flex-grow p-4 mt-24`}
               >
-                <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
+                <div className=" mt-4 p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
                   {responseData.genderResults ? (
                     <div className="self-center flex w-full flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
                       <div className="mb-5">
@@ -615,7 +615,7 @@ export default function Fav() {
                                 <div className="mt-5">
                                   <span className=" text-lg mr-10">
                                     성별 :{" "}
-                                    <span className="bg-red-200 text-black-800 p-1 rounded">
+                                    <span className="bg-red-200 p-2 text-black-800  rounded">
                                       {(() => {
                                         let genderMap = {
                                           "": "전체",
@@ -639,9 +639,9 @@ export default function Fav() {
                                     </span>
                                   </span>
 
-                                  <span className=" text-lg mr-10">
+                                  <span className=" text-lg mr-10 ">
                                     기기 :{" "}
-                                    <span className="bg-red-200 text-black-800 p-1 rounded">
+                                    <span className="bg-red-200 text-black-800 p-2 rounded ">
                                       {(() => {
                                         let deviceMap = {
                                           "": "전체", //패션
@@ -667,7 +667,7 @@ export default function Fav() {
 
                                   <span className=" text-lg ">
                                     연령 :{" "}
-                                    <span className="bg-red-200 text-black-800 p-1 rounded">
+                                    <span className="bg-red-200 text-black-800 p-2 rounded">
                                       {(() => {
                                         const index = favResponse.findIndex(
                                           (item) =>
@@ -707,7 +707,7 @@ export default function Fav() {
                             </div>
                           </div>
                           <div className="lg:col-span-1 ml-5">
-                          <label className="relative inline-flex items-center mb-5 cursor-pointer">
+                            <label className="relative inline-flex items-center mb-5 cursor-pointer">
                               <input
                                 type="checkbox"
                                 onClick={handleComparing}
@@ -797,7 +797,7 @@ export default function Fav() {
                                     <div className=" text-lg flex flex-row">
                                       <span className="mr-10 mt-5 ">
                                         성별 :{" "}
-                                        <span className="bg-blue-200 text-black-800 p-1 rounded">
+                                        <span className="bg-blue-200 text-black-800 p-2 rounded">
                                           {filterData.gender === ""
                                             ? "전체"
                                             : filterData.gender === "m"
@@ -807,7 +807,7 @@ export default function Fav() {
                                       </span>
                                       <span className="mr-10 mt-5">
                                         기기 :{" "}
-                                        <span className="bg-blue-200 text-black-800 p-1 rounded">
+                                        <span className="bg-blue-200 text-black-800 p-2 rounded">
                                           {filterData.device === ""
                                             ? "전체"
                                             : filterData.device === "mo"
@@ -817,27 +817,26 @@ export default function Fav() {
                                       </span>
                                       <span className="mr-10 mt-5">
                                         연령 :
-                                        <span className="ml-1 bg-blue-200 text-black-800 p-1 rounded">
+                                        <span className="ml-1 bg-blue-200 text-black-800 p-2 rounded">
                                           {formatAges(filterData.ages)}
                                         </span>
-                                        
                                       </span>
                                       <span
-                                          className="border bg-white flex mt-2.5 px-3.5 py-2 rounded-[20px] border-solid border-gray-300 max-md:px-5 "
-                                          onClick={handleButtonClick}
-                                          style={{ cursor: "pointer" }}
-                                        >
-                                          <div className="self-center flex items-center mt-0.5 w-[84px] max-w-full gap-0">
-                                            <img
-                                              loading="lazy"
-                                              srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=100 100w"
-                                              className="aspect-[1.11] object-contain object-center w-[30px] overflow-hidden self-stretch max-w-full"
-                                            />
-                                            <div className="text-black text-base font-light self-center whitespace-nowrap my-auto">
-                                              조회하기
-                                            </div>
+                                        className="border bg-white flex mt-1.5 px-7 py-3 rounded-[50px] border-solid border-gray-300 max-md:px-5 "
+                                        onClick={handleButtonClick}
+                                        style={{ cursor: "pointer" }}
+                                      >
+                                        <div className="self-center flex items-center mt-0.5 w-[84px] max-w-full gap-0">
+                                          <img
+                                            loading="lazy"
+                                            srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/d4229ddf-a29f-46af-b439-5fab4021194e?apiKey=d9a6bade01504f228813cd0dfee9b81b&width=100 100w"
+                                            className="aspect-[1.11] object-contain object-center w-[30px] overflow-hidden self-stretch max-w-full"
+                                          />
+                                          <div className="text-black text-base font-light self-center whitespace-nowrap my-auto">
+                                            조회하기
                                           </div>
-                                        </span>
+                                        </div>
+                                      </span>
                                     </div>
 
                                     <div className="flex gap-4 mt-8"></div>

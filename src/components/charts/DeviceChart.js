@@ -46,17 +46,29 @@ const filteredPcData = filterPc(deviceResults[0].data);
                 labels: {
                   font: {
                     size: 17,
+                    family: 'NEXON'
                   }
                 }
+              },
+              title: {
+                display: true,
+                text: '기기별 클릭량 차트',
+                
+                font: {
+                  size: 20,
+                  family: 'NEXON'
+                },
               },
               tooltip: {
                 bodySpacing: 20,
                 padding: 15,
                 titleFont: {
-                  size: 20
+                  size: 20,
+                  family: 'NEXON'
                 },
                 bodyFont: {
-                  size: 20
+                  size: 20,
+                  family: 'NEXON'
                 },
                 callbacks: {
                   label: (context) => `${context.formattedValue}%`, // 툴팁에 표시될 값 설정

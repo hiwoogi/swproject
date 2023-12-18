@@ -364,7 +364,7 @@ export default function Search(props) {
               </div>
 
               <div className="flex gap-4">
-                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
+                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-5 max-md:mt-10">
                   <SelectCategory
                     field={field}
                     setFilterData={setFilterData}

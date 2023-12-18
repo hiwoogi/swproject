@@ -268,15 +268,15 @@ export default function ComparingSearch(props) {
           <SyncLoader color="#3490dc" />
         </div>
       ) : (
-        <div className="bg-white flex flex-col px-20 max-md:px-5 font-['NEXON'] mt-24">
+        <div className="bg-white flex flex-col px-20  font-['NEXON'] mt-24">
           <form id="searchForm" onSubmit={handleSubmit} className="self-center">
-            <div className="self-center flex w-full max-w-[1920px] flex-col mt-20 mb-16 max-md:max-w-full max-md:my-10">
-              <div className="text-black text-5xl max-w-[377px] self-center max-md:text-4xl">
+            <div className="self-center flex w-full max-w-[1920px] flex-col mt-20 mb-16 ">
+              <div className="text-black text-5xl max-w-[377px] self-center ">
                 키워드 비교분석
               </div>
 
               <div className="flex gap-4">
-                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
+                <div className="flex items-center gap-3 ml-5 mt-20 self-start ">
                   <SelectCategory
                     field={field}
                     setFilterData={setFilterData}
@@ -286,7 +286,7 @@ export default function ComparingSearch(props) {
                   />
                 </div>
                 <div className="relative flex flex-col items-center">
-                  <div className="self-center flex items-start gap-5 ml-5 mt-20 max-md:max-w-full max-md:flex-wrap max-md:mt-10">
+                  <div className="self-center flex items-start gap-5 ml-5 mt-20 ">
                     <ReactTags
                       tags={tags}
                       handleAddition={handleAddition}

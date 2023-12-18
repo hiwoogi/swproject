@@ -57,7 +57,8 @@ export default function ClickChart({ num, clickResults }) {
               x: {
                 ticks: {
                   font: {
-                    size: 15,
+                    size: 13,
+                    family: 'NEXON'
                   }
                 }
               },
@@ -76,21 +77,34 @@ export default function ClickChart({ num, clickResults }) {
                 labels: {
                   font: {
                     size: 20,
+                    family: 'NEXON'
                   }
                 }
+                
+              },
+              title: {
+                display: true,
+                text: '클릭량 추세 차트',
+                font: {
+                  size: 20,
+                  family: 'NEXON'
+                },
               },
               tooltip: {
                 bodySpacing: 20,
                 padding: 15,
                 titleFont: {
-                  size: 18
+                  size: 18,
+                  family: 'NEXON'
                 },
                 bodyFont: {
-                  size: 20
+                  size: 20,
+                  family: 'NEXON'
                 },
                 callbacks: {
                   label: (context) => `${context.formattedValue}%`,
-                }
+                },
+                
               },
             },
           },

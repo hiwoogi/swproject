@@ -44,10 +44,7 @@ export default function TrendKeyword() {
       <div className="text-black text-2xl self-center mx-auto max-md:text-4xl mt-5">
         궁금한 키워드를 선택하면 더 자세한 데이터를 알아볼 수 있습니다!
       </div>
-      <div className="text-black mx-auto max-md:text-4xl">
-            실시간 트렌드 순위의 데이터는 2일 전 데이터를 바탕으로
-            구성되어있습니다.
-          </div>
+     
 
       <div id="treemap">
         <div className="flex self-start gap-3 ml-5 mt-5 max-md:ml-2.5 max-md:mt-10">

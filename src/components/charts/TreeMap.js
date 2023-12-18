@@ -84,7 +84,7 @@ export default function TreeMap({ trend, field }) {
                     else if (capacityMW <= 30)
                       fontSize = fontSize - name.length * 2;
 
-                    return { size: fontSize, weight: 'bold' };
+                    return { size: fontSize, weight: 'bold' , family: 'NEXON' };
                   },
                 },
                 //각 칸 배경색 동적으로 설정
@@ -151,8 +151,19 @@ export default function TreeMap({ trend, field }) {
   }, [trend]);
 
   return (
-    <div className="w-[1600px] max-w-full border-2 border-gray-300 p-4 rounded-lg flex justify-center items-center mt-5">
-      <canvas id="Treemap" />
+    <div className="w-[1600px] max-w-full border-2 border-gray-300 p-4 rounded-lg relative mt-5">
+      <div className="absolute top-0 left-5 mt-3 mb-3">
+        <div className="relative inline-block group">
+          <button className="text-lg p-1 rounded-full transition-all">
+            ⓘ
+          </button>
+          <span className="hidden bg-white text-gray-800 p-2 rounded-md top-full left-1/2 transform -translate-x-1/2 group-hover:block">
+            실시간 트렌드 순위는 2일 전 데이터를 바탕으로
+            구성되어있습니다.
+          </span>
+        </div>
+      </div>
+      <canvas id="Treemap" style={{ cursor: "pointer" }} />
     </div>
   );
 }
