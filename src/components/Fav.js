@@ -490,9 +490,9 @@ export default function Fav() {
                   isSidebarOpen ? "ml-72 mt-24" : "ml-7"
                 } transition-all flex-grow p-4 mt-24`}
               >
-                <div className=" mt-4 p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
+                <div className=" mt-4 p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700  min-w-[1000px] ">
                   {responseData.genderResults ? (
-                    <div className="self-center flex w-full flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
+                    <div className="self-center flex  flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10 ">
                       <div className="mb-5">
                         <div className="lg:grid lg:grid-cols-2">
                           <div className="lg:col-span-1">

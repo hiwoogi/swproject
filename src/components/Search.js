@@ -356,15 +356,15 @@ export default function Search(props) {
           <SyncLoader color="#3490dc" />
         </div>
       ) : (
-        <div className="bg-white flex flex-col px-20 max-md:px-5 font-['NEXON'] mt-24">
-          <form id="searchForm" onSubmit={handleSubmit} className="self-center">
-            <div className="self-center flex w-full max-w-[1920px] flex-col mt-20 mb-16 max-md:max-w-full max-md:my-10">
+        <div className="bg-white flex flex-col px-20 max-md:px-5 font-['NEXON'] mt-24 " >
+          <form id="searchForm" onSubmit={handleSubmit} className="mx-auto max-w-[600px] sm:max-w-[800px] md:max-w-[1000px] lg:max-w-[1200px] xl:max-w-[1400px]">
+            <div className="self-center flex flex-col mt-5 mb-5 max-md:my-10">
               <div className="text-black text-5xl max-w-[377px] self-center max-md:text-4xl">
                 키워드 검색
               </div>
 
               <div className="flex gap-4">
-                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-5 max-md:mt-10">
+                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-5 max-md:mt-10 ">
                   <SelectCategory
                     field={field}
                     setFilterData={setFilterData}
@@ -439,6 +439,7 @@ export default function Search(props) {
                     setClickFilterData={setClickFilterData}
                     filterData={filterData}
                     clickFilterData={clickFilterData}
+                    
                   />
                   <GenderRadio
                     setFilterData={setFilterData}
