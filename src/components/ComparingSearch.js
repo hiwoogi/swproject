@@ -270,13 +270,13 @@ export default function ComparingSearch(props) {
       ) : (
         <div className="bg-white flex flex-col px-20 max-md:px-5 font-['NEXON'] mt-24">
           <form id="searchForm" onSubmit={handleSubmit} className="self-center mx-auto max-w-[600px] sm:max-w-[800px] md:max-w-[1000px] lg:max-w-[1200px] xl:max-w-[1400px]">
-            <div className="self-center flex w-full max-w-[1920px] flex-col mt-20 mb-16 max-md:max-w-full max-md:my-10">
+            <div className="self-center flex w-full max-w-[1920px] flex-col mt-10 mb-10 max-md:max-w-full max-md:my-10">
               <div className="text-black text-5xl max-w-[377px] self-center max-md:text-4xl">
                 키워드 비교분석
               </div>
 
-              <div className="flex gap-4">
-                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
+              <div className="flex gap-4 mt-14">
+                <div className="flex items-center gap-3 ml-5  self-start max-md:ml-2.5 max-md:mt-10">
                   <SelectCategory
                     field={field}
                     setFilterData={setFilterData}
@@ -286,7 +286,7 @@ export default function ComparingSearch(props) {
                   />
                 </div>
                 <div className="relative flex flex-col items-center">
-                  <div className="self-center flex items-start gap-5 ml-5 mt-20 max-md:max-w-full max-md:flex-wrap max-md:mt-10">
+                  <div className="self-center flex items-start gap-5 ml-5 max-md:max-w-full max-md:flex-wrap max-md:mt-10">
                     <ReactTags
                       tags={tags}
                       handleAddition={handleAddition}
@@ -398,7 +398,7 @@ export default function ComparingSearch(props) {
             </div>
           </form>
           {responseData.startDate && responseData.endDate && (
-            <div className="self-center flex w-full max-w-[1500px] flex-col mt-5 mb-16 max-md:max-w-full max-md:my-10">
+            <div className="self-center flex w-full max-w-[1500px] flex-col  mb-16 max-md:max-w-full max-md:my-10">
               <div className="">
                 <div id="clickGraph" className="">
                   <ClickChart

@@ -38,8 +38,8 @@ export default function TrendKeyword() {
 
   return (
     <div className="mt-24 flex flex-col items-center font-['NEXON']">
-      <div className="text-black text-5xl max-w-[500px] self-center mx-auto max-md:text-4xl mt-20">
-        실시간 트렌드 순위
+      <div className="text-black text-5xl max-w-[500px] self-center mx-auto max-md:text-4xl mt-10">
+        실시간 트렌드
       </div>
       <div className="text-black text-2xl self-center mx-auto max-md:text-4xl mt-5">
         궁금한 키워드를 선택하면 더 자세한 데이터를 알아볼 수 있습니다!

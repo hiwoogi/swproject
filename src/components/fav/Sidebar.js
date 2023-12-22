@@ -43,29 +43,20 @@ export default function Sidebar({ data, setResponseData, setData, isSidebarOpen,
   }, [data]);
 
   useEffect(() => {
-    console.log("리렌더링 : ");
-    console.log(currentData);
-    console.log(data);
+
   }, [currentData]);
 
   useEffect(() => {
-    console.log(currentPage);
-    console.log(currentData);
-    console.log(data);
+
   }, [currentPage]);
 
   useEffect(() => {
-    console.log(isSidebarOpen);
+
   }, [isSidebarOpen]);
 
   return (
     <>
-    {!isSidebarOpen && (
-      <div
-        className="fixed top-32 left-0 z-30 w-8  h-screen  bg-gray-200 dark:bg-gray-800 rounded-r-md "
-        onClick={toggleSidebar} // Clicking on the gray background can also toggle the sidebar
-      ></div>
-    )}
+    
       {isSidebarOpen && (
         <aside
           id="default-sidebar"

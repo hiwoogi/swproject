@@ -358,13 +358,13 @@ export default function Search(props) {
       ) : (
         <div className="bg-white flex flex-col px-20 max-md:px-5 font-['NEXON'] mt-24 " >
           <form id="searchForm" onSubmit={handleSubmit} className="mx-auto max-w-[600px] sm:max-w-[800px] md:max-w-[1000px] lg:max-w-[1200px] xl:max-w-[1400px]">
-            <div className="self-center flex flex-col mt-5 mb-5 max-md:my-10">
+            <div className="self-center flex flex-col mt-10 mb-5 max-md:my-10">
               <div className="text-black text-5xl max-w-[377px] self-center max-md:text-4xl">
-                키워드 검색
+                키워드 분석
               </div>
 
-              <div className="flex gap-4">
-                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-5 max-md:mt-10 ">
+              <div className="flex gap-4 mt-14">
+                <div className="flex items-center gap-3 ml-5  self-start max-md:ml-5 max-md:mt-10 ">
                   <SelectCategory
                     field={field}
                     setFilterData={setFilterData}
@@ -374,7 +374,7 @@ export default function Search(props) {
                   />
                 </div>
                 <div className="relative flex flex-col items-center">
-                  <div className="self-center flex items-start gap-5 mt-20 max-md:max-w-full max-md:flex-wrap max-md:mt-10">
+                  <div className="self-center flex items-start gap-5  max-md:max-w-full max-md:flex-wrap max-md:mt-10">
                     <InputKeyword
                       trend={trend}
                       setFilterData={setFilterData}
@@ -388,14 +388,14 @@ export default function Search(props) {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
+                <div className="flex items-center gap-3 ml-5  self-start max-md:ml-2.5 max-md:mt-10">
                   <SelectPeriod
                     setFilterData={setFilterData}
                     setClickFilterData={setClickFilterData}
                   />
                 </div>
 
-                <div className="flex items-center gap-3 ml-5 mt-20 self-start max-md:ml-2.5 max-md:mt-10">
+                <div className="flex items-center gap-3 ml-5  self-start max-md:ml-2.5 max-md:mt-10">
                   <select
                     // defaultValue={field ? field : "50000000"}
                     name=""

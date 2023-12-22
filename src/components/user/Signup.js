@@ -105,11 +105,11 @@ export default function Signup(props) {
   };
 
   return (
-    <section className="bg-white flex flex-col items-center px-5 font-['NEXON']">
-      <form id="signupForm" onSubmit={handleSubmit}>
-        <article className="border shadow-2xl bg-white flex w-[670px] max-w-full flex-col items-center mt-20 mb-11 px-20 py-12 rounded-3xl border-solid border-blue-300 max-md:my-10 max-md:px-5">
-          <h1 className="text-blue-600 text-3xl font-medium leading-8 max-w-[462px] mr-auto mt-2 max-md:max-w-full">
-            회원 가입을 위해 <br /> 정보를 입력해주세요
+    <section className="bg-white flex flex-col items-center px-5 font-['NEXON'] ">
+      <form id="signupForm" onSubmit={handleSubmit} className=" w-full max-w-[670px]">
+        <article className="border shadow-2xl bg-white flex w-[670px] max-w-full flex-col items-center mt-20 mb-11 px-20 py-12 rounded-3xl border-solid border-blue-300 max-md:my-10 max-md:px-5 " >
+          <h1 className="text-blue-600 text-3xl font-medium leading-8 max-w-[462px] mr-auto mt-2 max-md:max-w-full ">
+            회원 가입을 위해 <br /> 정보를 입력 해주세요
           </h1>
 
           {error && <h2 className="text-red-500 text-2xl mt-10">{error}</h2>} {/* Display error message */}

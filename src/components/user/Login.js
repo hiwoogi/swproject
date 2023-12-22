@@ -20,8 +20,7 @@ export default function Login(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
+
 
     try {
       const apiUrl = 'http://localhost:8080/user/login';
@@ -31,7 +30,6 @@ export default function Login(props) {
         password: password,
       });
 
-      console.log('API Response:', response.data);
 
       if (response.data.token) {
         localStorage.setItem("ACCESS_TOKEN", response.data.token)
@@ -55,13 +53,13 @@ export default function Login(props) {
   return (
     <div>
       <Header />
-      <section className="mt-24 bg-white flex w-full flex-col items-center px-5 py-12 max-md:max-w-full font-['NEXON']">
-        <article className="border shadow-2xl bg-white flex w-[670px] max-w-full flex-col items-center mb-5 px-20 py-12 rounded-3xl border-solid border-blue-300 max-md:px-5">
+      <section className="mt-24 bg-white flex w-full flex-col items-center px-5 py-12 max-md:max-w-full font-['NEXON'] ">
+        <article className="border shadow-2xl bg-white flex w-[670px] max-w-full flex-col items-center mb-5 px-20 py-12 rounded-3xl border-solid border-blue-300 max-md:px-5 ">
           <h1 className="text-blue-600 text-4xl font-medium leading-8 w-[466px] max-w-full mt-9">
             로그인
           </h1>
           <form onSubmit={handleSubmit}
-            className="flex flex-col"
+            className="flex flex-col  w-full max-w-[670px]   "
           >
             <label
               htmlFor="email"
@@ -106,13 +104,14 @@ export default function Login(props) {
               로그인
             </button>
 
-          </form>
-          <Link
+            <Link
             to="/signup"
-            className="text-blue-600 text-center text-2xl leading-5 whitespace-nowrap border bg-white w-[474px] max-w-full items-center mt-9 mb-20 pt-7 pb-7 px-5 rounded-xl border-solid border-blue-600 max-md:mb-10"
+            className="text-blue-600 text-center text-2xl   leading-5 whitespace-nowrap border bg-white w-[474px] max-w-full items-center mt-9 mb-20  pt-7 pb-7 px-5 rounded-xl border-solid border-blue-600 max-md:mb-10"
           >
             회원가입
           </Link>
+          </form>
+          
         </article>
       </section>
     </div>
